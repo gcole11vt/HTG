@@ -1,0 +1,107 @@
+# Xcode
+build/
+DerivedData/
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+xcuserdata/
+
+# Xcode playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# CocoaPods
+Pods/
+*.xcworkspace
+
+# Carthage
+Carthage/Build/
+Carthage/Checkouts/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+
+# Code Injection
+iOSInjectionProject/
+
+# Instruments
+*.instrdst
+
+# Code coverage
+*.gcno
+*.gcda
+*.profraw
+*.profdata
+
+# Playgrounds
+*.playground/**/timeline.xctimeline
+
+# Archives
+*.xcarchive
+
+# dSYM files
+*.dSYM
+*.dSYM.zip
+
+# App packaging
+*.ipa
+*.app
+*.framework
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# IDEs and editors
+*.swp
+*.swo
+*~
+.idea/
+*.iml
+.vscode/
+
+# Environment and secrets
+.env
+.env.*
+*.xcconfig.local
+Secrets/
+secrets/
+
+# Tuist
+Tuist/Dependencies/
+
+# XcodeGen
+project.yml.local
+
+# Provisioning profiles
+*.mobileprovision
+*.provisionprofile
+
+# Crashlytics
+crashlytics-build.properties
+crashlytics.properties
+fabric.properties
+
+# Testing
+*.xcresult
+TestResults/
+
+# Documentation
+docs/generated/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
