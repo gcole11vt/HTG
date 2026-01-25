@@ -13,6 +13,32 @@
 		A1000004229F0004 /* HTGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000014229F0004 /* HTGTests.swift */; };
 		A1000005229F0005 /* HTGUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000015229F0005 /* HTGUITests.swift */; };
 		A1000006229F0006 /* HTGUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000016229F0006 /* HTGUITestsLaunchTests.swift */; };
+		B1000001229F0001 /* Club.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000011229F0001 /* Club.swift */; };
+		B1000002229F0002 /* ShotType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000012229F0002 /* ShotType.swift */; };
+		B1000003229F0003 /* RangeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000013229F0003 /* RangeSession.swift */; };
+		B1000004229F0004 /* Shot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000014229F0004 /* Shot.swift */; };
+		B1000005229F0005 /* StoredShotType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000015229F0005 /* StoredShotType.swift */; };
+		B1000006229F0006 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000016229F0006 /* UserProfile.swift */; };
+		B1000007229F0007 /* ShotRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000017229F0007 /* ShotRecommendation.swift */; };
+		B1000008229F0008 /* RangeStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000018229F0008 /* RangeStats.swift */; };
+		C1000001229F0001 /* ClubDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011229F0001 /* ClubDataService.swift */; };
+		C1000002229F0002 /* ClubDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000012229F0002 /* ClubDataServiceTests.swift */; };
+		C1000003229F0003 /* ShotRecommendationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000013229F0003 /* ShotRecommendationService.swift */; };
+		C1000004229F0004 /* ShotRecommendationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000014229F0004 /* ShotRecommendationServiceTests.swift */; };
+		C1000005229F0005 /* RangeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000015229F0005 /* RangeDataService.swift */; };
+		C1000006229F0006 /* RangeDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000016229F0006 /* RangeDataServiceTests.swift */; };
+		C1000007229F0007 /* ProfileDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000017229F0007 /* ProfileDataService.swift */; };
+		C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000018229F0008 /* ProfileDataServiceTests.swift */; };
+		C1000009229F0009 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000019229F0009 /* SpeechRecognitionService.swift */; };
+		C100000A229F000A /* SpeechRecognitionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001A229F000A /* SpeechRecognitionServiceTests.swift */; };
+		D1000001229F0001 /* ClubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000011229F0001 /* ClubManager.swift */; };
+		D1000002229F0002 /* RangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000012229F0002 /* RangeManager.swift */; };
+		D1000003229F0003 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000013229F0003 /* ProfileManager.swift */; };
+		D1000004229F0004 /* GolfModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000014229F0004 /* GolfModeViewModel.swift */; };
+		E1000001229F0001 /* ClubListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000011229F0001 /* ClubListView.swift */; };
+		E1000002229F0002 /* GolfModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000012229F0002 /* GolfModeView.swift */; };
+		E1000003229F0003 /* RangeModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000013229F0003 /* RangeModeView.swift */; };
+		E1000004229F0004 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000014229F0004 /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +68,32 @@
 		A1000201229F0201 /* HTG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HTG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000301229F0301 /* HTGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HTGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000401229F0401 /* HTGUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HTGUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1000011229F0001 /* Club.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Club.swift; sourceTree = "<group>"; };
+		B1000012229F0002 /* ShotType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotType.swift; sourceTree = "<group>"; };
+		B1000013229F0003 /* RangeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeSession.swift; sourceTree = "<group>"; };
+		B1000014229F0004 /* Shot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shot.swift; sourceTree = "<group>"; };
+		B1000015229F0005 /* StoredShotType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredShotType.swift; sourceTree = "<group>"; };
+		B1000016229F0006 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		B1000017229F0007 /* ShotRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendation.swift; sourceTree = "<group>"; };
+		B1000018229F0008 /* RangeStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeStats.swift; sourceTree = "<group>"; };
+		C1000011229F0001 /* ClubDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataService.swift; sourceTree = "<group>"; };
+		C1000012229F0002 /* ClubDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataServiceTests.swift; sourceTree = "<group>"; };
+		C1000013229F0003 /* ShotRecommendationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendationService.swift; sourceTree = "<group>"; };
+		C1000014229F0004 /* ShotRecommendationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendationServiceTests.swift; sourceTree = "<group>"; };
+		C1000015229F0005 /* RangeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeDataService.swift; sourceTree = "<group>"; };
+		C1000016229F0006 /* RangeDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeDataServiceTests.swift; sourceTree = "<group>"; };
+		C1000017229F0007 /* ProfileDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataService.swift; sourceTree = "<group>"; };
+		C1000018229F0008 /* ProfileDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataServiceTests.swift; sourceTree = "<group>"; };
+		C1000019229F0009 /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
+		C100001A229F000A /* SpeechRecognitionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionServiceTests.swift; sourceTree = "<group>"; };
+		D1000011229F0001 /* ClubManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubManager.swift; sourceTree = "<group>"; };
+		D1000012229F0002 /* RangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeManager.swift; sourceTree = "<group>"; };
+		D1000013229F0003 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		D1000014229F0004 /* GolfModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeViewModel.swift; sourceTree = "<group>"; };
+		E1000011229F0001 /* ClubListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubListView.swift; sourceTree = "<group>"; };
+		E1000012229F0002 /* GolfModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeView.swift; sourceTree = "<group>"; };
+		E1000013229F0003 /* RangeModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeModeView.swift; sourceTree = "<group>"; };
+		E1000014229F0004 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +147,11 @@
 			isa = PBXGroup;
 			children = (
 				A1000014229F0004 /* HTGTests.swift */,
+				C1000012229F0002 /* ClubDataServiceTests.swift */,
+				C1000014229F0004 /* ShotRecommendationServiceTests.swift */,
+				C1000016229F0006 /* RangeDataServiceTests.swift */,
+				C1000018229F0008 /* ProfileDataServiceTests.swift */,
+				C100001A229F000A /* SpeechRecognitionServiceTests.swift */,
 			);
 			path = HTGTests;
 			sourceTree = "<group>";
@@ -130,8 +187,112 @@
 		A1000611229F0611 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				D1000020229F0020 /* ClubManagement */,
+				D1000021229F0021 /* RangeMode */,
+				D1000022229F0022 /* GolfMode */,
+				D1000023229F0023 /* Profile */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		D1000020229F0020 /* ClubManagement */ = {
+			isa = PBXGroup;
+			children = (
+				E1000040229F0040 /* Views */,
+				D1000030229F0030 /* ViewModels */,
+			);
+			path = ClubManagement;
+			sourceTree = "<group>";
+		};
+		D1000021229F0021 /* RangeMode */ = {
+			isa = PBXGroup;
+			children = (
+				E1000042229F0042 /* Views */,
+				D1000031229F0031 /* ViewModels */,
+			);
+			path = RangeMode;
+			sourceTree = "<group>";
+		};
+		D1000022229F0022 /* GolfMode */ = {
+			isa = PBXGroup;
+			children = (
+				E1000041229F0041 /* Views */,
+				D1000032229F0032 /* ViewModels */,
+			);
+			path = GolfMode;
+			sourceTree = "<group>";
+		};
+		D1000023229F0023 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E1000043229F0043 /* Views */,
+				D1000033229F0033 /* ViewModels */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		D1000030229F0030 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D1000011229F0001 /* ClubManager.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D1000031229F0031 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D1000012229F0002 /* RangeManager.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D1000032229F0032 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D1000014229F0004 /* GolfModeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D1000033229F0033 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D1000013229F0003 /* ProfileManager.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		E1000040229F0040 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E1000011229F0001 /* ClubListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E1000041229F0041 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E1000012229F0002 /* GolfModeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E1000042229F0042 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E1000013229F0003 /* RangeModeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E1000043229F0043 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E1000014229F0004 /* ProfileView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A1000612229F0612 /* Core */ = {
@@ -161,6 +322,14 @@
 		A1000620229F0620 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B1000011229F0001 /* Club.swift */,
+				B1000012229F0002 /* ShotType.swift */,
+				B1000013229F0003 /* RangeSession.swift */,
+				B1000014229F0004 /* Shot.swift */,
+				B1000015229F0005 /* StoredShotType.swift */,
+				B1000016229F0006 /* UserProfile.swift */,
+				B1000017229F0007 /* ShotRecommendation.swift */,
+				B1000018229F0008 /* RangeStats.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -168,6 +337,11 @@
 		A1000621229F0621 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				C1000011229F0001 /* ClubDataService.swift */,
+				C1000013229F0003 /* ShotRecommendationService.swift */,
+				C1000015229F0005 /* RangeDataService.swift */,
+				C1000017229F0007 /* ProfileDataService.swift */,
+				C1000019229F0009 /* SpeechRecognitionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -310,6 +484,27 @@
 			files = (
 				A1000001229F0001 /* HTGApp.swift in Sources */,
 				A1000002229F0002 /* ContentView.swift in Sources */,
+				B1000001229F0001 /* Club.swift in Sources */,
+				B1000002229F0002 /* ShotType.swift in Sources */,
+				B1000003229F0003 /* RangeSession.swift in Sources */,
+				B1000004229F0004 /* Shot.swift in Sources */,
+				B1000005229F0005 /* StoredShotType.swift in Sources */,
+				B1000006229F0006 /* UserProfile.swift in Sources */,
+				B1000007229F0007 /* ShotRecommendation.swift in Sources */,
+				B1000008229F0008 /* RangeStats.swift in Sources */,
+				C1000001229F0001 /* ClubDataService.swift in Sources */,
+				C1000003229F0003 /* ShotRecommendationService.swift in Sources */,
+				C1000005229F0005 /* RangeDataService.swift in Sources */,
+				C1000007229F0007 /* ProfileDataService.swift in Sources */,
+				C1000009229F0009 /* SpeechRecognitionService.swift in Sources */,
+				D1000001229F0001 /* ClubManager.swift in Sources */,
+				D1000002229F0002 /* RangeManager.swift in Sources */,
+				D1000003229F0003 /* ProfileManager.swift in Sources */,
+				D1000004229F0004 /* GolfModeViewModel.swift in Sources */,
+				E1000001229F0001 /* ClubListView.swift in Sources */,
+				E1000002229F0002 /* GolfModeView.swift in Sources */,
+				E1000003229F0003 /* RangeModeView.swift in Sources */,
+				E1000004229F0004 /* ProfileView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +513,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1000004229F0004 /* HTGTests.swift in Sources */,
+				C1000002229F0002 /* ClubDataServiceTests.swift in Sources */,
+				C1000004229F0004 /* ShotRecommendationServiceTests.swift in Sources */,
+				C1000006229F0006 /* RangeDataServiceTests.swift in Sources */,
+				C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */,
+				C100000A229F000A /* SpeechRecognitionServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

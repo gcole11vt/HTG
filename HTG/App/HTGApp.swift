@@ -4,7 +4,14 @@ import SwiftData
 @main
 struct HTGApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([])
+        let schema = Schema([
+            Club.self,
+            ShotType.self,
+            RangeSession.self,
+            Shot.self,
+            StoredShotType.self,
+            UserProfile.self
+        ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
