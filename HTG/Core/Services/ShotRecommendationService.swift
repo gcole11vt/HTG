@@ -3,8 +3,9 @@ import Foundation
 enum ShotTypeFilter: String, CaseIterable, Sendable {
     case all = "All"
     case full = "Full"
-    case threeQuarter = "Three-Quarter"
-    case half = "Half"
+    case threeQuarter = "3/4"
+    case hard = "Hard"
+    case half = "1/2"
     case punch = "Punch"
 }
 

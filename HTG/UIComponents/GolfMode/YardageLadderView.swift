@@ -92,7 +92,7 @@ private struct TickMark {
         ),
         LadderEntry(
             clubName: "7 Iron",
-            shotTypeName: "Three-Quarter",
+            shotTypeName: "3/4",
             carryDistance: 140,
             yardagePosition: 0.35,
             isSelected: false,

@@ -100,10 +100,10 @@ struct ClubDataServiceTests {
         let service = makeService(container: container)
 
         let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
-        try await service.addShotType(to: club, name: "Three-Quarter", distance: 150)
+        try await service.addShotType(to: club, name: "3/4", distance: 150)
 
         #expect(club.shotTypes.count == 2)
-        let threeQuarter = club.shotTypes.first { $0.name == "Three-Quarter" }
+        let threeQuarter = club.shotTypes.first { $0.name == "3/4" }
         #expect(threeQuarter?.carryDistance == 150)
     }
 
@@ -114,8 +114,8 @@ struct ClubDataServiceTests {
 
         let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
         // Club starts with 1 shot type, add 4 more
-        try await service.addShotType(to: club, name: "Three-Quarter", distance: 150)
-        try await service.addShotType(to: club, name: "Half", distance: 130)
+        try await service.addShotType(to: club, name: "3/4", distance: 150)
+        try await service.addShotType(to: club, name: "1/2", distance: 130)
         try await service.addShotType(to: club, name: "Punch", distance: 120)
         try await service.addShotType(to: club, name: "Flop", distance: 100)
 
@@ -131,9 +131,9 @@ struct ClubDataServiceTests {
         let service = makeService(container: container)
 
         let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
-        try await service.addShotType(to: club, name: "Three-Quarter", distance: 150)
+        try await service.addShotType(to: club, name: "3/4", distance: 150)
 
-        let threeQuarter = club.shotTypes.first { $0.name == "Three-Quarter" }!
+        let threeQuarter = club.shotTypes.first { $0.name == "3/4" }!
         try await service.deleteShotType(threeQuarter, from: club)
 
         #expect(club.shotTypes.count == 1)
@@ -163,15 +163,19 @@ struct ClubDataServiceTests {
         let clubs = try await service.fetchAllClubs()
         #expect(clubs.count == 13)
 
-        // Verify driver exists with correct distance
+        // Verify driver exists with correct distance and 4 shot types
         let driver = clubs.first { $0.name == "Driver" }
         #expect(driver != nil)
-        #expect(driver?.shotTypes.first?.carryDistance == 250)
+        #expect(driver?.shotTypes.count == 4)
+        let driverFull = driver?.shotTypes.first { $0.name == "Full" }
+        #expect(driverFull?.carryDistance == 250)
 
-        // Verify lob wedge exists with correct distance
+        // Verify lob wedge exists with correct distance and 4 shot types
         let lobWedge = clubs.first { $0.name == "Lob Wedge" }
         #expect(lobWedge != nil)
-        #expect(lobWedge?.shotTypes.first?.carryDistance == 80)
+        #expect(lobWedge?.shotTypes.count == 4)
+        let lobWedgeFull = lobWedge?.shotTypes.first { $0.name == "Full" }
+        #expect(lobWedgeFull?.carryDistance == 80)
     }
 
     @Test("Load default clubs does nothing if clubs exist")
@@ -297,13 +301,13 @@ struct ClubDataServiceTests {
 
         let club1 = try await service.addClub(name: "Driver", defaultDistance: 250)
         let club2 = try await service.addClub(name: "7 Iron", defaultDistance: 165)
-        try await service.addShotType(to: club1, name: "Three-Quarter", distance: 230)
-        try await service.addShotType(to: club2, name: "Half", distance: 130)
-        try await service.addShotType(to: club2, name: "Three-Quarter", distance: 150)
+        try await service.addShotType(to: club1, name: "3/4", distance: 230)
+        try await service.addShotType(to: club2, name: "1/2", distance: 130)
+        try await service.addShotType(to: club2, name: "3/4", distance: 150)
 
         let names = try await service.fetchAllUniqueShotTypeNames()
 
-        #expect(names == ["Full", "Half", "Three-Quarter"])
+        #expect(names == ["1/2", "3/4", "Full"])
     }
 
     // MARK: - Update Shot Type

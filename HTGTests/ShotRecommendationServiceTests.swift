@@ -86,7 +86,7 @@ struct ShotRecommendationServiceTests {
         let container = try makeTestContainer()
         let club = createClub(
             name: "7 Iron",
-            shotTypes: [("Full", 165), ("Three-Quarter", 150), ("Half", 130)],
+            shotTypes: [("Full", 165), ("3/4", 150), ("1/2", 130)],
             sortOrder: 0,
             in: container.mainContext
         )
@@ -95,7 +95,7 @@ struct ShotRecommendationServiceTests {
         let recommendations = service.getRecommendations(targetYardage: 140, clubs: [club], filter: .all)
 
         #expect(recommendations.count == 3)
-        // Sorted by distance to 140: Half (130, diff 10), Three-Quarter (150, diff 10), Full (165, diff 25)
+        // Sorted by distance to 140: 1/2 (130, diff 10), 3/4 (150, diff 10), Full (165, diff 25)
     }
 
     @Test("Filters by shot type - Full only")
@@ -103,7 +103,7 @@ struct ShotRecommendationServiceTests {
         let container = try makeTestContainer()
         _ = createClub(
             name: "7 Iron",
-            shotTypes: [("Full", 165), ("Three-Quarter", 150), ("Half", 130)],
+            shotTypes: [("Full", 165), ("3/4", 150), ("1/2", 130)],
             sortOrder: 0,
             in: container.mainContext
         )
@@ -116,12 +116,12 @@ struct ShotRecommendationServiceTests {
         #expect(recommendations.first?.shotTypeName == "Full")
     }
 
-    @Test("Filters by shot type - Three-Quarter only")
+    @Test("Filters by shot type - 3/4 only")
     func filtersByThreeQuarterShotType() throws {
         let container = try makeTestContainer()
         _ = createClub(
             name: "7 Iron",
-            shotTypes: [("Full", 165), ("Three-Quarter", 150), ("Half", 130)],
+            shotTypes: [("Full", 165), ("3/4", 150), ("1/2", 130)],
             sortOrder: 0,
             in: container.mainContext
         )
@@ -131,15 +131,15 @@ struct ShotRecommendationServiceTests {
         let recommendations = service.getRecommendations(targetYardage: 140, clubs: clubs, filter: .threeQuarter)
 
         #expect(recommendations.count == 1)
-        #expect(recommendations.first?.shotTypeName == "Three-Quarter")
+        #expect(recommendations.first?.shotTypeName == "3/4")
     }
 
-    @Test("Filters by shot type - Half only")
+    @Test("Filters by shot type - 1/2 only")
     func filtersByHalfShotType() throws {
         let container = try makeTestContainer()
         _ = createClub(
             name: "7 Iron",
-            shotTypes: [("Full", 165), ("Three-Quarter", 150), ("Half", 130)],
+            shotTypes: [("Full", 165), ("3/4", 150), ("1/2", 130)],
             sortOrder: 0,
             in: container.mainContext
         )
@@ -149,7 +149,7 @@ struct ShotRecommendationServiceTests {
         let recommendations = service.getRecommendations(targetYardage: 140, clubs: clubs, filter: .half)
 
         #expect(recommendations.count == 1)
-        #expect(recommendations.first?.shotTypeName == "Half")
+        #expect(recommendations.first?.shotTypeName == "1/2")
     }
 
     @Test("Filters by shot type - Punch only")

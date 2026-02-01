@@ -130,9 +130,9 @@ struct ProfileDataServiceTests {
         let service = makeService(container: container)
 
         _ = try await service.getOrCreateProfile()
-        try await service.updateProfile(name: "", handicap: 18, primaryShotType: "Three-Quarter")
+        try await service.updateProfile(name: "", handicap: 18, primaryShotType: "3/4")
 
         let profile = try await service.getOrCreateProfile()
-        #expect(profile.primaryShotType == "Three-Quarter")
+        #expect(profile.primaryShotType == "3/4")
     }
 }

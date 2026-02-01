@@ -142,8 +142,14 @@ final class ClubDataService: Sendable {
 
         for (index, (name, distance)) in defaultClubs.enumerated() {
             let club = Club(name: name, sortOrder: index)
-            let fullShotType = ShotType(name: "Full", carryDistance: distance, sortOrder: 0, club: club)
-            club.shotTypes = [fullShotType]
+            let fullShot = ShotType(name: "Full", carryDistance: distance, sortOrder: 0, club: club)
+            let threeQuarterDist = Int(Double(distance) * Double.random(in: 0.90...0.95))
+            let threeQuarterShot = ShotType(name: "3/4", carryDistance: threeQuarterDist, sortOrder: 1, club: club)
+            let hardDist = Int(Double(distance) * Double.random(in: 1.02...1.08))
+            let hardShot = ShotType(name: "Hard", carryDistance: hardDist, sortOrder: 2, club: club)
+            let halfDist = Int(Double(distance) * Double.random(in: 0.55...0.75))
+            let halfShot = ShotType(name: "1/2", carryDistance: halfDist, sortOrder: 3, club: club)
+            club.shotTypes = [fullShot, threeQuarterShot, hardShot, halfShot]
             modelContext.insert(club)
         }
 
