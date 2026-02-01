@@ -6,47 +6,53 @@ struct YardageBookPageView: View {
     let showResetIndicator: Bool
     let ladderMinYardage: Int
     let ladderMaxYardage: Int
-    let ladderEntries: [LadderEntry]
+    let groupedLadderEntries: [GroupedLadderEntry]
     var onSelectEntry: ((LadderEntry) -> Void)?
     var onReset: (() -> Void)?
 
     var body: some View {
         GeometryReader { geometry in
-            HStack(spacing: 0) {
-                // Left side - Yardage and Club Badge
-                VStack(spacing: 16) {
-                    Spacer()
+            VStack(alignment: .leading, spacing: 8) {
+                PageTitleView()
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
 
-                    YardageDisplayView(yardage: $targetYardage)
+                HStack(alignment: .top, spacing: 0) {
+                    // Left column — top aligned
+                    VStack(alignment: .leading, spacing: 12) {
+                        YardageDisplayView(yardage: $targetYardage)
 
-                    if let clubShot = displayedClubShot {
-                        ClubShotBadgeView(
-                            clubName: clubShot.clubName,
-                            shotTypeName: clubShot.shotTypeName
-                        )
-                    }
-
-                    if showResetIndicator {
-                        ResetIndicatorView {
-                            onReset?()
+                        if let clubShot = displayedClubShot {
+                            ShotInfoHeaderView(
+                                carryDistance: clubShot.carryDistance,
+                                clubName: clubShot.clubName,
+                                shotTypeName: clubShot.shotTypeName
+                            )
                         }
-                        .transition(.opacity.combined(with: .scale))
+
+                        if showResetIndicator {
+                            ResetIndicatorView {
+                                onReset?()
+                            }
+                            .transition(.opacity.combined(with: .scale))
+                        }
+
+                        Spacer()
                     }
+                    .padding(.leading, 16)
+                    .frame(width: geometry.size.width * 0.55)
+                    .animation(.easeInOut(duration: 0.3), value: showResetIndicator)
 
-                    Spacer()
+                    // Right column — YardageLadder
+                    YardageLadderView(
+                        targetYardage: targetYardage,
+                        minYardage: ladderMinYardage,
+                        maxYardage: ladderMaxYardage,
+                        groupedEntries: groupedLadderEntries,
+                        onSelectEntry: onSelectEntry
+                    )
+                    .frame(width: geometry.size.width * 0.45)
                 }
-                .frame(width: geometry.size.width * 0.55)
-                .animation(.easeInOut(duration: 0.3), value: showResetIndicator)
-
-                // Right side - Yardage Ladder
-                YardageLadderView(
-                    targetYardage: targetYardage,
-                    minYardage: ladderMinYardage,
-                    maxYardage: ladderMaxYardage,
-                    entries: ladderEntries,
-                    onSelectEntry: onSelectEntry
-                )
-                .frame(width: geometry.size.width * 0.45)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -59,30 +65,24 @@ struct YardageBookPageView: View {
         @State var yardage = 150
         @State var showReset = true
 
-        let entries = [
-            LadderEntry(
-                clubName: "6 Iron",
-                shotTypeName: "Full",
+        let groupedEntries = [
+            GroupedLadderEntry(
                 carryDistance: 165,
-                yardagePosition: 0.7,
-                isSelected: false,
-                isSameClubAsSelected: false
+                entries: [
+                    LadderEntry(clubName: "6 Iron", clubNickname: "6I", shotTypeName: "Full", carryDistance: 165, yardagePosition: 0.7, isSelected: false, isSameClubAsSelected: false, isPrimaryShotType: true)
+                ]
             ),
-            LadderEntry(
-                clubName: "7 Iron",
-                shotTypeName: "Full",
+            GroupedLadderEntry(
                 carryDistance: 155,
-                yardagePosition: 0.55,
-                isSelected: true,
-                isSameClubAsSelected: true
+                entries: [
+                    LadderEntry(clubName: "7 Iron", clubNickname: "7I", shotTypeName: "Full", carryDistance: 155, yardagePosition: 0.55, isSelected: true, isSameClubAsSelected: true, isPrimaryShotType: true)
+                ]
             ),
-            LadderEntry(
-                clubName: "8 Iron",
-                shotTypeName: "Full",
+            GroupedLadderEntry(
                 carryDistance: 145,
-                yardagePosition: 0.4,
-                isSelected: false,
-                isSameClubAsSelected: false
+                entries: [
+                    LadderEntry(clubName: "8 Iron", clubNickname: "8I", shotTypeName: "Full", carryDistance: 145, yardagePosition: 0.4, isSelected: false, isSameClubAsSelected: false, isPrimaryShotType: true)
+                ]
             )
         ]
 
@@ -97,7 +97,7 @@ struct YardageBookPageView: View {
                 showResetIndicator: showReset,
                 ladderMinYardage: 127,
                 ladderMaxYardage: 172,
-                ladderEntries: entries
+                groupedLadderEntries: groupedEntries
             ) { entry in
                 print("Selected: \(entry.clubName)")
             } onReset: {

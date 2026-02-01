@@ -54,6 +54,14 @@ final class GolfModeViewModel {
         computeLadderEntries()
     }
 
+    var groupedLadderEntries: [GroupedLadderEntry] {
+        let entries = ladderEntries
+        let grouped = Dictionary(grouping: entries) { $0.carryDistance }
+        return grouped.map { distance, group in
+            GroupedLadderEntry(carryDistance: distance, entries: group)
+        }.sorted { $0.carryDistance > $1.carryDistance }
+    }
+
     init(modelContext: ModelContext) {
         self.recommendationService = ShotRecommendationService()
         self.clubService = ClubDataService(modelContext: modelContext)

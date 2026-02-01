@@ -22,7 +22,10 @@ struct JournalOpeningAnimationView: View {
 
                 // Journal cover with 3D rotation
                 JournalCoverView(ownerName: ownerName)
-                    .frame(width: min(geometry.size.width * 0.8, 350))
+                    .frame(
+                        width: min(geometry.size.width * 0.8, 350),
+                        height: geometry.size.height
+                    )
                     .rotation3DEffect(
                         .degrees(coverRotation),
                         axis: (x: 0, y: 1, z: 0),

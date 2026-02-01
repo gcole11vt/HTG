@@ -12,6 +12,7 @@ enum JournalTheme {
     static let redMarker = Color(red: 0.75, green: 0.22, blue: 0.17)
     static let mutedGray = Color(red: 0.58, green: 0.65, blue: 0.65)
     static let goldEmboss = Color(red: 0.83, green: 0.68, blue: 0.38)
+    static let targetGreen = Color(red: 0.18, green: 0.62, blue: 0.34)
 
     // MARK: - Fonts (Chalkboard SE - System Font)
 

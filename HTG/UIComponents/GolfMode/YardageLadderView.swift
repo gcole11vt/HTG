@@ -4,17 +4,16 @@ struct YardageLadderView: View {
     let targetYardage: Int
     let minYardage: Int
     let maxYardage: Int
-    let entries: [LadderEntry]
+    let groupedEntries: [GroupedLadderEntry]
     var onSelectEntry: ((LadderEntry) -> Void)?
 
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .trailing) {
-                // Tick marks (absolutely positioned using same Y-mapping as club markers)
+                // Tick marks
                 ForEach(tickMarks, id: \.yardage) { tick in
                     LadderTickMarkView(
                         yardage: tick.yardage,
-                        isTarget: tick.isTarget,
                         isMajor: tick.isMajor
                     )
                     .position(
@@ -23,12 +22,20 @@ struct YardageLadderView: View {
                     )
                 }
 
-                // Club markers
-                ForEach(entries) { entry in
-                    LadderClubMarkerView(entry: entry, onSelect: onSelectEntry)
+                // Green target bar — same width as a major (10yd) tick mark
+                TargetYardageBarView()
+                    .frame(width: 12)
+                    .position(
+                        x: geometry.size.width - 25,
+                        y: yPosition(for: targetYardage, in: geometry.size.height)
+                    )
+
+                // Grouped club markers
+                ForEach(groupedEntries) { group in
+                    GroupedLadderClubMarkerView(group: group, onSelect: onSelectEntry)
                         .position(
                             x: geometry.size.width - 80,
-                            y: yPosition(for: entry.carryDistance, in: geometry.size.height)
+                            y: yPosition(for: group.carryDistance, in: geometry.size.height)
                         )
                 }
             }
@@ -37,7 +44,6 @@ struct YardageLadderView: View {
 
     private var tickMarks: [TickMark] {
         var marks: [TickMark] = []
-        // Generate tick marks every 5 yards
         let start = (minYardage / 5) * 5
         let end = ((maxYardage / 5) + 1) * 5
 
@@ -45,7 +51,6 @@ struct YardageLadderView: View {
             if yardage >= minYardage && yardage <= maxYardage {
                 marks.append(TickMark(
                     yardage: yardage,
-                    isTarget: yardage == targetYardage,
                     isMajor: yardage % 10 == 0
                 ))
             }
@@ -60,7 +65,6 @@ struct YardageLadderView: View {
         let padding: CGFloat = 20
         let usableHeight = height - (padding * 2)
 
-        // Invert because higher yardage should be at top
         let normalizedPosition = 1.0 - (Double(yardage - minYardage) / Double(range))
         return padding + CGFloat(normalizedPosition) * usableHeight
     }
@@ -68,51 +72,42 @@ struct YardageLadderView: View {
 
 private struct TickMark {
     let yardage: Int
-    let isTarget: Bool
     let isMajor: Bool
 }
 
 #Preview {
     let entries = [
-        LadderEntry(
-            clubName: "6 Iron",
-            shotTypeName: "Full",
+        GroupedLadderEntry(
             carryDistance: 165,
-            yardagePosition: 0.7,
-            isSelected: false,
-            isSameClubAsSelected: false
+            entries: [
+                LadderEntry(clubName: "6 Iron", clubNickname: "6I", shotTypeName: "Full", carryDistance: 165, yardagePosition: 0.7, isSelected: false, isSameClubAsSelected: false, isPrimaryShotType: true)
+            ]
         ),
-        LadderEntry(
-            clubName: "7 Iron",
-            shotTypeName: "Full",
+        GroupedLadderEntry(
             carryDistance: 155,
-            yardagePosition: 0.55,
-            isSelected: true,
-            isSameClubAsSelected: true
+            entries: [
+                LadderEntry(clubName: "7 Iron", clubNickname: "7I", shotTypeName: "Full", carryDistance: 155, yardagePosition: 0.55, isSelected: true, isSameClubAsSelected: true, isPrimaryShotType: true)
+            ]
         ),
-        LadderEntry(
-            clubName: "7 Iron",
-            shotTypeName: "3/4",
-            carryDistance: 140,
-            yardagePosition: 0.35,
-            isSelected: false,
-            isSameClubAsSelected: true
-        ),
-        LadderEntry(
-            clubName: "8 Iron",
-            shotTypeName: "Full",
+        GroupedLadderEntry(
             carryDistance: 145,
-            yardagePosition: 0.4,
-            isSelected: false,
-            isSameClubAsSelected: false
+            entries: [
+                LadderEntry(clubName: "8 Iron", clubNickname: "8I", shotTypeName: "Full", carryDistance: 145, yardagePosition: 0.4, isSelected: false, isSameClubAsSelected: false, isPrimaryShotType: true)
+            ]
+        ),
+        GroupedLadderEntry(
+            carryDistance: 140,
+            entries: [
+                LadderEntry(clubName: "7 Iron", clubNickname: "7I", shotTypeName: "3/4", carryDistance: 140, yardagePosition: 0.35, isSelected: false, isSameClubAsSelected: true, isPrimaryShotType: false)
+            ]
         )
     ]
 
     return YardageLadderView(
-        targetYardage: 150,
+        targetYardage: 153,
         minYardage: 127,
         maxYardage: 172,
-        entries: entries
+        groupedEntries: entries
     ) { entry in
         print("Selected: \(entry.clubName)")
     }

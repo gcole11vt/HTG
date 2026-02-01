@@ -35,7 +35,7 @@ struct GolfModeView: View {
             showResetIndicator: viewModel.showResetIndicator,
             ladderMinYardage: viewModel.ladderMinYardage,
             ladderMaxYardage: viewModel.ladderMaxYardage,
-            ladderEntries: viewModel.ladderEntries
+            groupedLadderEntries: viewModel.groupedLadderEntries
         ) { entry in
             viewModel.selectClubShot(
                 clubName: entry.clubName,

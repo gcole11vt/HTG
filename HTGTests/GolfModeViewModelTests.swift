@@ -293,6 +293,95 @@ struct GolfModeViewModelTests {
         #expect(wedgeEntry?.clubNickname == "PW")
     }
 
+    // MARK: - Grouped Ladder Entry Tests
+
+    @Test("Two entries at same distance produce one grouped entry")
+    func twoEntriesSameDistanceProduceOneGroup() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", nickname: "7I", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+        _ = createClub(name: "Pitching Wedge", nickname: "PW", shotTypes: [("Full", 150)], sortOrder: 1, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(150)
+        viewModel.yardageRangePercentage = 15
+
+        let grouped = viewModel.groupedLadderEntries
+        let at150 = grouped.filter { $0.carryDistance == 150 }
+
+        #expect(at150.count == 1)
+        #expect(at150.first?.entries.count == 2)
+    }
+
+    @Test("Primary entry sorts first in grouped entry")
+    func primaryEntrySortsFirstInGroup() async throws {
+        let container = try makeTestContainer()
+        // PW non-primary and 7I primary at same distance
+        _ = createClub(name: "Pitching Wedge", nickname: "PW", shotTypes: [("3/4", 150)], sortOrder: 1, in: container.mainContext)
+        _ = createClub(name: "7 Iron", nickname: "7I", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(150)
+        viewModel.yardageRangePercentage = 15
+
+        let grouped = viewModel.groupedLadderEntries
+        let at150 = grouped.first { $0.carryDistance == 150 }
+
+        #expect(at150?.entries.first?.isPrimaryShotType == true)
+        #expect(at150?.entries.first?.clubNickname == "7I")
+    }
+
+    @Test("displayLabel for group of 2 shows nicknames joined by slash")
+    func displayLabelForGroupOfTwo() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", nickname: "7I", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+        _ = createClub(name: "Pitching Wedge", nickname: "PW", shotTypes: [("Full", 150)], sortOrder: 1, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(150)
+        viewModel.yardageRangePercentage = 15
+
+        let grouped = viewModel.groupedLadderEntries
+        let at150 = grouped.first { $0.carryDistance == 150 }
+
+        // Primary sorts first, so "7I / PW"
+        #expect(at150?.displayLabel == "7I / PW")
+    }
+
+    @Test("displayLabel for single primary shows nickname only")
+    func displayLabelForSinglePrimary() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", nickname: "7I", shotTypes: [("Full", 155)], sortOrder: 0, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(155)
+        viewModel.yardageRangePercentage = 15
+
+        let grouped = viewModel.groupedLadderEntries
+        let at155 = grouped.first { $0.carryDistance == 155 }
+
+        #expect(at155?.displayLabel == "7I")
+    }
+
+    @Test("displayLabel for single non-primary shows nickname and shot type")
+    func displayLabelForSingleNonPrimary() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", nickname: "7I", shotTypes: [("3/4", 140)], sortOrder: 0, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(140)
+        viewModel.yardageRangePercentage = 15
+
+        let grouped = viewModel.groupedLadderEntries
+        let at140 = grouped.first { $0.carryDistance == 140 }
+
+        #expect(at140?.displayLabel == "7I 3/4")
+    }
+
     @Test("isPrimaryShotType is correctly set on ladder entries")
     func isPrimaryShotTypeCorrectlySet() async throws {
         let container = try makeTestContainer()

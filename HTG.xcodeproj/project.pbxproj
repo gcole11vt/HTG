@@ -63,6 +63,11 @@
 		I1000003229F0003 /* AppLaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000013229F0003 /* AppLaunchViewModel.swift */; };
 		J1000001229F0001 /* NicknameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000011229F0001 /* NicknameGenerator.swift */; };
 		J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000012229F0002 /* NicknameGeneratorTests.swift */; };
+		K1000001229F0001 /* GroupedLadderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000011229F0001 /* GroupedLadderEntry.swift */; };
+		K1000002229F0002 /* TargetYardageBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000012229F0002 /* TargetYardageBarView.swift */; };
+		K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000013229F0003 /* GroupedLadderClubMarkerView.swift */; };
+		K1000004229F0004 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000014229F0004 /* PageTitleView.swift */; };
+		K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000015229F0005 /* ShotInfoHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +147,11 @@
 		I1000013229F0003 /* AppLaunchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchViewModel.swift; sourceTree = "<group>"; };
 		J1000011229F0001 /* NicknameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGenerator.swift; sourceTree = "<group>"; };
 		J1000012229F0002 /* NicknameGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGeneratorTests.swift; sourceTree = "<group>"; };
+		K1000011229F0001 /* GroupedLadderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderEntry.swift; sourceTree = "<group>"; };
+		K1000012229F0002 /* TargetYardageBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetYardageBarView.swift; sourceTree = "<group>"; };
+		K1000013229F0003 /* GroupedLadderClubMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderClubMarkerView.swift; sourceTree = "<group>"; };
+		K1000014229F0004 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
+		K1000015229F0005 /* ShotInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotInfoHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,6 +315,7 @@
 			isa = PBXGroup;
 			children = (
 				F1000012229F0002 /* LadderEntry.swift */,
+				K1000011229F0001 /* GroupedLadderEntry.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -419,6 +430,10 @@
 				H1000015229F0005 /* LadderClubMarkerView.swift */,
 				H1000016229F0006 /* YardageLadderView.swift */,
 				H1000017229F0007 /* YardageBookPageView.swift */,
+				K1000012229F0002 /* TargetYardageBarView.swift */,
+				K1000013229F0003 /* GroupedLadderClubMarkerView.swift */,
+				K1000014229F0004 /* PageTitleView.swift */,
+				K1000015229F0005 /* ShotInfoHeaderView.swift */,
 			);
 			path = GolfMode;
 			sourceTree = "<group>";
@@ -653,6 +668,11 @@
 				I1000003229F0003 /* AppLaunchViewModel.swift in Sources */,
 				C100000B229F000B /* ClubDistanceResolver.swift in Sources */,
 				J1000001229F0001 /* NicknameGenerator.swift in Sources */,
+				K1000001229F0001 /* GroupedLadderEntry.swift in Sources */,
+				K1000002229F0002 /* TargetYardageBarView.swift in Sources */,
+				K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */,
+				K1000004229F0004 /* PageTitleView.swift in Sources */,
+				K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -58,7 +58,7 @@ struct JournalCoverView: View {
                 .padding(.leading, 30)
             }
         }
-        .aspectRatio(0.7, contentMode: .fit)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var titleSection: some View {
@@ -96,7 +96,8 @@ struct JournalCoverView: View {
         Color.black.opacity(0.8)
             .ignoresSafeArea()
 
-        JournalCoverView(ownerName: "Gregory Cole")
+        JournalCoverView(ownerName: "Greg Cole")
             .frame(width: 300)
+            .ignoresSafeArea()
     }
 }
