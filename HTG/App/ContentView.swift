@@ -4,6 +4,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var launchViewModel: AppLaunchViewModel?
+    @State private var navigationCoordinator = NavigationCoordinator()
 
     var body: some View {
         ZStack {
@@ -33,27 +34,33 @@ struct ContentView: View {
     }
 
     private var mainTabView: some View {
-        TabView {
+        @Bindable var coordinator = navigationCoordinator
+        return TabView(selection: $coordinator.selectedTab) {
             GolfModeView()
+                .tag(AppTab.golf)
                 .tabItem {
                     Label("Golf", systemImage: "flag.fill")
                 }
 
             RangeModeView()
+                .tag(AppTab.range)
                 .tabItem {
                     Label("Range", systemImage: "target")
                 }
 
             ClubListView()
+                .tag(AppTab.clubs)
                 .tabItem {
                     Label("Clubs", systemImage: "bag.fill")
                 }
 
             ProfileView()
+                .tag(AppTab.profile)
                 .tabItem {
                     Label("Profile", systemImage: "person.fill")
                 }
         }
+        .environment(navigationCoordinator)
     }
 }
 

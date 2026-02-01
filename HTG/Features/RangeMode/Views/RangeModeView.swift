@@ -3,6 +3,7 @@ import SwiftData
 
 struct RangeModeView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @State private var rangeManager: RangeManager?
     @State private var clubManager: ClubManager?
     @State private var selectedClub: Club?
@@ -28,6 +29,10 @@ struct RangeModeView: View {
                     clubManager = ClubManager(modelContext: modelContext)
                     await clubManager?.loadClubs()
                 }
+                applyPreselectionIfNeeded()
+            }
+            .onAppear {
+                applyPreselectionIfNeeded()
             }
         }
     }
@@ -159,6 +164,24 @@ struct RangeModeView: View {
         .buttonStyle(.bordered)
     }
 
+    private func applyPreselectionIfNeeded() {
+        guard let clubName = navigationCoordinator.rangePreselectedClubName,
+              let club = clubManager?.clubs.first(where: { $0.name == clubName }) else { return }
+        selectedClub = club
+        if let shotTypeName = navigationCoordinator.rangePreselectedShotTypeName,
+           let shotType = club.shotTypes.first(where: { $0.name == shotTypeName }) {
+            selectedShotType = shotType
+            if navigationCoordinator.rangeAutoStartSession {
+                let autoClubName = club.name
+                let autoShotTypeName = shotType.name
+                Task {
+                    await rangeManager?.startSession(clubName: autoClubName, shotTypeName: autoShotTypeName)
+                }
+            }
+        }
+        navigationCoordinator.clearRangePreselection()
+    }
+
     private func addShot() {
         guard let distance = Int(distanceText) else { return }
         Task {
@@ -196,5 +219,6 @@ struct StatBox: View {
 
 #Preview {
     RangeModeView()
+        .environment(NavigationCoordinator())
         .modelContainer(for: [Club.self, ShotType.self, RangeSession.self, Shot.self], inMemory: true)
 }

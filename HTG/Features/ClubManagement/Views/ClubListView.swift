@@ -127,6 +127,7 @@ struct ClubDetailView: View {
     @State private var isEditingName = false
     @State private var isEditingNickname = false
     @Environment(\.dismiss) private var dismiss
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
 
     private var sortedShotTypes: [ShotType] {
         club.shotTypes.sorted { $0.carryDistance > $1.carryDistance }
@@ -203,6 +204,16 @@ struct ClubDetailView: View {
                         clubManager: clubManager,
                         club: club
                     )
+                    .swipeActions(edge: .trailing) {
+                        Button("Range") {
+                            navigationCoordinator.navigateToRange(
+                                clubName: club.name,
+                                shotTypeName: shotType.name,
+                                autoStart: true
+                            )
+                        }
+                        .tint(.green)
+                    }
                 }
                 .onDelete(perform: deleteShotTypes)
 
@@ -218,6 +229,13 @@ struct ClubDetailView: View {
         .navigationTitle(club.name)
         .sheet(isPresented: $showingAddShotType) {
             AddShotTypeSheet(club: club, clubManager: clubManager)
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Range") {
+                    navigationCoordinator.navigateToRange(clubName: club.name)
+                }
+            }
         }
     }
 
@@ -384,5 +402,6 @@ struct AddShotTypeSheet: View {
 
 #Preview {
     ClubListView()
+        .environment(NavigationCoordinator())
         .modelContainer(for: [Club.self, ShotType.self], inMemory: true)
 }

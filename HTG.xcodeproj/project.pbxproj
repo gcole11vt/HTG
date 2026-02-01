@@ -62,6 +62,7 @@
 		I1000002229F0002 /* JournalOpeningAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000012229F0002 /* JournalOpeningAnimationView.swift */; };
 		I1000003229F0003 /* AppLaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000013229F0003 /* AppLaunchViewModel.swift */; };
 		J1000001229F0001 /* NicknameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000011229F0001 /* NicknameGenerator.swift */; };
+		N1000001229F0001 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000011229F0001 /* NavigationCoordinator.swift */; };
 		J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000012229F0002 /* NicknameGeneratorTests.swift */; };
 		K1000001229F0001 /* GroupedLadderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000011229F0001 /* GroupedLadderEntry.swift */; };
 		K1000002229F0002 /* TargetYardageBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000012229F0002 /* TargetYardageBarView.swift */; };
@@ -146,6 +147,7 @@
 		I1000012229F0002 /* JournalOpeningAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalOpeningAnimationView.swift; sourceTree = "<group>"; };
 		I1000013229F0003 /* AppLaunchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchViewModel.swift; sourceTree = "<group>"; };
 		J1000011229F0001 /* NicknameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGenerator.swift; sourceTree = "<group>"; };
+		N1000011229F0001 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		J1000012229F0002 /* NicknameGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGeneratorTests.swift; sourceTree = "<group>"; };
 		K1000011229F0001 /* GroupedLadderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderEntry.swift; sourceTree = "<group>"; };
 		K1000012229F0002 /* TargetYardageBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetYardageBarView.swift; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				F1000015229F0005 /* AppSettingsService.swift */,
 				C100001B229F000B /* ClubDistanceResolver.swift */,
 				J1000011229F0001 /* NicknameGenerator.swift */,
+				N1000011229F0001 /* NavigationCoordinator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -668,6 +671,7 @@
 				I1000003229F0003 /* AppLaunchViewModel.swift in Sources */,
 				C100000B229F000B /* ClubDistanceResolver.swift in Sources */,
 				J1000001229F0001 /* NicknameGenerator.swift in Sources */,
+				N1000001229F0001 /* NavigationCoordinator.swift in Sources */,
 				K1000001229F0001 /* GroupedLadderEntry.swift in Sources */,
 				K1000002229F0002 /* TargetYardageBarView.swift in Sources */,
 				K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */,
