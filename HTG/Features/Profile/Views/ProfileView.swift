@@ -6,6 +6,7 @@ struct ProfileView: View {
     @State private var profileManager: ProfileManager?
     @State private var nameText: String = ""
     @State private var handicapText: String = ""
+    @State private var primaryShotTypeText: String = "Full"
     @State private var isEditing = false
 
     var body: some View {
@@ -28,6 +29,7 @@ struct ProfileView: View {
                     if let profile = profileManager?.profile {
                         nameText = profile.name
                         handicapText = "\(profile.handicap)"
+                        primaryShotTypeText = profile.primaryShotType
                     }
                 }
             }
@@ -54,10 +56,18 @@ struct ProfileView: View {
                         .multilineTextAlignment(.trailing)
                         .frame(width: 60)
                 }
+                if let shotTypeNames = profileManager?.shotTypeNames, !shotTypeNames.isEmpty {
+                    Picker("Primary Shot Type", selection: $primaryShotTypeText) {
+                        ForEach(shotTypeNames, id: \.self) { name in
+                            Text(name).tag(name)
+                        }
+                    }
+                }
                 HStack {
                     Button("Cancel") {
                         nameText = profile.name
                         handicapText = "\(profile.handicap)"
+                        primaryShotTypeText = profile.primaryShotType
                         isEditing = false
                     }
                     Spacer()
@@ -77,6 +87,12 @@ struct ProfileView: View {
                     Text("Handicap")
                     Spacer()
                     Text("\(profile.handicap)")
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("Primary Shot Type")
+                    Spacer()
+                    Text(profile.primaryShotType)
                         .foregroundStyle(.secondary)
                 }
                 Button("Edit Profile") {
@@ -101,7 +117,11 @@ struct ProfileView: View {
     private func saveProfile() {
         guard let handicap = Int(handicapText) else { return }
         Task {
-            await profileManager?.updateProfile(name: nameText, handicap: handicap)
+            await profileManager?.updateProfile(
+                name: nameText,
+                handicap: handicap,
+                primaryShotType: primaryShotTypeText
+            )
             isEditing = false
         }
     }
@@ -109,5 +129,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .modelContainer(for: [UserProfile.self], inMemory: true)
+        .modelContainer(for: [UserProfile.self, Club.self, ShotType.self], inMemory: true)
 }

@@ -21,8 +21,31 @@ final class ClubDataService: Sendable {
     }
 
     func fetchAllClubs() async throws -> [Club] {
-        let descriptor = FetchDescriptor<Club>(sortBy: [SortDescriptor(\.sortOrder)])
+        var descriptor = FetchDescriptor<Club>(
+            predicate: #Predicate { $0.isArchived == false },
+            sortBy: [SortDescriptor(\.sortOrder)]
+        )
+        descriptor.includePendingChanges = true
         return try modelContext.fetch(descriptor)
+    }
+
+    func fetchArchivedClubs() async throws -> [Club] {
+        var descriptor = FetchDescriptor<Club>(
+            predicate: #Predicate { $0.isArchived == true },
+            sortBy: [SortDescriptor(\.sortOrder)]
+        )
+        descriptor.includePendingChanges = true
+        return try modelContext.fetch(descriptor)
+    }
+
+    func archiveClub(_ club: Club) async throws {
+        club.isArchived = true
+        try modelContext.save()
+    }
+
+    func restoreClub(_ club: Club) async throws {
+        club.isArchived = false
+        try modelContext.save()
     }
 
     func addClub(name: String, defaultDistance: Int) async throws -> Club {
@@ -74,6 +97,12 @@ final class ClubDataService: Sendable {
         try modelContext.save()
     }
 
+    func updateShotType(_ shotType: ShotType, name: String, distance: Int) async throws {
+        shotType.name = name
+        shotType.carryDistance = distance
+        try modelContext.save()
+    }
+
     func deleteShotType(_ shotType: ShotType, from club: Club) async throws {
         guard club.shotTypes.count > Self.minimumShotTypesPerClub else {
             throw ClubDataServiceError.minimumShotTypesRequired
@@ -82,6 +111,13 @@ final class ClubDataService: Sendable {
         club.shotTypes.removeAll { $0.id == shotType.id }
         modelContext.delete(shotType)
         try modelContext.save()
+    }
+
+    func fetchAllUniqueShotTypeNames() async throws -> [String] {
+        let descriptor = FetchDescriptor<ShotType>()
+        let shotTypes = try modelContext.fetch(descriptor)
+        let uniqueNames = Set(shotTypes.map(\.name))
+        return uniqueNames.sorted()
     }
 
     func loadDefaultClubs() async throws {

@@ -30,7 +30,7 @@ final class ProfileDataService: Sendable {
         return newProfile
     }
 
-    func updateProfile(name: String, handicap: Int) async throws {
+    func updateProfile(name: String, handicap: Int, primaryShotType: String? = nil) async throws {
         guard handicap >= Self.minimumHandicap && handicap <= Self.maximumHandicap else {
             throw ProfileDataServiceError.invalidHandicap
         }
@@ -38,6 +38,9 @@ final class ProfileDataService: Sendable {
         let profile = try await getOrCreateProfile()
         profile.name = name
         profile.handicap = handicap
+        if let primaryShotType {
+            profile.primaryShotType = primaryShotType
+        }
         try modelContext.save()
     }
 }

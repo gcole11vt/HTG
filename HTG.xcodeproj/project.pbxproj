@@ -31,6 +31,8 @@
 		C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000018229F0008 /* ProfileDataServiceTests.swift */; };
 		C1000009229F0009 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000019229F0009 /* SpeechRecognitionService.swift */; };
 		C100000A229F000A /* SpeechRecognitionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001A229F000A /* SpeechRecognitionServiceTests.swift */; };
+		C100000B229F000B /* ClubDistanceResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001B229F000B /* ClubDistanceResolver.swift */; };
+		C100000C229F000C /* ClubDistanceResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001C229F000C /* ClubDistanceResolverTests.swift */; };
 		D1000001229F0001 /* ClubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000011229F0001 /* ClubManager.swift */; };
 		D1000002229F0002 /* RangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000012229F0002 /* RangeManager.swift */; };
 		D1000003229F0003 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000013229F0003 /* ProfileManager.swift */; };
@@ -39,6 +41,26 @@
 		E1000002229F0002 /* GolfModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000012229F0002 /* GolfModeView.swift */; };
 		E1000003229F0003 /* RangeModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000013229F0003 /* RangeModeView.swift */; };
 		E1000004229F0004 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000014229F0004 /* ProfileView.swift */; };
+		F1000001229F0001 /* SelectedClubShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000011229F0001 /* SelectedClubShot.swift */; };
+		F1000002229F0002 /* LadderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000012229F0002 /* LadderEntry.swift */; };
+		F1000003229F0003 /* GolfModeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000013229F0003 /* GolfModeViewModelTests.swift */; };
+		F1000004229F0004 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000014229F0004 /* AppSettings.swift */; };
+		F1000005229F0005 /* AppSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000015229F0005 /* AppSettingsService.swift */; };
+		F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000016229F0006 /* AppSettingsServiceTests.swift */; };
+		G1000001229F0001 /* JournalTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000011229F0001 /* JournalTheme.swift */; };
+		G1000002229F0002 /* LeatherBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000012229F0002 /* LeatherBackground.swift */; };
+		G1000003229F0003 /* AgedPaperBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000013229F0003 /* AgedPaperBackground.swift */; };
+		G1000004229F0004 /* RedMarkerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000014229F0004 /* RedMarkerCircle.swift */; };
+		H1000001229F0001 /* YardageDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011229F0001 /* YardageDisplayView.swift */; };
+		H1000002229F0002 /* ClubShotBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012229F0002 /* ClubShotBadgeView.swift */; };
+		H1000003229F0003 /* ResetIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013229F0003 /* ResetIndicatorView.swift */; };
+		H1000004229F0004 /* LadderTickMarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000014229F0004 /* LadderTickMarkView.swift */; };
+		H1000005229F0005 /* LadderClubMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000015229F0005 /* LadderClubMarkerView.swift */; };
+		H1000006229F0006 /* YardageLadderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000016229F0006 /* YardageLadderView.swift */; };
+		H1000007229F0007 /* YardageBookPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000017229F0007 /* YardageBookPageView.swift */; };
+		I1000001229F0001 /* JournalCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000011229F0001 /* JournalCoverView.swift */; };
+		I1000002229F0002 /* JournalOpeningAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000012229F0002 /* JournalOpeningAnimationView.swift */; };
+		I1000003229F0003 /* AppLaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000013229F0003 /* AppLaunchViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +108,8 @@
 		C1000018229F0008 /* ProfileDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataServiceTests.swift; sourceTree = "<group>"; };
 		C1000019229F0009 /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 		C100001A229F000A /* SpeechRecognitionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionServiceTests.swift; sourceTree = "<group>"; };
+		C100001B229F000B /* ClubDistanceResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDistanceResolver.swift; sourceTree = "<group>"; };
+		C100001C229F000C /* ClubDistanceResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDistanceResolverTests.swift; sourceTree = "<group>"; };
 		D1000011229F0001 /* ClubManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubManager.swift; sourceTree = "<group>"; };
 		D1000012229F0002 /* RangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeManager.swift; sourceTree = "<group>"; };
 		D1000013229F0003 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
@@ -94,6 +118,26 @@
 		E1000012229F0002 /* GolfModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeView.swift; sourceTree = "<group>"; };
 		E1000013229F0003 /* RangeModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeModeView.swift; sourceTree = "<group>"; };
 		E1000014229F0004 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		F1000011229F0001 /* SelectedClubShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedClubShot.swift; sourceTree = "<group>"; };
+		F1000012229F0002 /* LadderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadderEntry.swift; sourceTree = "<group>"; };
+		F1000013229F0003 /* GolfModeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeViewModelTests.swift; sourceTree = "<group>"; };
+		F1000014229F0004 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		F1000015229F0005 /* AppSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsService.swift; sourceTree = "<group>"; };
+		F1000016229F0006 /* AppSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsServiceTests.swift; sourceTree = "<group>"; };
+		G1000011229F0001 /* JournalTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTheme.swift; sourceTree = "<group>"; };
+		G1000012229F0002 /* LeatherBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeatherBackground.swift; sourceTree = "<group>"; };
+		G1000013229F0003 /* AgedPaperBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgedPaperBackground.swift; sourceTree = "<group>"; };
+		G1000014229F0004 /* RedMarkerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedMarkerCircle.swift; sourceTree = "<group>"; };
+		H1000011229F0001 /* YardageDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageDisplayView.swift; sourceTree = "<group>"; };
+		H1000012229F0002 /* ClubShotBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubShotBadgeView.swift; sourceTree = "<group>"; };
+		H1000013229F0003 /* ResetIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetIndicatorView.swift; sourceTree = "<group>"; };
+		H1000014229F0004 /* LadderTickMarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadderTickMarkView.swift; sourceTree = "<group>"; };
+		H1000015229F0005 /* LadderClubMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadderClubMarkerView.swift; sourceTree = "<group>"; };
+		H1000016229F0006 /* YardageLadderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageLadderView.swift; sourceTree = "<group>"; };
+		H1000017229F0007 /* YardageBookPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageBookPageView.swift; sourceTree = "<group>"; };
+		I1000011229F0001 /* JournalCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalCoverView.swift; sourceTree = "<group>"; };
+		I1000012229F0002 /* JournalOpeningAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalOpeningAnimationView.swift; sourceTree = "<group>"; };
+		I1000013229F0003 /* AppLaunchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +196,9 @@
 				C1000016229F0006 /* RangeDataServiceTests.swift */,
 				C1000018229F0008 /* ProfileDataServiceTests.swift */,
 				C100001A229F000A /* SpeechRecognitionServiceTests.swift */,
+				F1000013229F0003 /* GolfModeViewModelTests.swift */,
+				F1000016229F0006 /* AppSettingsServiceTests.swift */,
+				C100001C229F000C /* ClubDistanceResolverTests.swift */,
 			);
 			path = HTGTests;
 			sourceTree = "<group>";
@@ -191,8 +238,34 @@
 				D1000021229F0021 /* RangeMode */,
 				D1000022229F0022 /* GolfMode */,
 				D1000023229F0023 /* Profile */,
+				I1000030229F0030 /* Launch */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		I1000030229F0030 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				I1000031229F0031 /* Views */,
+				I1000032229F0032 /* ViewModels */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
+		I1000031229F0031 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				I1000012229F0002 /* JournalOpeningAnimationView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		I1000032229F0032 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				I1000013229F0003 /* AppLaunchViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		D1000020229F0020 /* ClubManagement */ = {
@@ -218,8 +291,17 @@
 			children = (
 				E1000041229F0041 /* Views */,
 				D1000032229F0032 /* ViewModels */,
+				F1000020229F0020 /* Models */,
 			);
 			path = GolfMode;
+			sourceTree = "<group>";
+		};
+		F1000020229F0020 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F1000012229F0002 /* LadderEntry.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		D1000023229F0023 /* Profile */ = {
@@ -307,8 +389,44 @@
 		A1000613229F0613 /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
+				G1000020229F0020 /* Theme */,
+				H1000020229F0020 /* GolfMode */,
+				I1000020229F0020 /* Launch */,
 			);
 			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		I1000020229F0020 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				I1000011229F0001 /* JournalCoverView.swift */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
+		H1000020229F0020 /* GolfMode */ = {
+			isa = PBXGroup;
+			children = (
+				H1000011229F0001 /* YardageDisplayView.swift */,
+				H1000012229F0002 /* ClubShotBadgeView.swift */,
+				H1000013229F0003 /* ResetIndicatorView.swift */,
+				H1000014229F0004 /* LadderTickMarkView.swift */,
+				H1000015229F0005 /* LadderClubMarkerView.swift */,
+				H1000016229F0006 /* YardageLadderView.swift */,
+				H1000017229F0007 /* YardageBookPageView.swift */,
+			);
+			path = GolfMode;
+			sourceTree = "<group>";
+		};
+		G1000020229F0020 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				G1000011229F0001 /* JournalTheme.swift */,
+				G1000012229F0002 /* LeatherBackground.swift */,
+				G1000013229F0003 /* AgedPaperBackground.swift */,
+				G1000014229F0004 /* RedMarkerCircle.swift */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 		A1000614229F0614 /* Resources */ = {
@@ -330,6 +448,8 @@
 				B1000016229F0006 /* UserProfile.swift */,
 				B1000017229F0007 /* ShotRecommendation.swift */,
 				B1000018229F0008 /* RangeStats.swift */,
+				F1000011229F0001 /* SelectedClubShot.swift */,
+				F1000014229F0004 /* AppSettings.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -342,6 +462,8 @@
 				C1000015229F0005 /* RangeDataService.swift */,
 				C1000017229F0007 /* ProfileDataService.swift */,
 				C1000019229F0009 /* SpeechRecognitionService.swift */,
+				F1000015229F0005 /* AppSettingsService.swift */,
+				C100001B229F000B /* ClubDistanceResolver.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -505,6 +627,25 @@
 				E1000002229F0002 /* GolfModeView.swift in Sources */,
 				E1000003229F0003 /* RangeModeView.swift in Sources */,
 				E1000004229F0004 /* ProfileView.swift in Sources */,
+				F1000001229F0001 /* SelectedClubShot.swift in Sources */,
+				F1000002229F0002 /* LadderEntry.swift in Sources */,
+				F1000004229F0004 /* AppSettings.swift in Sources */,
+				F1000005229F0005 /* AppSettingsService.swift in Sources */,
+				G1000001229F0001 /* JournalTheme.swift in Sources */,
+				G1000002229F0002 /* LeatherBackground.swift in Sources */,
+				G1000003229F0003 /* AgedPaperBackground.swift in Sources */,
+				G1000004229F0004 /* RedMarkerCircle.swift in Sources */,
+				H1000001229F0001 /* YardageDisplayView.swift in Sources */,
+				H1000002229F0002 /* ClubShotBadgeView.swift in Sources */,
+				H1000003229F0003 /* ResetIndicatorView.swift in Sources */,
+				H1000004229F0004 /* LadderTickMarkView.swift in Sources */,
+				H1000005229F0005 /* LadderClubMarkerView.swift in Sources */,
+				H1000006229F0006 /* YardageLadderView.swift in Sources */,
+				H1000007229F0007 /* YardageBookPageView.swift in Sources */,
+				I1000001229F0001 /* JournalCoverView.swift in Sources */,
+				I1000002229F0002 /* JournalOpeningAnimationView.swift in Sources */,
+				I1000003229F0003 /* AppLaunchViewModel.swift in Sources */,
+				C100000B229F000B /* ClubDistanceResolver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +659,9 @@
 				C1000006229F0006 /* RangeDataServiceTests.swift in Sources */,
 				C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */,
 				C100000A229F000A /* SpeechRecognitionServiceTests.swift in Sources */,
+				F1000003229F0003 /* GolfModeViewModelTests.swift in Sources */,
+				F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */,
+				C100000C229F000C /* ClubDistanceResolverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

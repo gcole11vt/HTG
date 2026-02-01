@@ -202,4 +202,123 @@ struct ClubDataServiceTests {
         #expect(clubs[1].name == "Driver")
         #expect(clubs[2].name == "Iron")
     }
+
+    // MARK: - Archive Tests
+
+    @Test("New club defaults isArchived to false")
+    func newClubDefaultsIsArchivedFalse() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "Driver", defaultDistance: 250)
+
+        #expect(club.isArchived == false)
+    }
+
+    @Test("Archive club sets isArchived to true")
+    func archiveClubSetsFlag() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "Driver", defaultDistance: 250)
+        try await service.archiveClub(club)
+
+        #expect(club.isArchived == true)
+    }
+
+    @Test("Restore club sets isArchived to false")
+    func restoreClubSetsFlag() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "Driver", defaultDistance: 250)
+        try await service.archiveClub(club)
+        try await service.restoreClub(club)
+
+        #expect(club.isArchived == false)
+    }
+
+    @Test("Fetch all clubs excludes archived clubs")
+    func fetchAllClubsExcludesArchived() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club1 = try await service.addClub(name: "Driver", defaultDistance: 250)
+        _ = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.archiveClub(club1)
+
+        let clubs = try await service.fetchAllClubs()
+
+        #expect(clubs.count == 1)
+        #expect(clubs.first?.name == "7 Iron")
+    }
+
+    @Test("Fetch archived clubs returns only archived")
+    func fetchArchivedClubsReturnsOnlyArchived() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club1 = try await service.addClub(name: "Driver", defaultDistance: 250)
+        _ = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.archiveClub(club1)
+
+        let archived = try await service.fetchArchivedClubs()
+
+        #expect(archived.count == 1)
+        #expect(archived.first?.name == "Driver")
+    }
+
+    @Test("Archived clubs do not count toward 13 club maximum")
+    func archivedClubsDontCountTowardMax() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        // Add 13 clubs
+        var clubs: [Club] = []
+        for i in 1...13 {
+            let club = try await service.addClub(name: "Club \(i)", defaultDistance: 100 + i * 10)
+            clubs.append(club)
+        }
+
+        // Archive one club
+        try await service.archiveClub(clubs[0])
+
+        // Should now be able to add a 14th club (since one is archived)
+        let newClub = try await service.addClub(name: "Club 14", defaultDistance: 240)
+        #expect(newClub.name == "Club 14")
+    }
+
+    // MARK: - Shot Type Names
+
+    @Test("Fetch all unique shot type names returns deduplicated sorted names")
+    func fetchAllUniqueShotTypeNamesReturnsSorted() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club1 = try await service.addClub(name: "Driver", defaultDistance: 250)
+        let club2 = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.addShotType(to: club1, name: "Three-Quarter", distance: 230)
+        try await service.addShotType(to: club2, name: "Half", distance: 130)
+        try await service.addShotType(to: club2, name: "Three-Quarter", distance: 150)
+
+        let names = try await service.fetchAllUniqueShotTypeNames()
+
+        #expect(names == ["Full", "Half", "Three-Quarter"])
+    }
+
+    // MARK: - Update Shot Type
+
+    @Test("Update shot type changes name and distance")
+    func updateShotTypeChangesNameAndDistance() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        let shotType = club.shotTypes.first!
+
+        try await service.updateShotType(shotType, name: "Punch", distance: 140)
+
+        #expect(shotType.name == "Punch")
+        #expect(shotType.carryDistance == 140)
+    }
 }

@@ -7,6 +7,7 @@ final class ClubManager {
     private let service: ClubDataService
 
     var clubs: [Club] = []
+    var archivedClubs: [Club] = []
     var isLoading: Bool = false
     var errorMessage: String?
 
@@ -19,6 +20,7 @@ final class ClubManager {
         errorMessage = nil
         do {
             clubs = try await service.fetchAllClubs()
+            archivedClubs = try await service.fetchArchivedClubs()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -72,12 +74,39 @@ final class ClubManager {
         }
     }
 
+    func archiveClub(_ club: Club) async {
+        do {
+            try await service.archiveClub(club)
+            await loadClubs()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func restoreClub(_ club: Club) async {
+        do {
+            try await service.restoreClub(club)
+            await loadClubs()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     func addShotType(to club: Club, name: String, distance: Int) async {
         do {
             try await service.addShotType(to: club, name: name, distance: distance)
             await loadClubs()
         } catch ClubDataServiceError.maximumShotTypesReached {
             errorMessage = "Maximum of 5 shot types per club reached"
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func updateShotType(_ shotType: ShotType, name: String, distance: Int) async {
+        do {
+            try await service.updateShotType(shotType, name: name, distance: distance)
+            await loadClubs()
         } catch {
             errorMessage = error.localizedDescription
         }

@@ -113,4 +113,26 @@ struct ProfileDataServiceTests {
         let profile = try await service.getOrCreateProfile()
         #expect(profile.handicap == 54)
     }
+
+    @Test("New profile defaults primaryShotType to Full")
+    func newProfileDefaultsPrimaryShotTypeToFull() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let profile = try await service.getOrCreateProfile()
+
+        #expect(profile.primaryShotType == "Full")
+    }
+
+    @Test("Update profile changes primaryShotType")
+    func updateProfileChangesPrimaryShotType() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        _ = try await service.getOrCreateProfile()
+        try await service.updateProfile(name: "", handicap: 18, primaryShotType: "Three-Quarter")
+
+        let profile = try await service.getOrCreateProfile()
+        #expect(profile.primaryShotType == "Three-Quarter")
+    }
 }
