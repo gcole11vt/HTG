@@ -312,6 +312,67 @@ struct ClubDataServiceTests {
 
     // MARK: - Update Shot Type
 
+    // MARK: - Nickname Tests
+
+    @Test("Add club generates a nickname automatically")
+    func addClubGeneratesNickname() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+
+        #expect(club.nickname == "7I")
+    }
+
+    @Test("Load default clubs generates nicknames for all 13 clubs")
+    func loadDefaultClubsGeneratesNicknames() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        try await service.loadDefaultClubs()
+        let clubs = try await service.fetchAllClubs()
+
+        for club in clubs {
+            #expect(!club.nickname.isEmpty, "Club '\(club.name)' should have a nickname")
+        }
+
+        let driver = clubs.first { $0.name == "Driver" }
+        #expect(driver?.nickname == "Dr")
+
+        let pitchingWedge = clubs.first { $0.name == "Pitching Wedge" }
+        #expect(pitchingWedge?.nickname == "PW")
+    }
+
+    @Test("Backfill nicknames fills empty nicknames")
+    func backfillNicknamesFillsEmpty() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        // Create a club with an empty nickname manually
+        let club = Club(name: "Sand Wedge", nickname: "", sortOrder: 0)
+        let shotType = ShotType(name: "Full", carryDistance: 100, sortOrder: 0, club: club)
+        club.shotTypes = [shotType]
+        container.mainContext.insert(club)
+        try container.mainContext.save()
+
+        #expect(club.nickname == "")
+
+        try await service.backfillNicknames()
+
+        #expect(club.nickname == "SW")
+    }
+
+    @Test("Update club changes nickname when provided")
+    func updateClubChangesNickname() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.updateClub(club, name: "7 Iron", nickname: "7i")
+
+        #expect(club.nickname == "7i")
+    }
+
     @Test("Update shot type changes name and distance")
     func updateShotTypeChangesNameAndDistance() async throws {
         let container = try makeTestContainer()

@@ -30,15 +30,16 @@ final class ClubManager {
     func loadDefaultClubsIfNeeded() async {
         do {
             try await service.loadDefaultClubs()
+            try await service.backfillNicknames()
             await loadClubs()
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func addClub(name: String, defaultDistance: Int) async {
+    func addClub(name: String, defaultDistance: Int, nickname: String? = nil) async {
         do {
-            _ = try await service.addClub(name: name, defaultDistance: defaultDistance)
+            _ = try await service.addClub(name: name, defaultDistance: defaultDistance, nickname: nickname)
             await loadClubs()
         } catch ClubDataServiceError.maximumClubsReached {
             errorMessage = "Maximum of 13 clubs reached"
@@ -56,9 +57,9 @@ final class ClubManager {
         }
     }
 
-    func updateClub(_ club: Club, name: String) async {
+    func updateClub(_ club: Club, name: String, nickname: String? = nil) async {
         do {
-            try await service.updateClub(club, name: name)
+            try await service.updateClub(club, name: name, nickname: nickname)
             await loadClubs()
         } catch {
             errorMessage = error.localizedDescription

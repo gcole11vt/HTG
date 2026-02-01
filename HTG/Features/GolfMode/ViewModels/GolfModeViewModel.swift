@@ -18,6 +18,7 @@ final class GolfModeViewModel {
     // Selection tracking
     var selectedClubShot: SelectedClubShot?
     var yardageRangePercentage: Int = 15
+    private var primaryShotTypeName: String = "Full"
 
     // Computed properties for selection
     var recommendedClubShot: SelectedClubShot? {
@@ -64,6 +65,7 @@ final class GolfModeViewModel {
         do {
             clubs = try await clubService.fetchAllClubs()
             let profile = try await profileService.getOrCreateProfile()
+            primaryShotTypeName = profile.primaryShotType
             if let filter = ShotTypeFilter(rawValue: profile.primaryShotType) {
                 selectedFilter = filter
             }
@@ -135,11 +137,13 @@ final class GolfModeViewModel {
 
                 let entry = LadderEntry(
                     clubName: club.name,
+                    clubNickname: club.nickname,
                     shotTypeName: shotType.name,
                     carryDistance: distance,
                     yardagePosition: position,
                     isSelected: isSelected,
-                    isSameClubAsSelected: isSameClub
+                    isSameClubAsSelected: isSameClub,
+                    isPrimaryShotType: shotType.name == primaryShotTypeName
                 )
                 entries.append(entry)
             }

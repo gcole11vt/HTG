@@ -48,14 +48,15 @@ final class ClubDataService: Sendable {
         try modelContext.save()
     }
 
-    func addClub(name: String, defaultDistance: Int) async throws -> Club {
+    func addClub(name: String, defaultDistance: Int, nickname: String? = nil) async throws -> Club {
         let existingClubs = try await fetchAllClubs()
 
         guard existingClubs.count < Self.maximumClubs else {
             throw ClubDataServiceError.maximumClubsReached
         }
 
-        let club = Club(name: name, sortOrder: existingClubs.count)
+        let resolvedNickname = nickname ?? NicknameGenerator.generate(from: name)
+        let club = Club(name: name, nickname: resolvedNickname, sortOrder: existingClubs.count)
         let fullShotType = ShotType(name: "Full", carryDistance: defaultDistance, sortOrder: 0, club: club)
         club.shotTypes = [fullShotType]
 
@@ -70,8 +71,11 @@ final class ClubDataService: Sendable {
         try modelContext.save()
     }
 
-    func updateClub(_ club: Club, name: String) async throws {
+    func updateClub(_ club: Club, name: String, nickname: String? = nil) async throws {
         club.name = name
+        if let nickname {
+            club.nickname = nickname
+        }
         try modelContext.save()
     }
 
@@ -113,6 +117,19 @@ final class ClubDataService: Sendable {
         try modelContext.save()
     }
 
+    func backfillNicknames() async throws {
+        var descriptor = FetchDescriptor<Club>(
+            predicate: #Predicate { $0.nickname == "" }
+        )
+        descriptor.includePendingChanges = true
+        let clubs = try modelContext.fetch(descriptor)
+        guard !clubs.isEmpty else { return }
+        for club in clubs {
+            club.nickname = NicknameGenerator.generate(from: club.name)
+        }
+        try modelContext.save()
+    }
+
     func fetchAllUniqueShotTypeNames() async throws -> [String] {
         let descriptor = FetchDescriptor<ShotType>()
         let shotTypes = try modelContext.fetch(descriptor)
@@ -141,7 +158,7 @@ final class ClubDataService: Sendable {
         ]
 
         for (index, (name, distance)) in defaultClubs.enumerated() {
-            let club = Club(name: name, sortOrder: index)
+            let club = Club(name: name, nickname: NicknameGenerator.generate(from: name), sortOrder: index)
             let fullShot = ShotType(name: "Full", carryDistance: distance, sortOrder: 0, club: club)
             let threeQuarterDist = Int(Double(distance) * Double.random(in: 0.90...0.95))
             let threeQuarterShot = ShotType(name: "3/4", carryDistance: threeQuarterDist, sortOrder: 1, club: club)

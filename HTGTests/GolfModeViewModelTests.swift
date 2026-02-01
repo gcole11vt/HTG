@@ -12,8 +12,9 @@ struct GolfModeViewModelTests {
         return try ModelContainer(for: schema, configurations: [config])
     }
 
-    private func createClub(name: String, shotTypes: [(String, Int)], sortOrder: Int, in context: ModelContext) -> Club {
-        let club = Club(name: name, sortOrder: sortOrder)
+    private func createClub(name: String, nickname: String? = nil, shotTypes: [(String, Int)], sortOrder: Int, in context: ModelContext) -> Club {
+        let resolvedNickname = nickname ?? NicknameGenerator.generate(from: name)
+        let club = Club(name: name, nickname: resolvedNickname, sortOrder: sortOrder)
         for (index, (shotName, distance)) in shotTypes.enumerated() {
             let shotType = ShotType(name: shotName, carryDistance: distance, sortOrder: index, club: club)
             club.shotTypes.append(shotType)
@@ -269,5 +270,50 @@ struct GolfModeViewModelTests {
         for rec in viewModel.recommendations {
             #expect(rec.shotTypeName == "3/4")
         }
+    }
+
+    // MARK: - Nickname and Primary Shot Type in Ladder Tests
+
+    @Test("Ladder entries contain correct clubNickname values")
+    func ladderEntriesContainCorrectNicknames() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", nickname: "7I", shotTypes: [("Full", 155)], sortOrder: 0, in: container.mainContext)
+        _ = createClub(name: "Pitching Wedge", nickname: "PW", shotTypes: [("Full", 135)], sortOrder: 1, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(145)
+        viewModel.yardageRangePercentage = 20
+
+        let entries = viewModel.ladderEntries
+        let ironEntry = entries.first(where: { $0.clubName == "7 Iron" })
+        let wedgeEntry = entries.first(where: { $0.clubName == "Pitching Wedge" })
+
+        #expect(ironEntry?.clubNickname == "7I")
+        #expect(wedgeEntry?.clubNickname == "PW")
+    }
+
+    @Test("isPrimaryShotType is correctly set on ladder entries")
+    func isPrimaryShotTypeCorrectlySet() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(
+            name: "7 Iron",
+            nickname: "7I",
+            shotTypes: [("Full", 155), ("3/4", 140)],
+            sortOrder: 0,
+            in: container.mainContext
+        )
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(150)
+        viewModel.yardageRangePercentage = 15
+
+        let entries = viewModel.ladderEntries
+        let fullEntry = entries.first(where: { $0.shotTypeName == "Full" })
+        let threeQuarterEntry = entries.first(where: { $0.shotTypeName == "3/4" })
+
+        #expect(fullEntry?.isPrimaryShotType == true)
+        #expect(threeQuarterEntry?.isPrimaryShotType == false)
     }
 }

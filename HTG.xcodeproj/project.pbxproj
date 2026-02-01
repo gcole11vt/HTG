@@ -61,6 +61,8 @@
 		I1000001229F0001 /* JournalCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000011229F0001 /* JournalCoverView.swift */; };
 		I1000002229F0002 /* JournalOpeningAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000012229F0002 /* JournalOpeningAnimationView.swift */; };
 		I1000003229F0003 /* AppLaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000013229F0003 /* AppLaunchViewModel.swift */; };
+		J1000001229F0001 /* NicknameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000011229F0001 /* NicknameGenerator.swift */; };
+		J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000012229F0002 /* NicknameGeneratorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +140,8 @@
 		I1000011229F0001 /* JournalCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalCoverView.swift; sourceTree = "<group>"; };
 		I1000012229F0002 /* JournalOpeningAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalOpeningAnimationView.swift; sourceTree = "<group>"; };
 		I1000013229F0003 /* AppLaunchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchViewModel.swift; sourceTree = "<group>"; };
+		J1000011229F0001 /* NicknameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGenerator.swift; sourceTree = "<group>"; };
+		J1000012229F0002 /* NicknameGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGeneratorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +203,7 @@
 				F1000013229F0003 /* GolfModeViewModelTests.swift */,
 				F1000016229F0006 /* AppSettingsServiceTests.swift */,
 				C100001C229F000C /* ClubDistanceResolverTests.swift */,
+				J1000012229F0002 /* NicknameGeneratorTests.swift */,
 			);
 			path = HTGTests;
 			sourceTree = "<group>";
@@ -464,6 +469,7 @@
 				C1000019229F0009 /* SpeechRecognitionService.swift */,
 				F1000015229F0005 /* AppSettingsService.swift */,
 				C100001B229F000B /* ClubDistanceResolver.swift */,
+				J1000011229F0001 /* NicknameGenerator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -646,6 +652,7 @@
 				I1000002229F0002 /* JournalOpeningAnimationView.swift in Sources */,
 				I1000003229F0003 /* AppLaunchViewModel.swift in Sources */,
 				C100000B229F000B /* ClubDistanceResolver.swift in Sources */,
+				J1000001229F0001 /* NicknameGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,6 +669,7 @@
 				F1000003229F0003 /* GolfModeViewModelTests.swift in Sources */,
 				F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */,
 				C100000C229F000C /* ClubDistanceResolverTests.swift in Sources */,
+				J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

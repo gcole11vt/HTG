@@ -123,7 +123,9 @@ struct ClubDetailView: View {
     let primaryShotType: String
     @State private var showingAddShotType = false
     @State private var editedName: String = ""
+    @State private var editedNickname: String = ""
     @State private var isEditingName = false
+    @State private var isEditingNickname = false
     @Environment(\.dismiss) private var dismiss
 
     private var sortedShotTypes: [ShotType] {
@@ -155,6 +157,37 @@ struct ClubDetailView: View {
                         Button("Edit") {
                             editedName = club.name
                             isEditingName = true
+                        }
+                    }
+                }
+            }
+
+            Section("Nickname") {
+                if isEditingNickname {
+                    HStack {
+                        TextField("Nickname", text: $editedNickname)
+                            .textInputAutocapitalization(.characters)
+                            .onChange(of: editedNickname) { _, newValue in
+                                let filtered = String(newValue.filter { $0.isLetter || $0.isNumber }.prefix(2))
+                                if filtered != newValue {
+                                    editedNickname = filtered
+                                }
+                            }
+                        Button("Save") {
+                            Task {
+                                await clubManager?.updateClub(club, name: club.name, nickname: editedNickname)
+                                isEditingNickname = false
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                } else {
+                    HStack {
+                        Text(club.nickname)
+                        Spacer()
+                        Button("Edit") {
+                            editedNickname = club.nickname
+                            isEditingNickname = true
                         }
                     }
                 }
@@ -271,12 +304,24 @@ struct AddClubSheet: View {
     let clubManager: ClubManager?
     @Environment(\.dismiss) private var dismiss
     @State private var name: String = ""
+    @State private var nickname: String = ""
     @State private var distanceText: String = "150"
 
     var body: some View {
         NavigationStack {
             Form {
                 TextField("Club Name", text: $name)
+                    .onChange(of: name) { _, newValue in
+                        nickname = NicknameGenerator.generate(from: newValue)
+                    }
+                TextField("Nickname (1-2 chars)", text: $nickname)
+                    .textInputAutocapitalization(.characters)
+                    .onChange(of: nickname) { _, newValue in
+                        let filtered = String(newValue.filter { $0.isLetter || $0.isNumber }.prefix(2))
+                        if filtered != newValue {
+                            nickname = filtered
+                        }
+                    }
                 TextField("Default Distance (yards)", text: $distanceText)
                     .keyboardType(.numberPad)
             }
@@ -290,7 +335,7 @@ struct AddClubSheet: View {
                     Button("Add") {
                         guard let distance = Int(distanceText) else { return }
                         Task {
-                            await clubManager?.addClub(name: name, defaultDistance: distance)
+                            await clubManager?.addClub(name: name, defaultDistance: distance, nickname: nickname.isEmpty ? nil : nickname)
                             dismiss()
                         }
                     }

@@ -14,15 +14,15 @@ struct LadderClubMarkerView: View {
                     .fill(markerColor)
                     .frame(width: 8, height: 8)
 
-                // Club name (abbreviated)
-                Text(abbreviatedClubName)
-                    .font(JournalTheme.handwritten(size: 12))
-                    .foregroundStyle(textColor)
-
-                if entry.isSelected {
-                    Text(entry.shotTypeName)
-                        .font(JournalTheme.handwritten(size: 10))
-                        .foregroundStyle(JournalTheme.mutedGray)
+                // Club nickname + optional shot type
+                if entry.isPrimaryShotType {
+                    Text(entry.clubNickname)
+                        .font(JournalTheme.handwritten(size: 13))
+                        .foregroundStyle(textColor)
+                } else {
+                    Text("\(entry.clubNickname) \(entry.shotTypeName)")
+                        .font(JournalTheme.handwritten(size: 12))
+                        .foregroundStyle(textColor)
                 }
             }
             .padding(.vertical, 2)
@@ -56,20 +56,6 @@ struct LadderClubMarkerView: View {
         }
     }
 
-    private var abbreviatedClubName: String {
-        // Abbreviate common club names
-        let name = entry.clubName
-        if name.contains("Iron") {
-            return name.replacingOccurrences(of: " Iron", with: "i")
-        } else if name.contains("Wood") {
-            return name.replacingOccurrences(of: " Wood", with: "W")
-        } else if name == "Driver" {
-            return "Dr"
-        } else if name == "Putter" {
-            return "Pt"
-        }
-        return name
-    }
 }
 
 #Preview {
@@ -77,33 +63,39 @@ struct LadderClubMarkerView: View {
         LadderClubMarkerView(
             entry: LadderEntry(
                 clubName: "7 Iron",
+                clubNickname: "7I",
                 shotTypeName: "Full",
                 carryDistance: 155,
                 yardagePosition: 0.6,
                 isSelected: true,
-                isSameClubAsSelected: true
+                isSameClubAsSelected: true,
+                isPrimaryShotType: true
             )
         )
 
         LadderClubMarkerView(
             entry: LadderEntry(
                 clubName: "7 Iron",
+                clubNickname: "7I",
                 shotTypeName: "3/4",
                 carryDistance: 140,
                 yardagePosition: 0.4,
                 isSelected: false,
-                isSameClubAsSelected: true
+                isSameClubAsSelected: true,
+                isPrimaryShotType: false
             )
         )
 
         LadderClubMarkerView(
             entry: LadderEntry(
                 clubName: "8 Iron",
+                clubNickname: "8I",
                 shotTypeName: "Full",
                 carryDistance: 145,
                 yardagePosition: 0.5,
                 isSelected: false,
-                isSameClubAsSelected: false
+                isSameClubAsSelected: false,
+                isPrimaryShotType: true
             )
         )
     }
