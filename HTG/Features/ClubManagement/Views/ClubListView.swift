@@ -160,9 +160,7 @@ struct ClubDetailView: View {
                         }
                     }
                 }
-            }
 
-            Section("Nickname") {
                 if isEditingNickname {
                     HStack {
                         TextField("Nickname", text: $editedNickname)
@@ -184,7 +182,10 @@ struct ClubDetailView: View {
                 } else {
                     HStack {
                         Text(club.nickname)
-                        Spacer()
+                        Text("Nickname")
+                            .foregroundStyle(.gray)
+                            .italic()
+                            .frame(maxWidth: .infinity)
                         Button("Edit") {
                             editedNickname = club.nickname
                             isEditingNickname = true
