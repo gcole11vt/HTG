@@ -4,119 +4,72 @@ import SwiftData
 struct GolfModeView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel: GolfModeViewModel?
-    @State private var yardageText: String = "150"
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                yardageInputSection
-                filterSection
-                recommendationsList
-            }
-            .navigationTitle("Golf Mode")
-            .task {
-                if viewModel == nil {
-                    viewModel = GolfModeViewModel(modelContext: modelContext)
-                }
-                await viewModel?.loadClubs()
-            }
-        }
-    }
-
-    private var yardageInputSection: some View {
-        VStack(spacing: 8) {
-            Text("Target Yardage")
-                .font(.headline)
-
-            HStack {
-                TextField("Yards", text: $yardageText)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(width: 100)
-                    .multilineTextAlignment(.center)
-
-                Text("yards")
-                    .foregroundStyle(.secondary)
-            }
-            .onChange(of: yardageText) { _, newValue in
-                if let yardage = Int(newValue) {
-                    viewModel?.setTargetYardage(yardage)
-                }
-            }
-        }
-        .padding()
-    }
-
-    private var filterSection: some View {
-        Picker("Shot Type", selection: Binding(
-            get: { viewModel?.selectedFilter ?? .all },
-            set: { viewModel?.setFilter($0) }
-        )) {
-            ForEach(ShotTypeFilter.allCases, id: \.self) { filter in
-                Text(filter.rawValue).tag(filter)
-            }
-        }
-        .pickerStyle(.segmented)
-        .padding(.horizontal)
-    }
-
-    private var recommendationsList: some View {
-        List {
-            if let recommendations = viewModel?.recommendations, !recommendations.isEmpty {
-                ForEach(recommendations) { rec in
-                    RecommendationRowView(recommendation: rec)
+        Group {
+            if let viewModel = viewModel {
+                if viewModel.clubs.isEmpty {
+                    emptyStateView
+                } else {
+                    yardageBookContent(viewModel: viewModel)
                 }
             } else {
-                ContentUnavailableView(
-                    "No Recommendations",
-                    systemImage: "questionmark.circle",
-                    description: Text("Add clubs to see shot recommendations")
-                )
+                loadingView
             }
         }
-    }
-}
-
-struct RecommendationRowView: View {
-    let recommendation: ShotRecommendation
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(recommendation.clubName)
-                    .font(.headline)
-                Text(recommendation.shotTypeName)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+        .task {
+            if viewModel == nil {
+                viewModel = GolfModeViewModel(modelContext: modelContext)
             }
-
-            Spacer()
-
-            VStack(alignment: .trailing) {
-                Text("\(recommendation.carryDistance) yds")
-                    .font(.headline)
-                Text(differenceText)
-                    .font(.caption)
-                    .foregroundStyle(differenceColor)
-            }
-        }
-        .padding(.vertical, 4)
-    }
-
-    private var differenceText: String {
-        if recommendation.distanceDifference == 0 {
-            return "Exact"
-        } else {
-            return "\(recommendation.distanceDifference > 0 ? "+" : "")\(recommendation.distanceDifference)"
+            await viewModel?.loadClubs()
         }
     }
 
-    private var differenceColor: Color {
-        switch recommendation.distanceDifference {
-        case 0...5: return .green
-        case 6...10: return .yellow
-        default: return .orange
+    private func yardageBookContent(viewModel: GolfModeViewModel) -> some View {
+        YardageBookPageView(
+            targetYardage: Binding(
+                get: { viewModel.targetYardage },
+                set: { viewModel.setTargetYardage($0) }
+            ),
+            displayedClubShot: viewModel.displayedClubShot,
+            showResetIndicator: viewModel.showResetIndicator,
+            ladderMinYardage: viewModel.ladderMinYardage,
+            ladderMaxYardage: viewModel.ladderMaxYardage,
+            ladderEntries: viewModel.ladderEntries
+        ) { entry in
+            viewModel.selectClubShot(
+                clubName: entry.clubName,
+                shotTypeName: entry.shotTypeName,
+                distance: entry.carryDistance
+            )
+        } onReset: {
+            viewModel.resetToRecommendation()
         }
+    }
+
+    private var loadingView: some View {
+        ProgressView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .agedPaperBackground()
+    }
+
+    private var emptyStateView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "bag")
+                .font(.system(size: 48))
+                .foregroundStyle(JournalTheme.mutedGray)
+
+            Text("No Clubs")
+                .font(JournalTheme.handwrittenBold(size: 24))
+                .foregroundStyle(JournalTheme.inkBlue)
+
+            Text("Add clubs in the Clubs tab\nto see shot recommendations")
+                .font(JournalTheme.handwritten(size: 16))
+                .foregroundStyle(JournalTheme.mutedGray)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .agedPaperBackground()
     }
 }
 

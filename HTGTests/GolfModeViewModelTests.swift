@@ -7,7 +7,7 @@ import SwiftData
 struct GolfModeViewModelTests {
 
     private func makeTestContainer() throws -> ModelContainer {
-        let schema = Schema([Club.self, ShotType.self])
+        let schema = Schema([Club.self, ShotType.self, UserProfile.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
     }
@@ -222,5 +222,52 @@ struct GolfModeViewModelTests {
         #expect(fullEntry?.isSameClubAsSelected == true)
         #expect(threeQuarterEntry?.isSelected == false)
         #expect(threeQuarterEntry?.isSameClubAsSelected == true)
+    }
+
+    // MARK: - Primary Shot Type Initial Filter Tests
+
+    @Test("Initial filter is set from profile primaryShotType Full")
+    func initialFilterFromProfileFull() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(
+            name: "7 Iron",
+            shotTypes: [("Full", 150), ("3/4", 135)],
+            sortOrder: 0,
+            in: container.mainContext
+        )
+
+        // Default profile has primaryShotType = "Full"
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+
+        #expect(viewModel.selectedFilter == .full)
+        // Recommendations should only contain Full shot types
+        for rec in viewModel.recommendations {
+            #expect(rec.shotTypeName == "Full")
+        }
+    }
+
+    @Test("Initial filter is set from profile primaryShotType 3/4")
+    func initialFilterFromProfileThreeQuarter() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(
+            name: "7 Iron",
+            shotTypes: [("Full", 150), ("3/4", 135)],
+            sortOrder: 0,
+            in: container.mainContext
+        )
+
+        // Set profile primaryShotType to "3/4"
+        let profileService = ProfileDataService(modelContext: container.mainContext)
+        let profile = try await profileService.getOrCreateProfile()
+        try await profileService.updateProfile(name: profile.name, handicap: profile.handicap, primaryShotType: "3/4")
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+
+        #expect(viewModel.selectedFilter == .threeQuarter)
+        for rec in viewModel.recommendations {
+            #expect(rec.shotTypeName == "3/4")
+        }
     }
 }

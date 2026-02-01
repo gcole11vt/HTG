@@ -10,7 +10,8 @@ struct HTGApp: App {
             RangeSession.self,
             Shot.self,
             StoredShotType.self,
-            UserProfile.self
+            UserProfile.self,
+            AppSettings.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
