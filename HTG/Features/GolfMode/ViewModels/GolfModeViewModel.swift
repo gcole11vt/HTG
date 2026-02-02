@@ -102,6 +102,18 @@ final class GolfModeViewModel {
         )
     }
 
+    // MARK: - Bag Metadata
+
+    var shotTypeNamesInBag: [String] {
+        var names: Set<String> = []
+        for club in clubs where !club.isArchived {
+            for shotType in club.shotTypes where !shotType.isArchived {
+                names.insert(shotType.name)
+            }
+        }
+        return names.sorted()
+    }
+
     // MARK: - Selection Methods
 
     func selectClubShot(clubName: String, shotTypeName: String, distance: Int) {

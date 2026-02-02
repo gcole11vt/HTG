@@ -35,16 +35,27 @@ struct GolfModeView: View {
             showResetIndicator: viewModel.showResetIndicator,
             ladderMinYardage: viewModel.ladderMinYardage,
             ladderMaxYardage: viewModel.ladderMaxYardage,
-            groupedLadderEntries: viewModel.groupedLadderEntries
-        ) { entry in
-            viewModel.selectClubShot(
-                clubName: entry.clubName,
-                shotTypeName: entry.shotTypeName,
-                distance: entry.carryDistance
-            )
-        } onReset: {
-            viewModel.resetToRecommendation()
-        }
+            groupedLadderEntries: viewModel.groupedLadderEntries,
+            clubs: viewModel.clubs,
+            allShotTypeNames: viewModel.shotTypeNamesInBag,
+            onSelectEntry: { entry in
+                viewModel.selectClubShot(
+                    clubName: entry.clubName,
+                    shotTypeName: entry.shotTypeName,
+                    distance: entry.carryDistance
+                )
+            },
+            onSelectClubShot: { selection in
+                viewModel.selectClubShot(
+                    clubName: selection.clubName,
+                    shotTypeName: selection.shotTypeName,
+                    distance: selection.carryDistance
+                )
+            },
+            onReset: {
+                viewModel.resetToRecommendation()
+            }
+        )
     }
 
     private var loadingView: some View {

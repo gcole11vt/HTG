@@ -69,6 +69,10 @@
 		K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000013229F0003 /* GroupedLadderClubMarkerView.swift */; };
 		K1000004229F0004 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000014229F0004 /* PageTitleView.swift */; };
 		K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000015229F0005 /* ShotInfoHeaderView.swift */; };
+		AA000001229F0001 /* ClubShotRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000011229F0001 /* ClubShotRowView.swift */; };
+		AA000002229F0002 /* ClubDetailPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000012229F0002 /* ClubDetailPanelView.swift */; };
+		AA000003229F0003 /* AllShotsOverviewPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000013229F0003 /* AllShotsOverviewPanelView.swift */; };
+		AA000004229F0004 /* ClubSelectorSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000014229F0004 /* ClubSelectorSheetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +158,10 @@
 		K1000013229F0003 /* GroupedLadderClubMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderClubMarkerView.swift; sourceTree = "<group>"; };
 		K1000014229F0004 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		K1000015229F0005 /* ShotInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotInfoHeaderView.swift; sourceTree = "<group>"; };
+		AA000011229F0001 /* ClubShotRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubShotRowView.swift; sourceTree = "<group>"; };
+		AA000012229F0002 /* ClubDetailPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDetailPanelView.swift; sourceTree = "<group>"; };
+		AA000013229F0003 /* AllShotsOverviewPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllShotsOverviewPanelView.swift; sourceTree = "<group>"; };
+		AA000014229F0004 /* ClubSelectorSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubSelectorSheetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,6 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				E1000012229F0002 /* GolfModeView.swift */,
+				AA000014229F0004 /* ClubSelectorSheetView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -436,6 +445,9 @@
 				K1000013229F0003 /* GroupedLadderClubMarkerView.swift */,
 				K1000014229F0004 /* PageTitleView.swift */,
 				K1000015229F0005 /* ShotInfoHeaderView.swift */,
+				AA000011229F0001 /* ClubShotRowView.swift */,
+				AA000012229F0002 /* ClubDetailPanelView.swift */,
+				AA000013229F0003 /* AllShotsOverviewPanelView.swift */,
 			);
 			path = GolfMode;
 			sourceTree = "<group>";
@@ -677,6 +689,10 @@
 				K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */,
 				K1000004229F0004 /* PageTitleView.swift in Sources */,
 				K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */,
+				AA000001229F0001 /* ClubShotRowView.swift in Sources */,
+				AA000002229F0002 /* ClubDetailPanelView.swift in Sources */,
+				AA000003229F0003 /* AllShotsOverviewPanelView.swift in Sources */,
+				AA000004229F0004 /* ClubSelectorSheetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

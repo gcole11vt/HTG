@@ -7,8 +7,13 @@ struct YardageBookPageView: View {
     let ladderMinYardage: Int
     let ladderMaxYardage: Int
     let groupedLadderEntries: [GroupedLadderEntry]
+    var clubs: [Club] = []
+    var allShotTypeNames: [String] = []
     var onSelectEntry: ((LadderEntry) -> Void)?
+    var onSelectClubShot: ((SelectedClubShot) -> Void)?
     var onReset: (() -> Void)?
+
+    @State private var showingClubSelector = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -28,6 +33,9 @@ struct YardageBookPageView: View {
                                 clubName: clubShot.clubName,
                                 shotTypeName: clubShot.shotTypeName
                             )
+                            .onTapGesture {
+                                showingClubSelector = true
+                            }
                         }
 
                         if showResetIndicator {
@@ -57,6 +65,18 @@ struct YardageBookPageView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .agedPaperBackground()
+        .sheet(isPresented: $showingClubSelector) {
+            if let clubShot = displayedClubShot {
+                ClubSelectorSheetView(
+                    targetYardage: targetYardage,
+                    clubs: clubs,
+                    currentSelection: clubShot,
+                    allShotTypeNames: allShotTypeNames
+                ) { selection in
+                    onSelectClubShot?(selection)
+                }
+            }
+        }
     }
 }
 
