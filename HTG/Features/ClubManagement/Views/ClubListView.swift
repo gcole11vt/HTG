@@ -130,7 +130,11 @@ struct ClubDetailView: View {
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
 
     private var sortedShotTypes: [ShotType] {
-        club.shotTypes.sorted { $0.carryDistance > $1.carryDistance }
+        club.shotTypes.filter { !$0.isArchived }.sorted { $0.carryDistance > $1.carryDistance }
+    }
+
+    private var archivedShotTypes: [ShotType] {
+        club.shotTypes.filter { $0.isArchived }.sorted { $0.carryDistance > $1.carryDistance }
     }
 
     private var primaryShotTypeDistance: Int? {
@@ -204,7 +208,7 @@ struct ClubDetailView: View {
                         clubManager: clubManager,
                         club: club
                     )
-                    .swipeActions(edge: .trailing) {
+                    .swipeActions(edge: .leading) {
                         Button("Range") {
                             navigationCoordinator.navigateToRange(
                                 clubName: club.name,
@@ -214,14 +218,42 @@ struct ClubDetailView: View {
                         }
                         .tint(.green)
                     }
+                    .swipeActions(edge: .trailing) {
+                        Button("Archive", role: .destructive) {
+                            Task {
+                                await clubManager?.archiveShotType(shotType, from: club)
+                            }
+                        }
+                    }
                 }
-                .onDelete(perform: deleteShotTypes)
 
-                if club.shotTypes.count < 5 {
+                if sortedShotTypes.count < 5 {
                     Button {
                         showingAddShotType = true
                     } label: {
                         Label("Add Shot Type", systemImage: "plus")
+                    }
+                }
+            }
+
+            if !archivedShotTypes.isEmpty {
+                Section("Archived") {
+                    ForEach(archivedShotTypes) { shotType in
+                        HStack {
+                            Text(shotType.name)
+                            Spacer()
+                            Text("\(shotType.carryDistance) yds")
+                                .foregroundStyle(.secondary)
+                        }
+                        .foregroundStyle(.secondary)
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                Task { await clubManager?.restoreShotType(shotType) }
+                            } label: {
+                                Label("Restore", systemImage: "arrow.uturn.backward")
+                            }
+                            .tint(.green)
+                        }
                     }
                 }
             }
@@ -239,14 +271,6 @@ struct ClubDetailView: View {
         }
     }
 
-    private func deleteShotTypes(at offsets: IndexSet) {
-        for index in offsets {
-            let shotType = sortedShotTypes[index]
-            Task {
-                await clubManager?.deleteShotType(shotType, from: club)
-            }
-        }
-    }
 }
 
 struct ShotTypeRowView: View {

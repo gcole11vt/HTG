@@ -31,6 +31,7 @@ final class ClubManager {
         do {
             try await service.loadDefaultClubs()
             try await service.backfillNicknames()
+            try await service.purgeExpiredShotTypes()
             await loadClubs()
         } catch {
             errorMessage = error.localizedDescription
@@ -113,12 +114,21 @@ final class ClubManager {
         }
     }
 
-    func deleteShotType(_ shotType: ShotType, from club: Club) async {
+    func archiveShotType(_ shotType: ShotType, from club: Club) async {
         do {
-            try await service.deleteShotType(shotType, from: club)
+            try await service.archiveShotType(shotType, from: club)
             await loadClubs()
         } catch ClubDataServiceError.minimumShotTypesRequired {
             errorMessage = "Each club must have at least one shot type"
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func restoreShotType(_ shotType: ShotType) async {
+        do {
+            try await service.restoreShotType(shotType)
+            await loadClubs()
         } catch {
             errorMessage = error.localizedDescription
         }

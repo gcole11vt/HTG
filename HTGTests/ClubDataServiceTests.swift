@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 import SwiftData
 @testable import HTG
 
@@ -125,8 +126,8 @@ struct ClubDataServiceTests {
         }
     }
 
-    @Test("Delete shot type removes from club")
-    func deleteShotTypeRemovesFromClub() async throws {
+    @Test("Archive shot type marks it as archived")
+    func archiveShotTypeMarksAsArchived() async throws {
         let container = try makeTestContainer()
         let service = makeService(container: container)
 
@@ -134,14 +135,16 @@ struct ClubDataServiceTests {
         try await service.addShotType(to: club, name: "3/4", distance: 150)
 
         let threeQuarter = club.shotTypes.first { $0.name == "3/4" }!
-        try await service.deleteShotType(threeQuarter, from: club)
+        try await service.archiveShotType(threeQuarter, from: club)
 
-        #expect(club.shotTypes.count == 1)
-        #expect(club.shotTypes.first?.name == "Full")
+        #expect(threeQuarter.isArchived == true)
+        #expect(threeQuarter.archivedDate != nil)
+        #expect(club.shotTypes.count == 2)
+        #expect(club.shotTypes.filter { !$0.isArchived }.count == 1)
     }
 
-    @Test("Delete shot type enforces minimum of 1 per club")
-    func deleteShotTypeEnforcesMinimum() async throws {
+    @Test("Archive shot type enforces minimum of 1 active per club")
+    func archiveShotTypeEnforcesMinimum() async throws {
         let container = try makeTestContainer()
         let service = makeService(container: container)
 
@@ -149,8 +152,83 @@ struct ClubDataServiceTests {
         let fullShot = club.shotTypes.first!
 
         await #expect(throws: ClubDataServiceError.minimumShotTypesRequired) {
-            try await service.deleteShotType(fullShot, from: club)
+            try await service.archiveShotType(fullShot, from: club)
         }
+    }
+
+    @Test("Restore shot type clears archived state")
+    func restoreShotTypeClearsArchivedState() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.addShotType(to: club, name: "3/4", distance: 150)
+
+        let threeQuarter = club.shotTypes.first { $0.name == "3/4" }!
+        try await service.archiveShotType(threeQuarter, from: club)
+        try await service.restoreShotType(threeQuarter)
+
+        #expect(threeQuarter.isArchived == false)
+        #expect(threeQuarter.archivedDate == nil)
+    }
+
+    @Test("Purge expired shot types deletes archived older than 7 days")
+    func purgeExpiredShotTypesDeletesOld() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.addShotType(to: club, name: "3/4", distance: 150)
+
+        let threeQuarter = club.shotTypes.first { $0.name == "3/4" }!
+        try await service.archiveShotType(threeQuarter, from: club)
+
+        // Manually set archivedDate to 8 days ago
+        threeQuarter.archivedDate = Calendar.current.date(byAdding: .day, value: -8, to: Date())
+        try container.mainContext.save()
+
+        try await service.purgeExpiredShotTypes()
+
+        #expect(club.shotTypes.count == 1)
+        #expect(club.shotTypes.first?.name == "Full")
+    }
+
+    @Test("Purge does not delete recently archived shot types")
+    func purgeKeepsRecentlyArchived() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.addShotType(to: club, name: "3/4", distance: 150)
+
+        let threeQuarter = club.shotTypes.first { $0.name == "3/4" }!
+        try await service.archiveShotType(threeQuarter, from: club)
+
+        try await service.purgeExpiredShotTypes()
+
+        #expect(club.shotTypes.count == 2)
+        #expect(threeQuarter.isArchived == true)
+    }
+
+    @Test("Archived shot types do not count toward maximum of 5")
+    func archivedShotTypesDontCountTowardMax() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let club = try await service.addClub(name: "7 Iron", defaultDistance: 165)
+        try await service.addShotType(to: club, name: "3/4", distance: 150)
+        try await service.addShotType(to: club, name: "1/2", distance: 130)
+        try await service.addShotType(to: club, name: "Punch", distance: 120)
+        try await service.addShotType(to: club, name: "Flop", distance: 100)
+
+        // Archive one to free a slot
+        let flop = club.shotTypes.first { $0.name == "Flop" }!
+        try await service.archiveShotType(flop, from: club)
+
+        // Should be able to add another since archived doesn't count
+        try await service.addShotType(to: club, name: "Stinger", distance: 110)
+        let activeCount = club.shotTypes.filter { !$0.isArchived }.count
+        #expect(activeCount == 5)
     }
 
     @Test("Load default clubs creates 13 standard clubs")

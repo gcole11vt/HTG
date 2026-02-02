@@ -87,7 +87,8 @@ final class ClubDataService: Sendable {
     }
 
     func addShotType(to club: Club, name: String, distance: Int) async throws {
-        guard club.shotTypes.count < Self.maximumShotTypesPerClub else {
+        let activeShotTypes = club.shotTypes.filter { !$0.isArchived }
+        guard activeShotTypes.count < Self.maximumShotTypesPerClub else {
             throw ClubDataServiceError.maximumShotTypesReached
         }
 
@@ -107,13 +108,41 @@ final class ClubDataService: Sendable {
         try modelContext.save()
     }
 
-    func deleteShotType(_ shotType: ShotType, from club: Club) async throws {
-        guard club.shotTypes.count > Self.minimumShotTypesPerClub else {
+    func archiveShotType(_ shotType: ShotType, from club: Club) async throws {
+        let activeShotTypes = club.shotTypes.filter { !$0.isArchived }
+        guard activeShotTypes.count > Self.minimumShotTypesPerClub else {
             throw ClubDataServiceError.minimumShotTypesRequired
         }
 
-        club.shotTypes.removeAll { $0.id == shotType.id }
-        modelContext.delete(shotType)
+        shotType.isArchived = true
+        shotType.archivedDate = Date()
+        try modelContext.save()
+    }
+
+    func restoreShotType(_ shotType: ShotType) async throws {
+        shotType.isArchived = false
+        shotType.archivedDate = nil
+        try modelContext.save()
+    }
+
+    func purgeExpiredShotTypes() async throws {
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        var descriptor = FetchDescriptor<ShotType>(
+            predicate: #Predicate<ShotType> { shotType in
+                shotType.isArchived == true
+            }
+        )
+        descriptor.includePendingChanges = true
+        let archivedShotTypes = try modelContext.fetch(descriptor)
+        let expired = archivedShotTypes.filter { shotType in
+            guard let archivedDate = shotType.archivedDate else { return false }
+            return archivedDate < sevenDaysAgo
+        }
+        guard !expired.isEmpty else { return }
+        for shotType in expired {
+            shotType.club?.shotTypes.removeAll { $0.id == shotType.id }
+            modelContext.delete(shotType)
+        }
         try modelContext.save()
     }
 
