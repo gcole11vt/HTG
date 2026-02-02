@@ -5,31 +5,43 @@ struct GroupedLadderClubMarkerView: View {
     var onSelect: ((LadderEntry) -> Void)?
 
     var body: some View {
-        Button {
-            if let entry = group.entries.first {
-                onSelect?(entry)
-            }
-        } label: {
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(markerColor)
-                    .frame(width: 8, height: 8)
+        HStack(spacing: 6) {
+            Circle()
+                .fill(markerColor)
+                .frame(width: 8, height: 8)
 
-                Text(group.displayLabel)
-                    .font(JournalTheme.handwritten(size: fontSize))
-                    .foregroundStyle(textColor)
-            }
-            .padding(.vertical, 2)
-            .padding(.horizontal, 6)
-            .background {
-                if group.isAnySelected {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(JournalTheme.redMarker.opacity(0.1))
+            ForEach(Array(group.entries.enumerated()), id: \.element.id) { index, entry in
+                if index > 0 {
+                    Text("/")
+                        .font(JournalTheme.handwritten(size: fontSize))
+                        .foregroundStyle(textColor.opacity(0.5))
                 }
+                Button {
+                    onSelect?(entry)
+                } label: {
+                    Text(entryLabel(for: entry))
+                        .font(JournalTheme.handwritten(size: fontSize))
+                        .foregroundStyle(entry.isSelected ? JournalTheme.redMarker : textColor)
+                }
+                .buttonStyle(.plain)
+                .disabled(onSelect == nil)
             }
         }
-        .buttonStyle(.plain)
-        .disabled(onSelect == nil)
+        .padding(.vertical, 2)
+        .padding(.horizontal, 6)
+        .background {
+            if group.isAnySelected {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(JournalTheme.redMarker.opacity(0.1))
+            }
+        }
+    }
+
+    private func entryLabel(for entry: LadderEntry) -> String {
+        if group.entries.count > 1 || entry.isPrimaryShotType {
+            return entry.clubNickname
+        }
+        return "\(entry.clubNickname) \(entry.shotTypeName)"
     }
 
     private var fontSize: CGFloat {
