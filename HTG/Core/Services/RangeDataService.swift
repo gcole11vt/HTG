@@ -33,6 +33,11 @@ final class RangeDataService: Sendable {
         try modelContext.save()
     }
 
+    func updateShotTypeCarryDistance(_ shotType: ShotType, distance: Int) async throws {
+        shotType.carryDistance = distance
+        try modelContext.save()
+    }
+
     func fetchAllSessions() async throws -> [RangeSession] {
         let descriptor = FetchDescriptor<RangeSession>(sortBy: [SortDescriptor(\.date, order: .reverse)])
         return try modelContext.fetch(descriptor)

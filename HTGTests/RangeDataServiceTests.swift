@@ -212,4 +212,28 @@ struct RangeDataServiceTests {
         let sessions = try await service.fetchAllSessions()
         #expect(sessions.isEmpty)
     }
+
+    // MARK: - Update Shot Type Carry Distance
+
+    private func makeTestContainerWithClubs() throws -> ModelContainer {
+        let schema = Schema([RangeSession.self, Shot.self, StoredShotType.self, Club.self, ShotType.self])
+        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        return try ModelContainer(for: schema, configurations: [config])
+    }
+
+    @Test("Update shot type carry distance persists new value")
+    func updateShotTypeCarryDistancePersists() async throws {
+        let container = try makeTestContainerWithClubs()
+        let service = makeService(container: container)
+
+        let club = Club(name: "7 Iron", sortOrder: 0)
+        let shotType = ShotType(name: "Full", carryDistance: 150, sortOrder: 0, club: club)
+        club.shotTypes = [shotType]
+        container.mainContext.insert(club)
+        try container.mainContext.save()
+
+        try await service.updateShotTypeCarryDistance(shotType, distance: 165)
+
+        #expect(shotType.carryDistance == 165)
+    }
 }
