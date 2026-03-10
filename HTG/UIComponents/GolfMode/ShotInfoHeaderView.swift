@@ -6,13 +6,13 @@ struct ShotInfoHeaderView: View {
     let shotTypeName: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .center, spacing: 4) {
             Text("\(carryDistance)")
-                .font(JournalTheme.handwrittenBold(size: 24))
+                .font(JournalTheme.handwritten(size: 24))
                 .foregroundStyle(JournalTheme.inkBlue)
 
             Text(clubName)
-                .font(JournalTheme.handwrittenBold(size: 24))
+                .font(JournalTheme.handwritten(size: 24))
                 .foregroundStyle(JournalTheme.inkBlue)
 
             Text(shotTypeName)
@@ -29,5 +29,4 @@ struct ShotInfoHeaderView: View {
         shotTypeName: "Full"
     )
     .padding()
-    .agedPaperBackground()
 }

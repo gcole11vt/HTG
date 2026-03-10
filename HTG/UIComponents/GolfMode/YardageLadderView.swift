@@ -14,21 +14,14 @@ struct YardageLadderView: View {
                 ForEach(tickMarks, id: \.yardage) { tick in
                     LadderTickMarkView(
                         yardage: tick.yardage,
-                        isMajor: tick.isMajor
+                        isMajor: tick.isMajor,
+                        isTarget: tick.isTarget
                     )
                     .position(
                         x: geometry.size.width - 25,
                         y: yPosition(for: tick.yardage, in: geometry.size.height)
                     )
                 }
-
-                // Green target bar — same width as a major (10yd) tick mark
-                TargetYardageBarView()
-                    .frame(width: 12)
-                    .position(
-                        x: geometry.size.width - 25,
-                        y: yPosition(for: targetYardage, in: geometry.size.height)
-                    )
 
                 // Grouped club markers
                 ForEach(groupedEntries) { group in
@@ -51,10 +44,22 @@ struct YardageLadderView: View {
             if yardage >= minYardage && yardage <= maxYardage {
                 marks.append(TickMark(
                     yardage: yardage,
-                    isMajor: yardage % 10 == 0
+                    isMajor: yardage % 10 == 0,
+                    isTarget: yardage == targetYardage
                 ))
             }
         }
+
+        // Insert target tick if it doesn't land on a 5-yard mark
+        if !marks.contains(where: { $0.isTarget }) {
+            let targetMark = TickMark(yardage: targetYardage, isMajor: true, isTarget: true)
+            if let insertIndex = marks.firstIndex(where: { $0.yardage < targetYardage }) {
+                marks.insert(targetMark, at: insertIndex)
+            } else {
+                marks.append(targetMark)
+            }
+        }
+
         return marks
     }
 
@@ -73,6 +78,7 @@ struct YardageLadderView: View {
 private struct TickMark {
     let yardage: Int
     let isMajor: Bool
+    var isTarget: Bool = false
 }
 
 #Preview {
@@ -113,5 +119,4 @@ private struct TickMark {
     }
     .padding()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .agedPaperBackground()
 }

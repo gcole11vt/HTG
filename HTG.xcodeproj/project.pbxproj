@@ -48,9 +48,6 @@
 		F1000005229F0005 /* AppSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000015229F0005 /* AppSettingsService.swift */; };
 		F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000016229F0006 /* AppSettingsServiceTests.swift */; };
 		G1000001229F0001 /* JournalTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000011229F0001 /* JournalTheme.swift */; };
-		G1000002229F0002 /* LeatherBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000012229F0002 /* LeatherBackground.swift */; };
-		G1000003229F0003 /* AgedPaperBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000013229F0003 /* AgedPaperBackground.swift */; };
-		G1000004229F0004 /* RedMarkerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000014229F0004 /* RedMarkerCircle.swift */; };
 		H1000001229F0001 /* YardageDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011229F0001 /* YardageDisplayView.swift */; };
 		H1000002229F0002 /* ClubShotBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012229F0002 /* ClubShotBadgeView.swift */; };
 		H1000003229F0003 /* ResetIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013229F0003 /* ResetIndicatorView.swift */; };
@@ -58,14 +55,10 @@
 		H1000005229F0005 /* LadderClubMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000015229F0005 /* LadderClubMarkerView.swift */; };
 		H1000006229F0006 /* YardageLadderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000016229F0006 /* YardageLadderView.swift */; };
 		H1000007229F0007 /* YardageBookPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000017229F0007 /* YardageBookPageView.swift */; };
-		I1000001229F0001 /* JournalCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000011229F0001 /* JournalCoverView.swift */; };
-		I1000002229F0002 /* JournalOpeningAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000012229F0002 /* JournalOpeningAnimationView.swift */; };
-		I1000003229F0003 /* AppLaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000013229F0003 /* AppLaunchViewModel.swift */; };
 		J1000001229F0001 /* NicknameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000011229F0001 /* NicknameGenerator.swift */; };
 		N1000001229F0001 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000011229F0001 /* NavigationCoordinator.swift */; };
 		J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000012229F0002 /* NicknameGeneratorTests.swift */; };
 		K1000001229F0001 /* GroupedLadderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000011229F0001 /* GroupedLadderEntry.swift */; };
-		K1000002229F0002 /* TargetYardageBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000012229F0002 /* TargetYardageBarView.swift */; };
 		K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000013229F0003 /* GroupedLadderClubMarkerView.swift */; };
 		K1000004229F0004 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000014229F0004 /* PageTitleView.swift */; };
 		K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000015229F0005 /* ShotInfoHeaderView.swift */; };
@@ -137,9 +130,6 @@
 		F1000015229F0005 /* AppSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsService.swift; sourceTree = "<group>"; };
 		F1000016229F0006 /* AppSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsServiceTests.swift; sourceTree = "<group>"; };
 		G1000011229F0001 /* JournalTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTheme.swift; sourceTree = "<group>"; };
-		G1000012229F0002 /* LeatherBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeatherBackground.swift; sourceTree = "<group>"; };
-		G1000013229F0003 /* AgedPaperBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgedPaperBackground.swift; sourceTree = "<group>"; };
-		G1000014229F0004 /* RedMarkerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedMarkerCircle.swift; sourceTree = "<group>"; };
 		H1000011229F0001 /* YardageDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageDisplayView.swift; sourceTree = "<group>"; };
 		H1000012229F0002 /* ClubShotBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubShotBadgeView.swift; sourceTree = "<group>"; };
 		H1000013229F0003 /* ResetIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetIndicatorView.swift; sourceTree = "<group>"; };
@@ -147,14 +137,10 @@
 		H1000015229F0005 /* LadderClubMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadderClubMarkerView.swift; sourceTree = "<group>"; };
 		H1000016229F0006 /* YardageLadderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageLadderView.swift; sourceTree = "<group>"; };
 		H1000017229F0007 /* YardageBookPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageBookPageView.swift; sourceTree = "<group>"; };
-		I1000011229F0001 /* JournalCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalCoverView.swift; sourceTree = "<group>"; };
-		I1000012229F0002 /* JournalOpeningAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalOpeningAnimationView.swift; sourceTree = "<group>"; };
-		I1000013229F0003 /* AppLaunchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchViewModel.swift; sourceTree = "<group>"; };
 		J1000011229F0001 /* NicknameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGenerator.swift; sourceTree = "<group>"; };
 		N1000011229F0001 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		J1000012229F0002 /* NicknameGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGeneratorTests.swift; sourceTree = "<group>"; };
 		K1000011229F0001 /* GroupedLadderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderEntry.swift; sourceTree = "<group>"; };
-		K1000012229F0002 /* TargetYardageBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetYardageBarView.swift; sourceTree = "<group>"; };
 		K1000013229F0003 /* GroupedLadderClubMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderClubMarkerView.swift; sourceTree = "<group>"; };
 		K1000014229F0004 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		K1000015229F0005 /* ShotInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotInfoHeaderView.swift; sourceTree = "<group>"; };
@@ -263,34 +249,8 @@
 				D1000021229F0021 /* RangeMode */,
 				D1000022229F0022 /* GolfMode */,
 				D1000023229F0023 /* Profile */,
-				I1000030229F0030 /* Launch */,
 			);
 			path = Features;
-			sourceTree = "<group>";
-		};
-		I1000030229F0030 /* Launch */ = {
-			isa = PBXGroup;
-			children = (
-				I1000031229F0031 /* Views */,
-				I1000032229F0032 /* ViewModels */,
-			);
-			path = Launch;
-			sourceTree = "<group>";
-		};
-		I1000031229F0031 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				I1000012229F0002 /* JournalOpeningAnimationView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		I1000032229F0032 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				I1000013229F0003 /* AppLaunchViewModel.swift */,
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		D1000020229F0020 /* ClubManagement */ = {
@@ -418,17 +378,8 @@
 			children = (
 				G1000020229F0020 /* Theme */,
 				H1000020229F0020 /* GolfMode */,
-				I1000020229F0020 /* Launch */,
 			);
 			path = UIComponents;
-			sourceTree = "<group>";
-		};
-		I1000020229F0020 /* Launch */ = {
-			isa = PBXGroup;
-			children = (
-				I1000011229F0001 /* JournalCoverView.swift */,
-			);
-			path = Launch;
 			sourceTree = "<group>";
 		};
 		H1000020229F0020 /* GolfMode */ = {
@@ -441,7 +392,6 @@
 				H1000015229F0005 /* LadderClubMarkerView.swift */,
 				H1000016229F0006 /* YardageLadderView.swift */,
 				H1000017229F0007 /* YardageBookPageView.swift */,
-				K1000012229F0002 /* TargetYardageBarView.swift */,
 				K1000013229F0003 /* GroupedLadderClubMarkerView.swift */,
 				K1000014229F0004 /* PageTitleView.swift */,
 				K1000015229F0005 /* ShotInfoHeaderView.swift */,
@@ -456,9 +406,6 @@
 			isa = PBXGroup;
 			children = (
 				G1000011229F0001 /* JournalTheme.swift */,
-				G1000012229F0002 /* LeatherBackground.swift */,
-				G1000013229F0003 /* AgedPaperBackground.swift */,
-				G1000014229F0004 /* RedMarkerCircle.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -668,9 +615,6 @@
 				F1000004229F0004 /* AppSettings.swift in Sources */,
 				F1000005229F0005 /* AppSettingsService.swift in Sources */,
 				G1000001229F0001 /* JournalTheme.swift in Sources */,
-				G1000002229F0002 /* LeatherBackground.swift in Sources */,
-				G1000003229F0003 /* AgedPaperBackground.swift in Sources */,
-				G1000004229F0004 /* RedMarkerCircle.swift in Sources */,
 				H1000001229F0001 /* YardageDisplayView.swift in Sources */,
 				H1000002229F0002 /* ClubShotBadgeView.swift in Sources */,
 				H1000003229F0003 /* ResetIndicatorView.swift in Sources */,
@@ -678,14 +622,10 @@
 				H1000005229F0005 /* LadderClubMarkerView.swift in Sources */,
 				H1000006229F0006 /* YardageLadderView.swift in Sources */,
 				H1000007229F0007 /* YardageBookPageView.swift in Sources */,
-				I1000001229F0001 /* JournalCoverView.swift in Sources */,
-				I1000002229F0002 /* JournalOpeningAnimationView.swift in Sources */,
-				I1000003229F0003 /* AppLaunchViewModel.swift in Sources */,
 				C100000B229F000B /* ClubDistanceResolver.swift in Sources */,
 				J1000001229F0001 /* NicknameGenerator.swift in Sources */,
 				N1000001229F0001 /* NavigationCoordinator.swift in Sources */,
 				K1000001229F0001 /* GroupedLadderEntry.swift in Sources */,
-				K1000002229F0002 /* TargetYardageBarView.swift in Sources */,
 				K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */,
 				K1000004229F0004 /* PageTitleView.swift in Sources */,
 				K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */,

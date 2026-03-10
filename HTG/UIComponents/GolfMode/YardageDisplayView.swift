@@ -4,10 +4,11 @@ struct YardageDisplayView: View {
     @Binding var yardage: Int
     @State private var isEditing = false
     @State private var editText = ""
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         Button {
-            editText = "\(yardage)"
+            editText = ""
             isEditing = true
         } label: {
             Text("\(yardage)")
@@ -22,45 +23,47 @@ struct YardageDisplayView: View {
     }
 
     private var yardageEditSheet: some View {
-        NavigationStack {
-            VStack(spacing: 24) {
-                Text("Target Yardage")
-                    .font(JournalTheme.handwrittenBold(size: 24))
-                    .foregroundStyle(JournalTheme.inkBlue)
+        VStack(spacing: 16) {
+            Spacer()
+
+            HStack(spacing: 12) {
+                Spacer()
 
                 TextField("", text: $editText)
                     .font(JournalTheme.yardageFont)
                     .foregroundStyle(JournalTheme.inkBlue)
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
-                    .frame(width: 200)
+                    .focused($isTextFieldFocused)
+                    .frame(width: 160)
+
+                Image(systemName: "mic.fill")
+                    .font(.system(size: 22))
+                    .foregroundStyle(JournalTheme.mutedGray)
 
                 Spacer()
             }
-            .padding(.top, 40)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .agedPaperBackground()
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        isEditing = false
+
+            Spacer()
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Go") {
+                    if let newYardage = Int(editText), newYardage > 0 {
+                        yardage = newYardage
                     }
-                    .foregroundStyle(JournalTheme.inkBlue)
+                    isEditing = false
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        if let newYardage = Int(editText), newYardage > 0 {
-                            yardage = newYardage
-                        }
-                        isEditing = false
-                    }
-                    .foregroundStyle(JournalTheme.redMarker)
-                    .fontWeight(.semibold)
-                }
+                .foregroundStyle(JournalTheme.redMarker)
+                .fontWeight(.semibold)
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.height(320)])
+        .presentationDragIndicator(.visible)
+        .onAppear {
+            isTextFieldFocused = true
+        }
     }
 }
 
@@ -72,7 +75,6 @@ struct YardageDisplayView: View {
                 YardageDisplayView(yardage: $yardage)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .agedPaperBackground()
         }
     }
     return PreviewWrapper()
