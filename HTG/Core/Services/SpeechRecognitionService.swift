@@ -1,6 +1,11 @@
 import Foundation
 import Speech
 
+enum VoiceCommand: Equatable {
+    case delete
+    case stop
+}
+
 @MainActor
 @Observable
 final class SpeechRecognitionService {
@@ -15,6 +20,8 @@ final class SpeechRecognitionService {
 
     nonisolated(unsafe) static let minimumDistance = 1
     nonisolated(unsafe) static let maximumDistance = 1000
+    nonisolated(unsafe) static var deleteCommands: Set<String> = ["delete", "error"]
+    nonisolated(unsafe) static var stopCommands: Set<String> = ["stop", "done"]
 
     nonisolated init() {}
 
@@ -47,6 +54,19 @@ final class SpeechRecognitionService {
         }
 
         return distance
+    }
+
+    nonisolated func extractCommand(from text: String) -> VoiceCommand? {
+        let trimmed = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        if Self.deleteCommands.contains(trimmed) {
+            return .delete
+        }
+        if Self.stopCommands.contains(trimmed) {
+            return .stop
+        }
+        return nil
     }
 
     func requestAuthorization() async -> Bool {

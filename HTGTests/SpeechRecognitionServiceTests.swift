@@ -149,4 +149,77 @@ struct SpeechRecognitionServiceTests {
 
         #expect(result == 50)
     }
+
+    // MARK: - Command Detection Tests
+
+    @Test("Detect delete command from exact utterance")
+    func detectDeleteCommand() {
+        let service = SpeechRecognitionService()
+
+        let result = service.extractCommand(from: "delete")
+
+        #expect(result == .delete)
+    }
+
+    @Test("Detect error command as delete")
+    func detectErrorAsDelete() {
+        let service = SpeechRecognitionService()
+
+        let result = service.extractCommand(from: "error")
+
+        #expect(result == .delete)
+    }
+
+    @Test("Detect stop command")
+    func detectStopCommand() {
+        let service = SpeechRecognitionService()
+
+        let result = service.extractCommand(from: "stop")
+
+        #expect(result == .stop)
+    }
+
+    @Test("Detect done command as stop")
+    func detectDoneAsStop() {
+        let service = SpeechRecognitionService()
+
+        let result = service.extractCommand(from: "done")
+
+        #expect(result == .stop)
+    }
+
+    @Test("Command detection is case insensitive")
+    func commandDetectionCaseInsensitive() {
+        let service = SpeechRecognitionService()
+
+        #expect(service.extractCommand(from: "DELETE") == .delete)
+        #expect(service.extractCommand(from: "Stop") == .stop)
+    }
+
+    @Test("Command not detected when number present")
+    func commandNotDetectedWithNumber() {
+        let service = SpeechRecognitionService()
+
+        let result = service.extractCommand(from: "delete 155")
+
+        #expect(result == nil)
+    }
+
+    @Test("Command not detected for plain text")
+    func commandNotDetectedForPlainText() {
+        let service = SpeechRecognitionService()
+
+        let result = service.extractCommand(from: "one fifty five")
+
+        #expect(result == nil)
+    }
+
+    @Test("Command not detected for empty string")
+    func commandNotDetectedForEmpty() {
+        let service = SpeechRecognitionService()
+
+        let result = service.extractCommand(from: "")
+
+        #expect(result == nil)
+    }
 }
