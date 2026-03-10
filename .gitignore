@@ -101,6 +101,9 @@ TestResults/
 # Documentation
 docs/generated/
 
+# Superpowers brainstorm
+.superpowers/
+
 # Temporary files
 *.tmp
 *.temp
