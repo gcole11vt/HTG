@@ -16,6 +16,7 @@ struct RangeModeView: View {
     @State private var showingEndConfirmation: Bool = false
     @State private var speechService = SpeechRecognitionService()
     @State private var showPermissionDeniedAlert = false
+    @FocusState private var isDistanceFieldFocused: Bool
     @FocusState private var isSaveFieldFocused: Bool
 
     var body: some View {
@@ -164,6 +165,10 @@ struct RangeModeView: View {
             sessionActionButtons
             twoColumnSection(session: session)
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isDistanceFieldFocused = false
+        }
         .padding()
         .sheet(isPresented: $showingSaveSheet) {
             saveSessionSheet
@@ -200,20 +205,13 @@ struct RangeModeView: View {
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .frame(width: 100)
+                .focused($isDistanceFieldFocused)
 
             Button("Add Shot") {
                 addShot()
             }
             .buttonStyle(.borderedProminent)
             .disabled(distanceText.isEmpty)
-
-            Button {
-                toggleSpeechMode()
-            } label: {
-                Image(systemName: speechService.isListening ? "mic.fill" : "mic")
-                    .font(.system(size: 22))
-                    .foregroundStyle(speechService.isListening ? .red : .secondary)
-            }
         }
     }
 
