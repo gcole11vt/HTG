@@ -5,6 +5,7 @@ import SwiftData
 @Observable
 final class RangeManager {
     private let service: RangeDataService
+    private let clubDataService: ClubDataService
 
     var currentSession: RangeSession?
     var sessions: [RangeSession] = []
@@ -12,15 +13,28 @@ final class RangeManager {
     var isLoading: Bool = false
     var errorMessage: String?
 
-    init(modelContext: ModelContext) {
-        self.service = RangeDataService(modelContext: modelContext)
+    var sessionClub: Club?
+    var sessionShotType: ShotType?
+    var isCustomShotType: Bool = false
+
+    var currentCarryDistance: Int? {
+        guard let shotType = sessionShotType, shotType.carryDistance > 0 else { return nil }
+        return shotType.carryDistance
     }
 
-    func startSession(clubName: String, shotTypeName: String) async {
+    init(modelContext: ModelContext) {
+        self.service = RangeDataService(modelContext: modelContext)
+        self.clubDataService = ClubDataService(modelContext: modelContext)
+    }
+
+    func startSession(club: Club, shotType: ShotType?, shotTypeName: String, isCustom: Bool) async {
         isLoading = true
         errorMessage = nil
+        sessionClub = club
+        sessionShotType = shotType
+        isCustomShotType = isCustom
         do {
-            currentSession = try await service.createSession(clubName: clubName, shotTypeName: shotTypeName)
+            currentSession = try await service.createSession(clubName: club.name, shotTypeName: shotTypeName)
             updateStats()
         } catch {
             errorMessage = error.localizedDescription
@@ -56,19 +70,58 @@ final class RangeManager {
         }
     }
 
-    func endSession() async {
-        currentSession = nil
-        currentStats = RangeStats()
+    func deleteLastShot() async {
+        guard let session = currentSession,
+              let lastShot = session.shots.sorted(by: { $0.date > $1.date }).first else { return }
+        await deleteShot(lastShot)
     }
 
-    func saveSessionAsStoredShotType() async {
+    func endSession() async {
+        if let session = currentSession {
+            do {
+                try await service.deleteSession(session)
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+        currentSession = nil
+        currentStats = RangeStats()
+        sessionClub = nil
+        sessionShotType = nil
+        isCustomShotType = false
+    }
+
+    func saveSession(carryDistance: Int) async {
+        guard let club = sessionClub else {
+            errorMessage = "No club associated with session"
+            return
+        }
         guard let session = currentSession else {
             errorMessage = "No active session"
             return
         }
 
         do {
-            try await service.saveAsStoredShotType(session: session)
+            if isCustomShotType {
+                let existingMatch = club.shotTypes.first(where: {
+                    $0.name.lowercased() == session.shotTypeName.lowercased() && !$0.isArchived
+                })
+                if let existing = existingMatch {
+                    try await service.updateShotTypeCarryDistance(existing, distance: carryDistance)
+                } else {
+                    try await clubDataService.addShotType(to: club, name: session.shotTypeName, distance: carryDistance)
+                }
+            } else if let shotType = sessionShotType {
+                try await service.updateShotTypeCarryDistance(shotType, distance: carryDistance)
+            }
+
+            try await service.deleteSession(session)
+
+            currentSession = nil
+            currentStats = RangeStats()
+            sessionClub = nil
+            sessionShotType = nil
+            isCustomShotType = false
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -91,6 +144,23 @@ final class RangeManager {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    // Temporary bridge for existing call sites — removed in Task 5
+    @available(*, deprecated, message: "Use startSession(club:shotType:shotTypeName:isCustom:) instead")
+    func startSession(clubName: String, shotTypeName: String) async {
+        isLoading = true
+        errorMessage = nil
+        sessionClub = nil
+        sessionShotType = nil
+        isCustomShotType = false
+        do {
+            currentSession = try await service.createSession(clubName: clubName, shotTypeName: shotTypeName)
+            updateStats()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
     }
 
     private func updateStats() {
