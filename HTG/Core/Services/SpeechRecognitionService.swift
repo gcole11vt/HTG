@@ -1,3 +1,4 @@
+import AVFoundation
 import Foundation
 import Speech
 
@@ -22,6 +23,14 @@ final class SpeechRecognitionService {
     nonisolated(unsafe) static let maximumDistance = 1000
     nonisolated(unsafe) static var deleteCommands: Set<String> = ["delete", "error"]
     nonisolated(unsafe) static var stopCommands: Set<String> = ["stop", "done"]
+
+    var continuousMode: Bool = false
+    var onDistanceConfirmed: (@MainActor (Int) -> Void)?
+    var onDeleteRequested: (@MainActor () -> Void)?
+    var onStopRequested: (@MainActor () -> Void)?
+
+    private var silenceTimerTask: Task<Void, Never>?
+    private let synthesizer = AVSpeechSynthesizer()
 
     nonisolated init() {}
 
@@ -88,7 +97,7 @@ final class SpeechRecognitionService {
         recognitionTask = nil
 
         let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+        try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.duckOthers, .defaultToSpeaker])
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
 
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
@@ -117,16 +126,24 @@ final class SpeechRecognitionService {
                 if let result = result {
                     self.lastRecognizedText = result.bestTranscription.formattedString
                     self.lastExtractedDistance = self.extractDistance(from: self.lastRecognizedText)
+
+                    if self.continuousMode {
+                        self.resetSilenceTimer()
+                    }
                 }
 
                 if error != nil || result?.isFinal == true {
-                    self.stopListening()
+                    if !self.continuousMode {
+                        self.stopListening()
+                    }
                 }
             }
         }
     }
 
     func stopListening() {
+        silenceTimerTask?.cancel()
+        silenceTimerTask = nil
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
         recognitionRequest?.endAudio()
@@ -134,6 +151,82 @@ final class SpeechRecognitionService {
         recognitionTask?.cancel()
         recognitionTask = nil
         isListening = false
+    }
+
+    func speakBack(_ text: String) async {
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+
+        synthesizer.speak(utterance)
+
+        // Wait for speech to finish
+        while synthesizer.isSpeaking {
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+    }
+
+    private func resetSilenceTimer() {
+        silenceTimerTask?.cancel()
+        guard continuousMode else { return }
+
+        silenceTimerTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(2))
+            guard !Task.isCancelled else { return }
+            await handleSilenceTimeout()
+        }
+    }
+
+    private func handleSilenceTimeout() async {
+        guard continuousMode, isListening else { return }
+
+        // Check for command first
+        if let command = extractCommand(from: lastRecognizedText) {
+            switch command {
+            case .delete:
+                onDeleteRequested?()
+                stopListening()
+                await speakBack("Deleted")
+                do {
+                    try await startListening()
+                } catch {
+                    continuousMode = false
+                    onStopRequested?()
+                }
+            case .stop:
+                continuousMode = false
+                stopListening()
+                onStopRequested?()
+            }
+            lastRecognizedText = ""
+            lastExtractedDistance = nil
+            return
+        }
+
+        // Check for distance
+        if let distance = lastExtractedDistance {
+            onDistanceConfirmed?(distance)
+            stopListening()
+            await speakBack("\(distance)")
+            lastRecognizedText = ""
+            lastExtractedDistance = nil
+            do {
+                try await startListening()
+            } catch {
+                continuousMode = false
+                onStopRequested?()
+            }
+        } else {
+            // No valid input detected, restart listening
+            lastRecognizedText = ""
+            stopListening()
+            do {
+                try await startListening()
+            } catch {
+                continuousMode = false
+                onStopRequested?()
+            }
+        }
     }
 }
 
