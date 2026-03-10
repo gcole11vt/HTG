@@ -146,23 +146,6 @@ final class RangeManager {
         }
     }
 
-    // Temporary bridge for existing call sites — removed in Task 5
-    @available(*, deprecated, message: "Use startSession(club:shotType:shotTypeName:isCustom:) instead")
-    func startSession(clubName: String, shotTypeName: String) async {
-        isLoading = true
-        errorMessage = nil
-        sessionClub = nil
-        sessionShotType = nil
-        isCustomShotType = false
-        do {
-            currentSession = try await service.createSession(clubName: clubName, shotTypeName: shotTypeName)
-            updateStats()
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        isLoading = false
-    }
-
     private func updateStats() {
         guard let session = currentSession else {
             currentStats = RangeStats()

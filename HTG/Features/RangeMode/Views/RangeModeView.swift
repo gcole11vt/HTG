@@ -7,9 +7,16 @@ struct RangeModeView: View {
     @State private var rangeManager: RangeManager?
     @State private var clubManager: ClubManager?
     @State private var selectedClub: Club?
-    @State private var selectedShotType: ShotType?
+    @State private var shotTypeSelection: ShotTypeSelection = .none
+    @State private var customShotTypeName: String = ""
+    @State private var showMaxShotTypesAlert: Bool = false
     @State private var distanceText: String = ""
-    @State private var showingClubPicker = false
+    @State private var showingSaveSheet: Bool = false
+    @State private var saveDistanceText: String = ""
+    @State private var showingEndConfirmation: Bool = false
+    @State private var speechService = SpeechRecognitionService()
+    @State private var showPermissionDeniedAlert = false
+    @FocusState private var isSaveFieldFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -34,8 +41,20 @@ struct RangeModeView: View {
             .onAppear {
                 applyPreselectionIfNeeded()
             }
+            .alert("Maximum Shot Types", isPresented: $showMaxShotTypesAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("This club already has the maximum number of shot types. You can still use an existing shot type name.")
+            }
+            .alert("Microphone Access Required", isPresented: $showPermissionDeniedAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("HTG needs microphone and speech recognition access to use voice input. Enable these in Settings.")
+            }
         }
     }
+
+    // MARK: - Start Session
 
     private var startSessionView: some View {
         VStack(spacing: 20) {
@@ -53,27 +72,61 @@ struct RangeModeView: View {
                 .pickerStyle(.menu)
 
                 if let club = selectedClub {
-                    Picker("Select Shot Type", selection: $selectedShotType) {
-                        Text("Select Shot Type").tag(nil as ShotType?)
-                        ForEach(club.shotTypes) { shotType in
-                            Text(shotType.name).tag(shotType as ShotType?)
+                    let activeShotTypes = club.shotTypes.filter { !$0.isArchived }
+
+                    Picker("Select Shot Type", selection: $shotTypeSelection) {
+                        Text("Select Shot Type").tag(ShotTypeSelection.none)
+                        ForEach(activeShotTypes) { shotType in
+                            Text(shotType.name).tag(ShotTypeSelection.existing(shotType))
                         }
+                        Text("Other").tag(ShotTypeSelection.other)
                     }
                     .pickerStyle(.menu)
-                }
-
-                Button("Start Session") {
-                    Task {
-                        guard let club = selectedClub,
-                              let shotType = selectedShotType else { return }
-                        await rangeManager?.startSession(
-                            clubName: club.name,
-                            shotTypeName: shotType.name
-                        )
+                    .onChange(of: shotTypeSelection) { _, newValue in
+                        if case .other = newValue {
+                            let activeCount = activeShotTypes.count
+                            if activeCount >= ClubDataService.maximumShotTypesPerClub {
+                                showMaxShotTypesAlert = true
+                            }
+                        } else {
+                            customShotTypeName = ""
+                        }
                     }
+
+                    if case .other = shotTypeSelection {
+                        TextField("Custom shot type name", text: $customShotTypeName)
+                            .textFieldStyle(.roundedBorder)
+                    }
+
+                    Button("Start Session") {
+                        Task {
+                            let club = club
+                            switch shotTypeSelection {
+                            case .other:
+                                let existingMatch = club.shotTypes.first(where: {
+                                    $0.name.lowercased() == customShotTypeName.lowercased() && !$0.isArchived
+                                })
+                                await rangeManager?.startSession(
+                                    club: club,
+                                    shotType: existingMatch,
+                                    shotTypeName: customShotTypeName,
+                                    isCustom: existingMatch == nil
+                                )
+                            case .existing(let shotType):
+                                await rangeManager?.startSession(
+                                    club: club,
+                                    shotType: shotType,
+                                    shotTypeName: shotType.name,
+                                    isCustom: false
+                                )
+                            case .none:
+                                break
+                            }
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(startSessionDisabled(club: club))
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(selectedClub == nil || selectedShotType == nil)
             } else {
                 ContentUnavailableView(
                     "No Clubs",
@@ -85,15 +138,49 @@ struct RangeModeView: View {
         .padding()
     }
 
+    private func startSessionDisabled(club: Club) -> Bool {
+        switch shotTypeSelection {
+        case .none:
+            return true
+        case .existing:
+            return false
+        case .other:
+            let activeCount = club.shotTypes.filter { !$0.isArchived }.count
+            let nameMatchesExisting = club.shotTypes.contains(where: {
+                $0.name.lowercased() == customShotTypeName.lowercased() && !$0.isArchived
+            })
+            if customShotTypeName.trimmingCharacters(in: .whitespaces).isEmpty { return true }
+            if activeCount >= ClubDataService.maximumShotTypesPerClub && !nameMatchesExisting { return true }
+            return false
+        }
+    }
+
+    // MARK: - Active Session
+
     private func activeSessionView(session: RangeSession) -> some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             sessionHeader(session: session)
-            statsDisplay
             shotEntrySection
-            shotsList(session: session)
-            endSessionButton
+            sessionActionButtons
+            twoColumnSection(session: session)
         }
         .padding()
+        .sheet(isPresented: $showingSaveSheet) {
+            saveSessionSheet
+        }
+        .alert("Discard this session?", isPresented: $showingEndConfirmation) {
+            Button("Discard", role: .destructive) {
+                Task {
+                    await rangeManager?.endSession()
+                    selectedClub = nil
+                    shotTypeSelection = .none
+                    customShotTypeName = ""
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("All shot data will be lost.")
+        }
     }
 
     private func sessionHeader(session: RangeSession) -> some View {
@@ -107,20 +194,8 @@ struct RangeModeView: View {
         }
     }
 
-    private var statsDisplay: some View {
-        HStack(spacing: 30) {
-            StatBox(label: "Max", value: rangeManager?.currentStats.max ?? 0)
-            StatBox(label: "75th", value: rangeManager?.currentStats.percentile75 ?? 0)
-            StatBox(label: "Median", value: rangeManager?.currentStats.median ?? 0)
-            StatBox(label: "Count", value: rangeManager?.currentStats.count ?? 0)
-        }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
-    }
-
     private var shotEntrySection: some View {
-        HStack {
+        HStack(spacing: 12) {
             TextField("Distance", text: $distanceText)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
@@ -131,38 +206,212 @@ struct RangeModeView: View {
             }
             .buttonStyle(.borderedProminent)
             .disabled(distanceText.isEmpty)
+
+            Button {
+                toggleSpeechMode()
+            } label: {
+                Image(systemName: speechService.isListening ? "mic.fill" : "mic")
+                    .font(.system(size: 22))
+                    .foregroundStyle(speechService.isListening ? .red : .secondary)
+            }
         }
     }
 
-    private func shotsList(session: RangeSession) -> some View {
-        List {
-            ForEach(session.shots.sorted(by: { $0.date > $1.date })) { shot in
-                HStack {
-                    Text("\(shot.distance) yards")
-                    Spacer()
-                    if shot.isFromVoice {
-                        Image(systemName: "mic.fill")
-                            .foregroundStyle(.secondary)
+    private var sessionActionButtons: some View {
+        HStack(spacing: 12) {
+            Button {
+                showingEndConfirmation = true
+            } label: {
+                Text("End Session")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+
+            Button {
+                saveDistanceText = "\(rangeManager?.currentStats.median ?? 0)"
+                showingSaveSheet = true
+            } label: {
+                Text("Save Session")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.green)
+            .disabled((rangeManager?.currentStats.count ?? 0) == 0)
+        }
+    }
+
+    private func twoColumnSection(session: RangeSession) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            previousShotsList(session: session)
+                .frame(maxWidth: .infinity)
+
+            Divider()
+
+            statsColumn
+                .frame(width: 80)
+        }
+    }
+
+    private func previousShotsList(session: RangeSession) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("PREVIOUS SHOTS")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .padding(.bottom, 8)
+
+            let sortedShots = session.shots.sorted(by: { $0.date > $1.date })
+            List {
+                ForEach(sortedShots) { shot in
+                    HStack {
+                        Text("\(shot.distance) yds")
+                            .font(.body)
+
+                        if shot.isFromVoice {
+                            Image(systemName: "mic.fill")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        Button {
+                            Task { await rangeManager?.deleteShot(shot) }
+                        } label: {
+                            Image(systemName: "trash")
+                                .font(.caption)
+                                .foregroundStyle(.red)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .onDelete { indexSet in
+                    for index in indexSet {
+                        let shot = sortedShots[index]
+                        Task { await rangeManager?.deleteShot(shot) }
                     }
                 }
             }
-            .onDelete { indexSet in
-                deleteShots(at: indexSet, from: session)
-            }
+            .listStyle(.plain)
         }
-        .frame(maxHeight: 200)
     }
 
-    private var endSessionButton: some View {
-        Button("End Session") {
-            Task {
-                await rangeManager?.endSession()
-                selectedClub = nil
-                selectedShotType = nil
+    private var statsColumn: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("STATS")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+
+            if let current = rangeManager?.currentCarryDistance {
+                statItem(label: "Current", value: current, color: .green)
+            }
+
+            statItem(label: "Count", value: rangeManager?.currentStats.count ?? 0)
+            statItem(label: "Median", value: rangeManager?.currentStats.median ?? 0)
+            statItem(label: "Max", value: rangeManager?.currentStats.max ?? 0)
+            statItem(label: "75th", value: rangeManager?.currentStats.percentile75 ?? 0)
+        }
+    }
+
+    private func statItem(label: String, value: Int, color: Color = .primary) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text("\(value)")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundStyle(color)
+        }
+    }
+
+    // MARK: - Save Session Sheet
+
+    private var saveSessionSheet: some View {
+        VStack(spacing: 16) {
+            Spacer()
+
+            Text("Save Carry Distance")
+                .font(.headline)
+
+            HStack(spacing: 12) {
+                Spacer()
+
+                TextField("", text: $saveDistanceText)
+                    .font(.system(size: 48, weight: .bold))
+                    .foregroundStyle(.primary)
+                    .multilineTextAlignment(.center)
+                    .keyboardType(.numberPad)
+                    .focused($isSaveFieldFocused)
+                    .frame(width: 160)
+
+                Spacer()
+            }
+
+            Spacer()
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Go") {
+                    if let distance = Int(saveDistanceText), distance > 0 {
+                        Task {
+                            await rangeManager?.saveSession(carryDistance: distance)
+                            showingSaveSheet = false
+                            selectedClub = nil
+                            shotTypeSelection = .none
+                            customShotTypeName = ""
+                        }
+                    }
+                }
+                .foregroundStyle(.green)
+                .fontWeight(.semibold)
             }
         }
-        .buttonStyle(.bordered)
+        .presentationDetents([.height(320)])
+        .presentationDragIndicator(.visible)
+        .onAppear {
+            isSaveFieldFocused = true
+        }
     }
+
+    // MARK: - Speech
+
+    private func toggleSpeechMode() {
+        if speechService.isListening {
+            speechService.continuousMode = false
+            speechService.stopListening()
+            return
+        }
+
+        Task {
+            let authorized = await speechService.requestAuthorization()
+            guard authorized else {
+                showPermissionDeniedAlert = true
+                return
+            }
+
+            speechService.continuousMode = true
+            speechService.onDistanceConfirmed = { @MainActor distance in
+                Task {
+                    await rangeManager?.addShot(distance: distance, isFromVoice: true)
+                }
+            }
+            speechService.onDeleteRequested = { @MainActor in
+                Task {
+                    await rangeManager?.deleteLastShot()
+                }
+            }
+            speechService.onStopRequested = { @MainActor in
+                // Mic icon state updates automatically via speechService.isListening
+            }
+
+            try? await speechService.startListening()
+        }
+    }
+
+    // MARK: - Helpers
 
     private func applyPreselectionIfNeeded() {
         guard let clubName = navigationCoordinator.rangePreselectedClubName,
@@ -170,12 +419,15 @@ struct RangeModeView: View {
         selectedClub = club
         if let shotTypeName = navigationCoordinator.rangePreselectedShotTypeName,
            let shotType = club.shotTypes.first(where: { $0.name == shotTypeName }) {
-            selectedShotType = shotType
+            shotTypeSelection = .existing(shotType)
             if navigationCoordinator.rangeAutoStartSession {
-                let autoClubName = club.name
-                let autoShotTypeName = shotType.name
                 Task {
-                    await rangeManager?.startSession(clubName: autoClubName, shotTypeName: autoShotTypeName)
+                    await rangeManager?.startSession(
+                        club: club,
+                        shotType: shotType,
+                        shotTypeName: shotType.name,
+                        isCustom: false
+                    )
                 }
             }
         }
@@ -189,30 +441,33 @@ struct RangeModeView: View {
             distanceText = ""
         }
     }
-
-    private func deleteShots(at offsets: IndexSet, from session: RangeSession) {
-        let sortedShots = session.shots.sorted(by: { $0.date > $1.date })
-        for index in offsets {
-            let shot = sortedShots[index]
-            Task {
-                await rangeManager?.deleteShot(shot)
-            }
-        }
-    }
 }
 
-struct StatBox: View {
-    let label: String
-    let value: Int
+// MARK: - Shot Type Selection
 
-    var body: some View {
-        VStack {
-            Text("\(value)")
-                .font(.title3)
-                .fontWeight(.bold)
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+enum ShotTypeSelection: Hashable {
+    case none
+    case existing(ShotType)
+    case other
+
+    var shotType: ShotType? {
+        if case .existing(let st) = self { return st }
+        return nil
+    }
+
+    static func == (lhs: ShotTypeSelection, rhs: ShotTypeSelection) -> Bool {
+        switch (lhs, rhs) {
+        case (.none, .none), (.other, .other): return true
+        case (.existing(let a), .existing(let b)): return a.id == b.id
+        default: return false
+        }
+    }
+
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .none: hasher.combine(0)
+        case .existing(let st): hasher.combine(1); hasher.combine(st.id)
+        case .other: hasher.combine(2)
         }
     }
 }
