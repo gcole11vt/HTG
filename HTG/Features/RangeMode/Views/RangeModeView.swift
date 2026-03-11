@@ -363,7 +363,7 @@ struct RangeModeView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(.green)
-            .disabled(Int(saveDistanceText) ?? 0 <= 0)
+            .disabled((Int(saveDistanceText) ?? 0) <= 0)
             .padding(.horizontal, 40)
 
             Spacer()
