@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,12 +13,18 @@
 		A1000004229F0004 /* HTGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000014229F0004 /* HTGTests.swift */; };
 		A1000005229F0005 /* HTGUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000015229F0005 /* HTGUITests.swift */; };
 		A1000006229F0006 /* HTGUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000016229F0006 /* HTGUITestsLaunchTests.swift */; };
+		AA000001229F0001 /* ClubShotRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000011229F0001 /* ClubShotRowView.swift */; };
+		AA000002229F0002 /* ClubDetailPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000012229F0002 /* ClubDetailPanelView.swift */; };
+		AA000003229F0003 /* AllShotsOverviewPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000013229F0003 /* AllShotsOverviewPanelView.swift */; };
+		AA000004229F0004 /* ClubSelectorSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000014229F0004 /* ClubSelectorSheetView.swift */; };
 		B1000001229F0001 /* Club.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000011229F0001 /* Club.swift */; };
 		B1000002229F0002 /* ShotType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000012229F0002 /* ShotType.swift */; };
 		B1000003229F0003 /* RangeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000013229F0003 /* RangeSession.swift */; };
 		B1000004229F0004 /* Shot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000014229F0004 /* Shot.swift */; };
 		B1000005229F0005 /* StoredShotType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000015229F0005 /* StoredShotType.swift */; };
 		B1000006229F0006 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000016229F0006 /* UserProfile.swift */; };
+		B10000A1229F00A1 /* PreShotRoutineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B1229F00A1 /* PreShotRoutineItem.swift */; };
+		B10000A2229F00A2 /* SwingThought.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B2229F00A2 /* SwingThought.swift */; };
 		B1000007229F0007 /* ShotRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000017229F0007 /* ShotRecommendation.swift */; };
 		B1000008229F0008 /* RangeStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000018229F0008 /* RangeStats.swift */; };
 		C1000001229F0001 /* ClubDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011229F0001 /* ClubDataService.swift */; };
@@ -28,7 +34,9 @@
 		C1000005229F0005 /* RangeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000015229F0005 /* RangeDataService.swift */; };
 		C1000006229F0006 /* RangeDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000016229F0006 /* RangeDataServiceTests.swift */; };
 		C1000007229F0007 /* ProfileDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000017229F0007 /* ProfileDataService.swift */; };
+		C10000A1229F00A1 /* SwingThoughtDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000B1229F00A1 /* SwingThoughtDataService.swift */; };
 		C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000018229F0008 /* ProfileDataServiceTests.swift */; };
+		C10000A2229F00A2 /* SwingThoughtDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000B2229F00A2 /* SwingThoughtDataServiceTests.swift */; };
 		C1000009229F0009 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000019229F0009 /* SpeechRecognitionService.swift */; };
 		C100000A229F000A /* SpeechRecognitionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001A229F000A /* SpeechRecognitionServiceTests.swift */; };
 		C100000B229F000B /* ClubDistanceResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001B229F000B /* ClubDistanceResolver.swift */; };
@@ -56,16 +64,12 @@
 		H1000006229F0006 /* YardageLadderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000016229F0006 /* YardageLadderView.swift */; };
 		H1000007229F0007 /* YardageBookPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000017229F0007 /* YardageBookPageView.swift */; };
 		J1000001229F0001 /* NicknameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000011229F0001 /* NicknameGenerator.swift */; };
-		N1000001229F0001 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000011229F0001 /* NavigationCoordinator.swift */; };
 		J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000012229F0002 /* NicknameGeneratorTests.swift */; };
 		K1000001229F0001 /* GroupedLadderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000011229F0001 /* GroupedLadderEntry.swift */; };
 		K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000013229F0003 /* GroupedLadderClubMarkerView.swift */; };
 		K1000004229F0004 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000014229F0004 /* PageTitleView.swift */; };
 		K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000015229F0005 /* ShotInfoHeaderView.swift */; };
-		AA000001229F0001 /* ClubShotRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000011229F0001 /* ClubShotRowView.swift */; };
-		AA000002229F0002 /* ClubDetailPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000012229F0002 /* ClubDetailPanelView.swift */; };
-		AA000003229F0003 /* AllShotsOverviewPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000013229F0003 /* AllShotsOverviewPanelView.swift */; };
-		AA000004229F0004 /* ClubSelectorSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000014229F0004 /* ClubSelectorSheetView.swift */; };
+		N1000001229F0001 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000011229F0001 /* NavigationCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,12 +99,18 @@
 		A1000201229F0201 /* HTG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HTG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000301229F0301 /* HTGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HTGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000401229F0401 /* HTGUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HTGUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA000011229F0001 /* ClubShotRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubShotRowView.swift; sourceTree = "<group>"; };
+		AA000012229F0002 /* ClubDetailPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDetailPanelView.swift; sourceTree = "<group>"; };
+		AA000013229F0003 /* AllShotsOverviewPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllShotsOverviewPanelView.swift; sourceTree = "<group>"; };
+		AA000014229F0004 /* ClubSelectorSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubSelectorSheetView.swift; sourceTree = "<group>"; };
 		B1000011229F0001 /* Club.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Club.swift; sourceTree = "<group>"; };
 		B1000012229F0002 /* ShotType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotType.swift; sourceTree = "<group>"; };
 		B1000013229F0003 /* RangeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeSession.swift; sourceTree = "<group>"; };
 		B1000014229F0004 /* Shot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shot.swift; sourceTree = "<group>"; };
 		B1000015229F0005 /* StoredShotType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredShotType.swift; sourceTree = "<group>"; };
 		B1000016229F0006 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		B10000B1229F00A1 /* PreShotRoutineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreShotRoutineItem.swift; sourceTree = "<group>"; };
+		B10000B2229F00A2 /* SwingThought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThought.swift; sourceTree = "<group>"; };
 		B1000017229F0007 /* ShotRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendation.swift; sourceTree = "<group>"; };
 		B1000018229F0008 /* RangeStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeStats.swift; sourceTree = "<group>"; };
 		C1000011229F0001 /* ClubDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataService.swift; sourceTree = "<group>"; };
@@ -110,7 +120,9 @@
 		C1000015229F0005 /* RangeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeDataService.swift; sourceTree = "<group>"; };
 		C1000016229F0006 /* RangeDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeDataServiceTests.swift; sourceTree = "<group>"; };
 		C1000017229F0007 /* ProfileDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataService.swift; sourceTree = "<group>"; };
+		C10000B1229F00A1 /* SwingThoughtDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtDataService.swift; sourceTree = "<group>"; };
 		C1000018229F0008 /* ProfileDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataServiceTests.swift; sourceTree = "<group>"; };
+		C10000B2229F00A2 /* SwingThoughtDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtDataServiceTests.swift; sourceTree = "<group>"; };
 		C1000019229F0009 /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 		C100001A229F000A /* SpeechRecognitionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionServiceTests.swift; sourceTree = "<group>"; };
 		C100001B229F000B /* ClubDistanceResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDistanceResolver.swift; sourceTree = "<group>"; };
@@ -138,16 +150,12 @@
 		H1000016229F0006 /* YardageLadderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageLadderView.swift; sourceTree = "<group>"; };
 		H1000017229F0007 /* YardageBookPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageBookPageView.swift; sourceTree = "<group>"; };
 		J1000011229F0001 /* NicknameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGenerator.swift; sourceTree = "<group>"; };
-		N1000011229F0001 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		J1000012229F0002 /* NicknameGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameGeneratorTests.swift; sourceTree = "<group>"; };
 		K1000011229F0001 /* GroupedLadderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderEntry.swift; sourceTree = "<group>"; };
 		K1000013229F0003 /* GroupedLadderClubMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderClubMarkerView.swift; sourceTree = "<group>"; };
 		K1000014229F0004 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		K1000015229F0005 /* ShotInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotInfoHeaderView.swift; sourceTree = "<group>"; };
-		AA000011229F0001 /* ClubShotRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubShotRowView.swift; sourceTree = "<group>"; };
-		AA000012229F0002 /* ClubDetailPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDetailPanelView.swift; sourceTree = "<group>"; };
-		AA000013229F0003 /* AllShotsOverviewPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllShotsOverviewPanelView.swift; sourceTree = "<group>"; };
-		AA000014229F0004 /* ClubSelectorSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubSelectorSheetView.swift; sourceTree = "<group>"; };
+		N1000011229F0001 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +213,7 @@
 				C1000014229F0004 /* ShotRecommendationServiceTests.swift */,
 				C1000016229F0006 /* RangeDataServiceTests.swift */,
 				C1000018229F0008 /* ProfileDataServiceTests.swift */,
+				C10000B2229F00A2 /* SwingThoughtDataServiceTests.swift */,
 				C100001A229F000A /* SpeechRecognitionServiceTests.swift */,
 				F1000013229F0003 /* GolfModeViewModelTests.swift */,
 				F1000016229F0006 /* AppSettingsServiceTests.swift */,
@@ -253,6 +262,68 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		A1000612229F0612 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A1000620229F0620 /* Models */,
+				A1000621229F0621 /* Services */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A1000613229F0613 /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				G1000020229F0020 /* Theme */,
+				H1000020229F0020 /* GolfMode */,
+			);
+			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		A1000614229F0614 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A1000013229F0003 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A1000620229F0620 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B1000011229F0001 /* Club.swift */,
+				B1000012229F0002 /* ShotType.swift */,
+				B1000013229F0003 /* RangeSession.swift */,
+				B1000014229F0004 /* Shot.swift */,
+				B1000015229F0005 /* StoredShotType.swift */,
+				B1000016229F0006 /* UserProfile.swift */,
+				B10000B1229F00A1 /* PreShotRoutineItem.swift */,
+				B10000B2229F00A2 /* SwingThought.swift */,
+				B1000017229F0007 /* ShotRecommendation.swift */,
+				B1000018229F0008 /* RangeStats.swift */,
+				F1000011229F0001 /* SelectedClubShot.swift */,
+				F1000014229F0004 /* AppSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A1000621229F0621 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C1000011229F0001 /* ClubDataService.swift */,
+				C1000013229F0003 /* ShotRecommendationService.swift */,
+				C1000015229F0005 /* RangeDataService.swift */,
+				C1000017229F0007 /* ProfileDataService.swift */,
+				C10000B1229F00A1 /* SwingThoughtDataService.swift */,
+				C1000019229F0009 /* SpeechRecognitionService.swift */,
+				F1000015229F0005 /* AppSettingsService.swift */,
+				C100001B229F000B /* ClubDistanceResolver.swift */,
+				J1000011229F0001 /* NicknameGenerator.swift */,
+				N1000011229F0001 /* NavigationCoordinator.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		D1000020229F0020 /* ClubManagement */ = {
 			isa = PBXGroup;
 			children = (
@@ -279,15 +350,6 @@
 				F1000020229F0020 /* Models */,
 			);
 			path = GolfMode;
-			sourceTree = "<group>";
-		};
-		F1000020229F0020 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				F1000012229F0002 /* LadderEntry.swift */,
-				K1000011229F0001 /* GroupedLadderEntry.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		D1000023229F0023 /* Profile */ = {
@@ -364,22 +426,21 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A1000612229F0612 /* Core */ = {
+		F1000020229F0020 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A1000620229F0620 /* Models */,
-				A1000621229F0621 /* Services */,
+				F1000012229F0002 /* LadderEntry.swift */,
+				K1000011229F0001 /* GroupedLadderEntry.swift */,
 			);
-			path = Core;
+			path = Models;
 			sourceTree = "<group>";
 		};
-		A1000613229F0613 /* UIComponents */ = {
+		G1000020229F0020 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				G1000020229F0020 /* Theme */,
-				H1000020229F0020 /* GolfMode */,
+				G1000011229F0001 /* JournalTheme.swift */,
 			);
-			path = UIComponents;
+			path = Theme;
 			sourceTree = "<group>";
 		};
 		H1000020229F0020 /* GolfMode */ = {
@@ -400,55 +461,6 @@
 				AA000013229F0003 /* AllShotsOverviewPanelView.swift */,
 			);
 			path = GolfMode;
-			sourceTree = "<group>";
-		};
-		G1000020229F0020 /* Theme */ = {
-			isa = PBXGroup;
-			children = (
-				G1000011229F0001 /* JournalTheme.swift */,
-			);
-			path = Theme;
-			sourceTree = "<group>";
-		};
-		A1000614229F0614 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A1000013229F0003 /* Assets.xcassets */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		A1000620229F0620 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B1000011229F0001 /* Club.swift */,
-				B1000012229F0002 /* ShotType.swift */,
-				B1000013229F0003 /* RangeSession.swift */,
-				B1000014229F0004 /* Shot.swift */,
-				B1000015229F0005 /* StoredShotType.swift */,
-				B1000016229F0006 /* UserProfile.swift */,
-				B1000017229F0007 /* ShotRecommendation.swift */,
-				B1000018229F0008 /* RangeStats.swift */,
-				F1000011229F0001 /* SelectedClubShot.swift */,
-				F1000014229F0004 /* AppSettings.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		A1000621229F0621 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				C1000011229F0001 /* ClubDataService.swift */,
-				C1000013229F0003 /* ShotRecommendationService.swift */,
-				C1000015229F0005 /* RangeDataService.swift */,
-				C1000017229F0007 /* ProfileDataService.swift */,
-				C1000019229F0009 /* SpeechRecognitionService.swift */,
-				F1000015229F0005 /* AppSettingsService.swift */,
-				C100001B229F000B /* ClubDistanceResolver.swift */,
-				J1000011229F0001 /* NicknameGenerator.swift */,
-				N1000011229F0001 /* NavigationCoordinator.swift */,
-			);
-			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -595,12 +607,15 @@
 				B1000004229F0004 /* Shot.swift in Sources */,
 				B1000005229F0005 /* StoredShotType.swift in Sources */,
 				B1000006229F0006 /* UserProfile.swift in Sources */,
+				B10000A1229F00A1 /* PreShotRoutineItem.swift in Sources */,
+				B10000A2229F00A2 /* SwingThought.swift in Sources */,
 				B1000007229F0007 /* ShotRecommendation.swift in Sources */,
 				B1000008229F0008 /* RangeStats.swift in Sources */,
 				C1000001229F0001 /* ClubDataService.swift in Sources */,
 				C1000003229F0003 /* ShotRecommendationService.swift in Sources */,
 				C1000005229F0005 /* RangeDataService.swift in Sources */,
 				C1000007229F0007 /* ProfileDataService.swift in Sources */,
+				C10000A1229F00A1 /* SwingThoughtDataService.swift in Sources */,
 				C1000009229F0009 /* SpeechRecognitionService.swift in Sources */,
 				D1000001229F0001 /* ClubManager.swift in Sources */,
 				D1000002229F0002 /* RangeManager.swift in Sources */,
@@ -645,6 +660,7 @@
 				C1000004229F0004 /* ShotRecommendationServiceTests.swift in Sources */,
 				C1000006229F0006 /* RangeDataServiceTests.swift in Sources */,
 				C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */,
+				C10000A2229F00A2 /* SwingThoughtDataServiceTests.swift in Sources */,
 				C100000A229F000A /* SpeechRecognitionServiceTests.swift in Sources */,
 				F1000003229F0003 /* GolfModeViewModelTests.swift in Sources */,
 				F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */,
@@ -809,12 +825,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = L8TC9NH45P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "HTG uses the microphone to listen for yardage distances you speak aloud.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "HTG uses speech recognition to convert spoken yardage into a number.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -838,12 +855,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = L8TC9NH45P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "HTG uses the microphone to listen for yardage distances you speak aloud.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "HTG uses speech recognition to convert spoken yardage into a number.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

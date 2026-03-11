@@ -11,7 +11,9 @@ struct HTGApp: App {
             Shot.self,
             StoredShotType.self,
             UserProfile.self,
-            AppSettings.self
+            AppSettings.self,
+            PreShotRoutineItem.self,
+            SwingThought.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

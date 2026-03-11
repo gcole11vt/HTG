@@ -7,7 +7,7 @@ import SwiftData
 struct ProfileDataServiceTests {
 
     private func makeTestContainer() throws -> ModelContainer {
-        let schema = Schema([UserProfile.self])
+        let schema = Schema([UserProfile.self, PreShotRoutineItem.self, SwingThought.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
     }
