@@ -12,9 +12,10 @@ struct ClubListView: View {
     }
 
     private var sortedClubs: [Club] {
-        guard let clubs = clubManager?.clubs else { return [] }
+        guard let manager = clubManager else { return [] }
+        let _ = manager.refreshToken
         let shotType = primaryShotType
-        return clubs.sorted { lhs, rhs in
+        return manager.clubs.sorted { lhs, rhs in
             ClubDistanceResolver.resolveDisplayDistance(for: lhs, primaryShotType: shotType) >
             ClubDistanceResolver.resolveDisplayDistance(for: rhs, primaryShotType: shotType)
         }
