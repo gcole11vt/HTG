@@ -37,27 +37,27 @@ struct YardageDisplayView: View {
                     .focused($isTextFieldFocused)
                     .frame(width: 160)
 
-                Image(systemName: "mic.fill")
-                    .font(.system(size: 22))
-                    .foregroundStyle(JournalTheme.mutedGray)
-
                 Spacer()
             }
+
+            Button {
+                if let newYardage = Int(editText), newYardage > 0 {
+                    yardage = newYardage
+                }
+                isEditing = false
+            } label: {
+                Text("Go")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(JournalTheme.redMarker)
+            .padding(.horizontal, 40)
 
             Spacer()
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Go") {
-                    if let newYardage = Int(editText), newYardage > 0 {
-                        yardage = newYardage
-                    }
-                    isEditing = false
-                }
-                .foregroundStyle(JournalTheme.redMarker)
-                .fontWeight(.semibold)
-            }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isTextFieldFocused = false
         }
         .presentationDetents([.height(320)])
         .presentationDragIndicator(.visible)

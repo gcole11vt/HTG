@@ -347,25 +347,30 @@ struct RangeModeView: View {
                 Spacer()
             }
 
-            Spacer()
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Go") {
-                    if let distance = Int(saveDistanceText), distance > 0 {
-                        Task {
-                            await rangeManager?.saveSession(carryDistance: distance)
-                            showingSaveSheet = false
-                            selectedClub = nil
-                            shotTypeSelection = .none
-                            customShotTypeName = ""
-                        }
+            Button {
+                if let distance = Int(saveDistanceText), distance > 0 {
+                    Task {
+                        await rangeManager?.saveSession(carryDistance: distance)
+                        showingSaveSheet = false
+                        selectedClub = nil
+                        shotTypeSelection = .none
+                        customShotTypeName = ""
                     }
                 }
-                .foregroundStyle(.green)
-                .fontWeight(.semibold)
+            } label: {
+                Text("Save")
+                    .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(.green)
+            .disabled(Int(saveDistanceText) ?? 0 <= 0)
+            .padding(.horizontal, 40)
+
+            Spacer()
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isSaveFieldFocused = false
         }
         .presentationDetents([.height(320)])
         .presentationDragIndicator(.visible)
