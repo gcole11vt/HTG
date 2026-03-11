@@ -6,7 +6,7 @@ struct ShotInfoHeaderView: View {
     let shotTypeName: String
 
     var body: some View {
-        VStack(alignment: .center, spacing: 4) {
+        VStack(alignment: .leading, spacing: 4) {
             Text("\(carryDistance)")
                 .font(JournalTheme.handwritten(size: 24))
                 .foregroundStyle(JournalTheme.inkBlue)
