@@ -86,6 +86,7 @@ final class GolfModeViewModel {
 
     func setTargetYardage(_ yardage: Int) {
         targetYardage = yardage
+        resetToRecommendation()
         updateRecommendations()
     }
 
