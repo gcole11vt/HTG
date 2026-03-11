@@ -38,6 +38,11 @@ struct GolfModeView: View {
             groupedLadderEntries: viewModel.groupedLadderEntries,
             clubs: viewModel.clubs,
             allShotTypeNames: viewModel.shotTypeNamesInBag,
+            showPreShotRoutine: viewModel.showPreShotRoutine,
+            routineItems: viewModel.sortedRoutineItems,
+            showMantra: viewModel.showMantra,
+            mantraText: viewModel.mantraText,
+            matchingSwingThoughts: viewModel.matchingSwingThoughts,
             onSelectEntry: { entry in
                 viewModel.selectClubShot(
                     clubName: entry.clubName,
@@ -61,7 +66,6 @@ struct GolfModeView: View {
     private var loadingView: some View {
         ProgressView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .agedPaperBackground()
     }
 
     private var emptyStateView: some View {
@@ -80,7 +84,6 @@ struct GolfModeView: View {
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .agedPaperBackground()
     }
 }
 

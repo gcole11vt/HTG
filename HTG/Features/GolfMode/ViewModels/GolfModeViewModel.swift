@@ -7,7 +7,9 @@ final class GolfModeViewModel {
     private let recommendationService: ShotRecommendationService
     private let clubService: ClubDataService
     private let profileService: ProfileDataService
+    private let swingThoughtService: SwingThoughtDataService
 
+    var profile: UserProfile?
     var targetYardage: Int = 150
     var selectedFilter: ShotTypeFilter = .all
     var recommendations: [ShotRecommendation] = []
@@ -66,15 +68,45 @@ final class GolfModeViewModel {
         self.recommendationService = ShotRecommendationService()
         self.clubService = ClubDataService(modelContext: modelContext)
         self.profileService = ProfileDataService(modelContext: modelContext)
+        self.swingThoughtService = SwingThoughtDataService(modelContext: modelContext)
+    }
+
+    // MARK: - Swing Thoughts & Routine
+
+    var sortedRoutineItems: [PreShotRoutineItem] {
+        profile?.preShotRoutineItems.sorted { $0.sortOrder < $1.sortOrder } ?? []
+    }
+
+    var showPreShotRoutine: Bool {
+        profile?.showPreShotRoutine == true && !sortedRoutineItems.isEmpty
+    }
+
+    var showMantra: Bool {
+        profile?.showMantra == true && !(profile?.mantra.isEmpty ?? true)
+    }
+
+    var mantraText: String {
+        profile?.mantra ?? ""
+    }
+
+    var matchingSwingThoughts: [SwingThought] {
+        guard let profile, let clubShot = displayedClubShot else { return [] }
+        return swingThoughtService.matchingSwingThoughts(
+            from: profile,
+            clubName: clubShot.clubName,
+            shotTypeName: clubShot.shotTypeName
+        )
     }
 
     func loadClubs() async {
         isLoading = true
         do {
             clubs = try await clubService.fetchAllClubs()
-            let profile = try await profileService.getOrCreateProfile()
-            primaryShotTypeName = profile.primaryShotType
-            if let filter = ShotTypeFilter(rawValue: profile.primaryShotType) {
+            let loadedProfile = try await profileService.getOrCreateProfile()
+            profile = loadedProfile
+            primaryShotTypeName = loadedProfile.primaryShotType
+            await swingThoughtService.seedDefaultsIfNeeded(for: loadedProfile)
+            if let filter = ShotTypeFilter(rawValue: loadedProfile.primaryShotType) {
                 selectedFilter = filter
             }
             updateRecommendations()

@@ -9,6 +9,11 @@ struct YardageBookPageView: View {
     let groupedLadderEntries: [GroupedLadderEntry]
     var clubs: [Club] = []
     var allShotTypeNames: [String] = []
+    var showPreShotRoutine: Bool = false
+    var routineItems: [PreShotRoutineItem] = []
+    var showMantra: Bool = false
+    var mantraText: String = ""
+    var matchingSwingThoughts: [SwingThought] = []
     var onSelectEntry: ((LadderEntry) -> Void)?
     var onSelectClubShot: ((SelectedClubShot) -> Void)?
     var onReset: (() -> Void)?
@@ -45,6 +50,18 @@ struct YardageBookPageView: View {
                             .transition(.opacity.combined(with: .scale))
                         }
 
+                        if showPreShotRoutine {
+                            PreShotRoutineView(items: routineItems)
+                        }
+
+                        if showMantra {
+                            MantraView(text: mantraText)
+                        }
+
+                        if !matchingSwingThoughts.isEmpty {
+                            SwingThoughtsView(thoughts: matchingSwingThoughts)
+                        }
+
                         Spacer()
                     }
                     .padding(.leading, 16)
@@ -64,7 +81,6 @@ struct YardageBookPageView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .agedPaperBackground()
         .sheet(isPresented: $showingClubSelector) {
             if let clubShot = displayedClubShot {
                 ClubSelectorSheetView(
