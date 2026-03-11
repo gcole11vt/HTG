@@ -137,6 +137,10 @@ struct ClubDetailView: View {
     @State private var isEditingNickname = false
     @Environment(\.dismiss) private var dismiss
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
+    @Environment(\.modelContext) private var modelContext
+    @State private var clubProfileManager: ProfileManager?
+    @State private var clubSwingThoughts: [SwingThought] = []
+    @State private var newClubSwingThoughtText: String = ""
 
     private var sortedShotTypes: [ShotType] {
         club.shotTypes.filter { !$0.isArchived }.sorted { $0.carryDistance > $1.carryDistance }
@@ -266,6 +270,50 @@ struct ClubDetailView: View {
                     }
                 }
             }
+
+            Section("Swing Thoughts") {
+                if clubSwingThoughts.isEmpty {
+                    Text("No swing thoughts for this club")
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(clubSwingThoughts) { thought in
+                        Text(thought.text)
+                    }
+                    .onDelete { indexSet in
+                        for index in indexSet {
+                            let thought = clubSwingThoughts[index]
+                            Task {
+                                await clubProfileManager?.deleteSwingThought(thought)
+                                await loadClubSwingThoughts()
+                            }
+                        }
+                    }
+                }
+
+                HStack {
+                    TextField("New swing thought", text: $newClubSwingThoughtText)
+                    Button("Add") {
+                        guard !newClubSwingThoughtText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                        Task {
+                            await clubProfileManager?.addSwingThought(
+                                text: newClubSwingThoughtText,
+                                tagType: "club",
+                                tagValue: club.name
+                            )
+                            newClubSwingThoughtText = ""
+                            await loadClubSwingThoughts()
+                        }
+                    }
+                    .disabled(newClubSwingThoughtText.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+        }
+        .task {
+            if clubProfileManager == nil {
+                clubProfileManager = ProfileManager(modelContext: modelContext)
+                await clubProfileManager?.loadProfile()
+            }
+            await loadClubSwingThoughts()
         }
         .navigationTitle(club.name)
         .sheet(isPresented: $showingAddShotType) {
@@ -280,6 +328,10 @@ struct ClubDetailView: View {
         }
     }
 
+    private func loadClubSwingThoughts() async {
+        guard let profile = clubProfileManager?.profile else { return }
+        clubSwingThoughts = profile.swingThoughts.filter { $0.tagType == "club" && $0.tagValue == club.name }
+    }
 }
 
 struct ShotTypeRowView: View {
