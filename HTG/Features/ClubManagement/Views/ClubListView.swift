@@ -6,6 +6,7 @@ struct ClubListView: View {
     @State private var clubManager: ClubManager?
     @State private var profileManager: ProfileManager?
     @State private var showingAddClub = false
+    @State private var refreshID = UUID()
 
     private var primaryShotType: String {
         profileManager?.profile?.primaryShotType ?? "Full"
@@ -64,6 +65,7 @@ struct ClubListView: View {
                     }
                 }
             }
+            .id(refreshID)
             .navigationTitle("My Clubs")
             .navigationDestination(for: Club.self) { club in
                 ClubDetailView(club: club, clubManager: clubManager, primaryShotType: primaryShotType)
@@ -91,6 +93,7 @@ struct ClubListView: View {
                 }
             }
             .onAppear {
+                refreshID = UUID()
                 Task {
                     await clubManager?.loadClubs()
                     await profileManager?.loadProfile()
