@@ -90,6 +90,12 @@ struct ClubListView: View {
                     await profileManager?.loadProfile()
                 }
             }
+            .onAppear {
+                Task {
+                    await clubManager?.loadClubs()
+                    await profileManager?.loadProfile()
+                }
+            }
             .alert("Error", isPresented: .init(
                 get: { clubManager?.errorMessage != nil },
                 set: { if !$0 { clubManager?.errorMessage = nil } }
