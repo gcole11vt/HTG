@@ -70,6 +70,9 @@
 		K1000004229F0004 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000014229F0004 /* PageTitleView.swift */; };
 		K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000015229F0005 /* ShotInfoHeaderView.swift */; };
 		N1000001229F0001 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000011229F0001 /* NavigationCoordinator.swift */; };
+		P1000001229F0001 /* PreShotRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = P1000011229F0001 /* PreShotRoutineView.swift */; };
+		P1000002229F0002 /* MantraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = P1000012229F0002 /* MantraView.swift */; };
+		P1000003229F0003 /* SwingThoughtsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = P1000013229F0003 /* SwingThoughtsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,6 +159,9 @@
 		K1000014229F0004 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		K1000015229F0005 /* ShotInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotInfoHeaderView.swift; sourceTree = "<group>"; };
 		N1000011229F0001 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
+		P1000011229F0001 /* PreShotRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreShotRoutineView.swift; sourceTree = "<group>"; };
+		P1000012229F0002 /* MantraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantraView.swift; sourceTree = "<group>"; };
+		P1000013229F0003 /* SwingThoughtsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,6 +465,9 @@
 				AA000011229F0001 /* ClubShotRowView.swift */,
 				AA000012229F0002 /* ClubDetailPanelView.swift */,
 				AA000013229F0003 /* AllShotsOverviewPanelView.swift */,
+				P1000011229F0001 /* PreShotRoutineView.swift */,
+				P1000012229F0002 /* MantraView.swift */,
+				P1000013229F0003 /* SwingThoughtsView.swift */,
 			);
 			path = GolfMode;
 			sourceTree = "<group>";
@@ -648,6 +657,9 @@
 				AA000002229F0002 /* ClubDetailPanelView.swift in Sources */,
 				AA000003229F0003 /* AllShotsOverviewPanelView.swift in Sources */,
 				AA000004229F0004 /* ClubSelectorSheetView.swift in Sources */,
+				P1000001229F0001 /* PreShotRoutineView.swift in Sources */,
+				P1000002229F0002 /* MantraView.swift in Sources */,
+				P1000003229F0003 /* SwingThoughtsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
