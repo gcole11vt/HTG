@@ -8,12 +8,20 @@ struct ProfileView: View {
     @State private var handicapText: String = ""
     @State private var primaryShotTypeText: String = "Full"
     @State private var isEditing = false
+    @State private var newRoutineItemText: String = ""
+    @State private var showingAddSwingThought = false
+    @State private var newSwingThoughtText: String = ""
+    @State private var newSwingThoughtTagType: String = "all"
+    @State private var newSwingThoughtTagValue: String = ""
 
     var body: some View {
         NavigationStack {
             Form {
                 if let profile = profileManager?.profile {
                     profileSection(profile: profile)
+                    preShotRoutineSection(profile: profile)
+                    mantraSection(profile: profile)
+                    swingThoughtsSection(profile: profile)
                     statsSection
                 } else if profileManager?.isLoading == true {
                     Section {
@@ -41,8 +49,13 @@ struct ProfileView: View {
             } message: {
                 Text(profileManager?.errorMessage ?? "")
             }
+            .sheet(isPresented: $showingAddSwingThought) {
+                addSwingThoughtSheet
+            }
         }
     }
+
+    // MARK: - Profile Section
 
     private func profileSection(profile: UserProfile) -> some View {
         Section("Your Information") {
@@ -102,6 +115,174 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - Pre-Shot Routine Section
+
+    private func preShotRoutineSection(profile: UserProfile) -> some View {
+        Section("Pre-Shot Routine") {
+            Toggle("Show in Golf Mode", isOn: Binding(
+                get: { profile.showPreShotRoutine },
+                set: { newValue in
+                    Task { await profileManager?.setShowPreShotRoutine(newValue) }
+                }
+            ))
+
+            let sortedItems = profile.preShotRoutineItems.sorted { $0.sortOrder < $1.sortOrder }
+            ForEach(sortedItems) { item in
+                Text(item.text)
+            }
+            .onDelete { indexSet in
+                for index in indexSet {
+                    let item = sortedItems[index]
+                    Task { await profileManager?.deleteRoutineItem(item) }
+                }
+            }
+            .onMove { from, to in
+                var reordered = sortedItems
+                reordered.move(fromOffsets: from, toOffset: to)
+                Task { await profileManager?.reorderRoutineItems(reordered) }
+            }
+
+            HStack {
+                TextField("New step", text: $newRoutineItemText)
+                Button("Add") {
+                    guard !newRoutineItemText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                    Task {
+                        await profileManager?.addRoutineItem(text: newRoutineItemText)
+                        newRoutineItemText = ""
+                    }
+                }
+                .disabled(newRoutineItemText.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        }
+    }
+
+    // MARK: - Mantra Section
+
+    private func mantraSection(profile: UserProfile) -> some View {
+        Section("Mantra") {
+            Toggle("Show in Golf Mode", isOn: Binding(
+                get: { profile.showMantra },
+                set: { newValue in
+                    Task { await profileManager?.setShowMantra(newValue) }
+                }
+            ))
+
+            TextField("Your mantra", text: Binding(
+                get: { profile.mantra },
+                set: { newValue in
+                    Task { await profileManager?.updateMantra(newValue) }
+                }
+            ))
+        }
+    }
+
+    // MARK: - Swing Thoughts Section
+
+    private func swingThoughtsSection(profile: UserProfile) -> some View {
+        Section("Swing Thoughts") {
+            if profile.swingThoughts.isEmpty {
+                Text("No swing thoughts yet")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(profile.swingThoughts) { thought in
+                    HStack {
+                        Text(thought.text)
+                        Spacer()
+                        Text(swingThoughtTagLabel(thought))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .onDelete { indexSet in
+                    let thoughts = Array(profile.swingThoughts)
+                    for index in indexSet {
+                        Task { await profileManager?.deleteSwingThought(thoughts[index]) }
+                    }
+                }
+            }
+
+            Button {
+                showingAddSwingThought = true
+            } label: {
+                Label("Add Swing Thought", systemImage: "plus")
+            }
+        }
+    }
+
+    private func swingThoughtTagLabel(_ thought: SwingThought) -> String {
+        switch thought.tagType {
+        case "club": return thought.tagValue
+        case "shotType": return thought.tagValue
+        default: return "All"
+        }
+    }
+
+    // MARK: - Add Swing Thought Sheet
+
+    private var addSwingThoughtSheet: some View {
+        NavigationStack {
+            Form {
+                TextField("Swing thought", text: $newSwingThoughtText)
+
+                Picker("Applies to", selection: $newSwingThoughtTagType) {
+                    Text("All Clubs").tag("all")
+                    Text("Specific Club").tag("club")
+                    Text("Shot Type").tag("shotType")
+                }
+
+                if newSwingThoughtTagType == "club" {
+                    Picker("Club", selection: $newSwingThoughtTagValue) {
+                        Text("Select Club").tag("")
+                        ForEach(profileManager?.clubNames ?? [], id: \.self) { name in
+                            Text(name).tag(name)
+                        }
+                    }
+                } else if newSwingThoughtTagType == "shotType" {
+                    Picker("Shot Type", selection: $newSwingThoughtTagValue) {
+                        Text("Select Shot Type").tag("")
+                        ForEach(profileManager?.shotTypeNames ?? [], id: \.self) { name in
+                            Text(name).tag(name)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Add Swing Thought")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        resetSwingThoughtForm()
+                        showingAddSwingThought = false
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Add") {
+                        let tagValue = newSwingThoughtTagType == "all" ? "" : newSwingThoughtTagValue
+                        Task {
+                            await profileManager?.addSwingThought(
+                                text: newSwingThoughtText,
+                                tagType: newSwingThoughtTagType,
+                                tagValue: tagValue
+                            )
+                            resetSwingThoughtForm()
+                            showingAddSwingThought = false
+                        }
+                    }
+                    .disabled(newSwingThoughtText.trimmingCharacters(in: .whitespaces).isEmpty ||
+                              (newSwingThoughtTagType != "all" && newSwingThoughtTagValue.isEmpty))
+                }
+            }
+        }
+    }
+
+    private func resetSwingThoughtForm() {
+        newSwingThoughtText = ""
+        newSwingThoughtTagType = "all"
+        newSwingThoughtTagValue = ""
+    }
+
+    // MARK: - Existing Sections
+
     private var statsSection: some View {
         Section("About Handicap") {
             VStack(alignment: .leading, spacing: 8) {
@@ -129,5 +310,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .modelContainer(for: [UserProfile.self, Club.self, ShotType.self], inMemory: true)
+        .modelContainer(for: [UserProfile.self, Club.self, ShotType.self, PreShotRoutineItem.self, SwingThought.self], inMemory: true)
 }
