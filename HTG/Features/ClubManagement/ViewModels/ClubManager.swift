@@ -10,7 +10,6 @@ final class ClubManager {
     var archivedClubs: [Club] = []
     var isLoading: Bool = false
     var errorMessage: String?
-    var refreshToken: Int = 0
 
     init(modelContext: ModelContext) {
         self.service = ClubDataService(modelContext: modelContext)
@@ -20,9 +19,10 @@ final class ClubManager {
         isLoading = true
         errorMessage = nil
         do {
+            clubs = []
+            archivedClubs = []
             clubs = try await service.fetchAllClubs()
             archivedClubs = try await service.fetchArchivedClubs()
-            refreshToken += 1
         } catch {
             errorMessage = error.localizedDescription
         }
