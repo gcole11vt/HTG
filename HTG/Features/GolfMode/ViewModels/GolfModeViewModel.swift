@@ -98,6 +98,18 @@ final class GolfModeViewModel {
         )
     }
 
+    /// Ensures default clubs exist when the store is empty, runs maintenance, then loads clubs and profile-driven UI state.
+    func ensureDefaultsThenLoadClubs() async {
+        do {
+            try await clubService.loadDefaultClubs()
+            try await clubService.backfillNicknames()
+            try await clubService.purgeExpiredShotTypes()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        await loadClubs()
+    }
+
     func loadClubs() async {
         isLoading = true
         do {

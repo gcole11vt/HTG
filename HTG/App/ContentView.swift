@@ -2,7 +2,9 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var navigationCoordinator = NavigationCoordinator()
+    @State private var didBootstrapClubDefaults = false
 
     var body: some View {
         mainTabView
@@ -37,6 +39,12 @@ struct ContentView: View {
         }
         .environment(navigationCoordinator)
         .tint(GTCColor.primary)
+        .task {
+            guard !didBootstrapClubDefaults else { return }
+            didBootstrapClubDefaults = true
+            let clubManager = ClubManager(modelContext: modelContext)
+            await clubManager.loadDefaultClubsIfNeeded()
+        }
     }
 }
 

@@ -3,6 +3,7 @@ import SwiftData
 
 struct GolfModeView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @State private var viewModel: GolfModeViewModel?
 
     var body: some View {
@@ -17,11 +18,12 @@ struct GolfModeView: View {
                 loadingView
             }
         }
-        .task {
+        .task(id: navigationCoordinator.selectedTab) {
             if viewModel == nil {
                 viewModel = GolfModeViewModel(modelContext: modelContext)
             }
-            await viewModel?.loadClubs()
+            guard navigationCoordinator.selectedTab == .golf else { return }
+            await viewModel?.ensureDefaultsThenLoadClubs()
         }
     }
 
@@ -89,5 +91,6 @@ struct GolfModeView: View {
 
 #Preview {
     GolfModeView()
+        .environment(NavigationCoordinator())
         .modelContainer(for: [Club.self, ShotType.self], inMemory: true)
 }
