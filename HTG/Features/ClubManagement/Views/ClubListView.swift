@@ -35,7 +35,7 @@ struct ClubListView: View {
                             } label: {
                                 Label("Archive", systemImage: "archivebox")
                             }
-                            .tint(.orange)
+                            .tint(GTCColor.swipe)
                         }
                     }
                 } else if clubManager?.isLoading == true {
@@ -52,14 +52,14 @@ struct ClubListView: View {
                     Section("Archived") {
                         ForEach(archivedClubs) { club in
                             ClubRowView(club: club, primaryShotType: primaryShotType)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(GTCColor.secondary)
                                 .swipeActions(edge: .trailing) {
                                     Button {
                                         Task { await clubManager?.restoreClub(club) }
                                     } label: {
                                         Label("Restore", systemImage: "arrow.uturn.backward")
                                     }
-                                    .tint(.green)
+                                    .tint(GTCColor.primary)
                                 }
                         }
                     }
@@ -121,7 +121,7 @@ struct ClubRowView: View {
                 .font(.headline)
             Spacer()
             Text("\(ClubDistanceResolver.resolveDisplayDistance(for: club, primaryShotType: primaryShotType)) yds")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(GTCColor.secondary)
         }
     }
 }
@@ -201,7 +201,7 @@ struct ClubDetailView: View {
                     HStack {
                         Text(club.nickname)
                         Text("Nickname")
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(GTCColor.border)
                             .italic()
                             .frame(maxWidth: .infinity)
                         Button("Edit") {
@@ -229,7 +229,7 @@ struct ClubDetailView: View {
                                 autoStart: true
                             )
                         }
-                        .tint(.green)
+                        .tint(GTCColor.primary)
                     }
                     .swipeActions(edge: .trailing) {
                         Button("Archive", role: .destructive) {
@@ -256,16 +256,16 @@ struct ClubDetailView: View {
                             Text(shotType.name)
                             Spacer()
                             Text("\(shotType.carryDistance) yds")
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(GTCColor.secondary)
                         }
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(GTCColor.secondary)
                         .swipeActions(edge: .trailing) {
                             Button {
                                 Task { await clubManager?.restoreShotType(shotType) }
                             } label: {
                                 Label("Restore", systemImage: "arrow.uturn.backward")
                             }
-                            .tint(.green)
+                            .tint(GTCColor.primary)
                         }
                     }
                 }
@@ -274,7 +274,7 @@ struct ClubDetailView: View {
             Section("Swing Thoughts") {
                 if clubSwingThoughts.isEmpty {
                     Text("No swing thoughts for this club")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(GTCColor.secondary)
                 } else {
                     ForEach(clubSwingThoughts) { thought in
                         Text(thought.text)
@@ -368,13 +368,13 @@ struct ShotTypeRowView: View {
                     .fontWeight(.semibold)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(delta > 0 ? Color.green.opacity(0.2) : Color.red.opacity(0.2))
-                    .foregroundStyle(delta > 0 ? .green : .red)
+                    .background(delta > 0 ? GTCColor.deltaPositiveBackground : GTCColor.deltaNegativeBackground)
+                    .foregroundStyle(delta > 0 ? GTCColor.primary : GTCColor.warning)
                     .clipShape(Capsule())
             }
             Spacer()
             Text("\(shotType.carryDistance) yds")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(GTCColor.secondary)
         }
         .contentShape(Rectangle())
         .onTapGesture {

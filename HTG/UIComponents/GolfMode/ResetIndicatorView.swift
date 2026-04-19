@@ -16,7 +16,7 @@ struct ResetIndicatorView: View {
                 Text("reset")
                     .font(JournalTheme.handwritten(size: 14))
             }
-            .foregroundStyle(JournalTheme.mutedGray)
+            .foregroundStyle(GTCColor.border)
             .opacity(isPressed ? 0.5 : 1.0)
         }
         .buttonStyle(.plain)
@@ -37,5 +37,4 @@ struct ResetIndicatorView: View {
         }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .agedPaperBackground()
 }

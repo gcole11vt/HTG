@@ -72,15 +72,15 @@ struct GolfModeView: View {
         VStack(spacing: 20) {
             Image(systemName: "bag")
                 .font(.system(size: 48))
-                .foregroundStyle(JournalTheme.mutedGray)
+                .foregroundStyle(GTCColor.border)
 
             Text("No Clubs")
                 .font(JournalTheme.handwrittenBold(size: 24))
-                .foregroundStyle(JournalTheme.inkBlue)
+                .foregroundStyle(GTCColor.primary)
 
             Text("Add clubs in the Clubs tab\nto see shot recommendations")
                 .font(JournalTheme.handwritten(size: 16))
-                .foregroundStyle(JournalTheme.mutedGray)
+                .foregroundStyle(GTCColor.border)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

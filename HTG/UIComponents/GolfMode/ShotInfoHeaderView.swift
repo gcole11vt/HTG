@@ -9,15 +9,15 @@ struct ShotInfoHeaderView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("\(carryDistance)")
                 .font(JournalTheme.handwritten(size: 24))
-                .foregroundStyle(JournalTheme.inkBlue)
+                .foregroundStyle(GTCColor.primary)
 
             Text(clubName)
                 .font(JournalTheme.handwritten(size: 24))
-                .foregroundStyle(JournalTheme.inkBlue)
+                .foregroundStyle(GTCColor.primary)
 
             Text(shotTypeName)
                 .font(JournalTheme.handwritten(size: 18))
-                .foregroundStyle(JournalTheme.mutedGray)
+                .foregroundStyle(GTCColor.border)
         }
     }
 }

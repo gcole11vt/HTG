@@ -21,18 +21,18 @@ struct ClubShotRowView: View {
     }
 
     private var differentialColor: Color {
-        differential >= 0 ? JournalTheme.targetGreen : JournalTheme.redMarker
+        differential >= 0 ? GTCColor.primary : GTCColor.warning
     }
 
     var body: some View {
         HStack {
             Text(clubNickname)
                 .font(JournalTheme.handwrittenBold(size: 16))
-                .foregroundStyle(JournalTheme.inkBlue)
+                .foregroundStyle(GTCColor.primary)
 
             Text(shotTypeName)
                 .font(JournalTheme.handwritten(size: 14))
-                .foregroundStyle(JournalTheme.mutedGray)
+                .foregroundStyle(GTCColor.border)
 
             Spacer()
 
@@ -42,16 +42,16 @@ struct ClubShotRowView: View {
 
             Text("\(carryDistance)")
                 .font(JournalTheme.handwrittenBold(size: 16))
-                .foregroundStyle(JournalTheme.inkBlue)
+                .foregroundStyle(GTCColor.primary)
                 .frame(width: 40, alignment: .trailing)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
-        .background(isHighlighted ? JournalTheme.paperDark : Color.clear)
+        .background(isHighlighted ? GTCColor.rowHighlight : Color.clear)
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .overlay(
             RoundedRectangle(cornerRadius: 6)
-                .stroke(isBordered ? JournalTheme.inkBlue : Color.clear, lineWidth: 1.5)
+                .stroke(isBordered ? GTCColor.primary : Color.clear, lineWidth: 1.5)
         )
     }
 }
@@ -82,5 +82,4 @@ struct ClubShotRowView: View {
         )
     }
     .padding()
-    .agedPaperBackground()
 }

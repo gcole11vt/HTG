@@ -7,6 +7,6 @@ struct MantraView: View {
         Text(text)
             .font(JournalTheme.handwritten(size: 18))
             .italic()
-            .foregroundStyle(JournalTheme.inkBlue.opacity(0.8))
+            .foregroundStyle(GTCColor.mantraSupportingText)
     }
 }

@@ -10,7 +10,7 @@ struct LadderTickMarkView: View {
             if isMajor {
                 Text("\(yardage)")
                     .font(JournalTheme.ladderFont)
-                    .foregroundStyle(isTarget ? JournalTheme.targetGreen : JournalTheme.inkBlue)
+                    .foregroundStyle(GTCColor.primary)
                     .frame(width: 30, alignment: .trailing)
             } else {
                 Spacer()
@@ -18,7 +18,7 @@ struct LadderTickMarkView: View {
             }
 
             Rectangle()
-                .fill(isTarget ? JournalTheme.targetGreen : JournalTheme.inkBlue.opacity(0.5))
+                .fill(isTarget ? GTCColor.primary : GTCColor.ladderTickMinorFill)
                 .frame(width: isTarget || isMajor ? 12 : 6, height: isTarget ? 3 : 1)
         }
     }

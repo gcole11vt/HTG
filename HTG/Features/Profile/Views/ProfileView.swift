@@ -94,19 +94,19 @@ struct ProfileView: View {
                     Text("Name")
                     Spacer()
                     Text(profile.name)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(GTCColor.secondary)
                 }
                 HStack {
                     Text("Handicap")
                     Spacer()
                     Text("\(profile.handicap)")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(GTCColor.secondary)
                 }
                 HStack {
                     Text("Primary Shot Type")
                     Spacer()
                     Text(profile.primaryShotType)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(GTCColor.secondary)
                 }
                 Button("Edit Profile") {
                     isEditing = true
@@ -182,7 +182,7 @@ struct ProfileView: View {
         Section("Swing Thoughts") {
             if profile.swingThoughts.isEmpty {
                 Text("No swing thoughts yet")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(GTCColor.secondary)
             } else {
                 ForEach(profile.swingThoughts) { thought in
                     HStack {
@@ -190,7 +190,7 @@ struct ProfileView: View {
                         Spacer()
                         Text(swingThoughtTagLabel(thought))
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(GTCColor.secondary)
                     }
                 }
                 .onDelete { indexSet in
@@ -290,7 +290,7 @@ struct ProfileView: View {
                     .font(.subheadline)
                 Text("Valid range: 0 (scratch) to 54 (beginner)")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(GTCColor.secondary)
             }
         }
     }

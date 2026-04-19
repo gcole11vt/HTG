@@ -30,7 +30,7 @@ struct LadderClubMarkerView: View {
             .background {
                 if entry.isSelected {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(JournalTheme.redMarker.opacity(0.1))
+                        .fill(GTCColor.ladderSelectionFill)
                 }
             }
         }
@@ -40,19 +40,19 @@ struct LadderClubMarkerView: View {
 
     private var markerColor: Color {
         if entry.isSelected {
-            return JournalTheme.redMarker
+            return GTCColor.warning
         } else if entry.isSameClubAsSelected {
-            return JournalTheme.redMarker.opacity(0.5)
+            return GTCColor.ladderSameClubMarker
         } else {
-            return JournalTheme.inkBlue.opacity(0.6)
+            return GTCColor.ladderDefaultMarker
         }
     }
 
     private var textColor: Color {
         if entry.isSelected {
-            return JournalTheme.redMarker
+            return GTCColor.warning
         } else {
-            return JournalTheme.inkBlue.opacity(0.8)
+            return GTCColor.ladderDefaultText
         }
     }
 
@@ -100,5 +100,4 @@ struct LadderClubMarkerView: View {
         )
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .agedPaperBackground()
 }

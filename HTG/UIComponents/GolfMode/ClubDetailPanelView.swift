@@ -33,7 +33,7 @@ struct ClubDetailPanelView: View {
         }
         .pickerStyle(.menu)
         .font(JournalTheme.handwrittenBold(size: 16))
-        .tint(JournalTheme.inkBlue)
+        .tint(GTCColor.primary)
     }
 
     private var shotTypeList: some View {

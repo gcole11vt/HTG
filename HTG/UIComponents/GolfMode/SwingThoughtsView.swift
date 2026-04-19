@@ -7,7 +7,7 @@ struct SwingThoughtsView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Swing Thoughts")
                 .font(JournalTheme.handwritten(size: 14))
-                .foregroundStyle(JournalTheme.mutedGray)
+                .foregroundStyle(GTCColor.border)
 
             ForEach(thoughts) { thought in
                 HStack(alignment: .top, spacing: 4) {
@@ -15,7 +15,7 @@ struct SwingThoughtsView: View {
                     Text(thought.text)
                 }
                 .font(JournalTheme.handwritten(size: 16))
-                .foregroundStyle(JournalTheme.inkBlue.opacity(0.7))
+                .foregroundStyle(GTCColor.routineSupportingText)
             }
         }
     }

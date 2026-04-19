@@ -42,10 +42,9 @@ struct ClubSelectorSheetView: View {
                         dismiss()
                     }
                     .font(JournalTheme.handwritten(size: 16))
-                    .foregroundStyle(JournalTheme.mutedGray)
+                    .foregroundStyle(GTCColor.border)
                 }
             }
-            .agedPaperBackground()
             .presentationDetents([.large])
         }
     }
@@ -54,10 +53,10 @@ struct ClubSelectorSheetView: View {
         VStack(spacing: 2) {
             Text("Target")
                 .font(JournalTheme.handwritten(size: 14))
-                .foregroundStyle(JournalTheme.mutedGray)
+                .foregroundStyle(GTCColor.border)
             Text("\(targetYardage)")
                 .font(JournalTheme.handwrittenBold(size: 36))
-                .foregroundStyle(JournalTheme.inkBlue)
+                .foregroundStyle(GTCColor.primary)
         }
     }
 
@@ -95,12 +94,12 @@ struct ClubSelectorSheetView: View {
         } label: {
             Text("Select")
                 .font(JournalTheme.handwrittenBold(size: 18))
-                .foregroundStyle(.white)
+                .foregroundStyle(GTCColor.surface)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(pendingSelection != nil ? JournalTheme.inkBlue : JournalTheme.mutedGray)
+                        .fill(pendingSelection != nil ? GTCColor.primary : GTCColor.border)
                 )
         }
         .disabled(pendingSelection == nil)

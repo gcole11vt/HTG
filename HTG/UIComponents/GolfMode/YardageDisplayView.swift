@@ -13,7 +13,7 @@ struct YardageDisplayView: View {
         } label: {
             Text("\(yardage)")
                 .font(JournalTheme.yardageFont)
-                .foregroundStyle(JournalTheme.inkBlue)
+                .foregroundStyle(GTCColor.primary)
                 .contentTransition(.numericText())
         }
         .buttonStyle(.plain)
@@ -31,7 +31,7 @@ struct YardageDisplayView: View {
 
                 TextField("", text: $editText)
                     .font(JournalTheme.yardageFont)
-                    .foregroundStyle(JournalTheme.inkBlue)
+                    .foregroundStyle(GTCColor.primary)
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
                     .focused($isTextFieldFocused)
@@ -50,7 +50,7 @@ struct YardageDisplayView: View {
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(JournalTheme.redMarker)
+            .tint(GTCColor.warning)
             .padding(.horizontal, 40)
 
             Spacer()

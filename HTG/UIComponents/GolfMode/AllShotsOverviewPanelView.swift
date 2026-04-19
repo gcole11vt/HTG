@@ -81,7 +81,7 @@ struct AllShotsOverviewPanelView: View {
                 Image(systemName: "line.3.horizontal.decrease.circle")
                     .font(.system(size: 14))
             }
-            .foregroundStyle(JournalTheme.mutedGray)
+            .foregroundStyle(GTCColor.border)
         }
     }
 

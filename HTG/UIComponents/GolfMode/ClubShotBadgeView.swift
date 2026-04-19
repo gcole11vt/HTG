@@ -13,17 +13,19 @@ struct ClubShotBadgeView: View {
             VStack(spacing: 4) {
                 Text(clubName)
                     .font(JournalTheme.clubNameFont)
-                    .foregroundStyle(JournalTheme.inkBlue)
+                    .foregroundStyle(GTCColor.primary)
 
                 Text(shotTypeName)
                     .font(JournalTheme.shotTypeFont)
-                    .foregroundStyle(JournalTheme.mutedGray)
+                    .foregroundStyle(GTCColor.border)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
             .background {
                 if showCircle {
-                    RedMarkerCircle(size: 100, animated: true)
+                    Circle()
+                        .stroke(GTCColor.warning, lineWidth: 3)
+                        .frame(width: 100, height: 100)
                 }
             }
         }
@@ -43,5 +45,4 @@ struct ClubShotBadgeView: View {
         }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .agedPaperBackground()
 }

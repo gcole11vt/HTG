@@ -195,7 +195,7 @@ struct RangeModeView: View {
                 .fontWeight(.bold)
             Text(session.shotTypeName)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(GTCColor.secondary)
         }
     }
 
@@ -233,7 +233,7 @@ struct RangeModeView: View {
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(.green)
+            .tint(GTCColor.primary)
             .disabled((rangeManager?.currentStats.count ?? 0) == 0)
         }
     }
@@ -255,7 +255,7 @@ struct RangeModeView: View {
             Text("PREVIOUS SHOTS")
                 .font(.caption)
                 .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(GTCColor.secondary)
                 .padding(.bottom, 8)
 
             let sortedShots = session.shots.sorted(by: { $0.date > $1.date })
@@ -268,7 +268,7 @@ struct RangeModeView: View {
                         if shot.isFromVoice {
                             Image(systemName: "mic.fill")
                                 .font(.caption2)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(GTCColor.secondary)
                         }
 
                         Spacer()
@@ -278,7 +278,7 @@ struct RangeModeView: View {
                         } label: {
                             Image(systemName: "trash")
                                 .font(.caption)
-                                .foregroundStyle(.red)
+                                .foregroundStyle(GTCColor.warning)
                         }
                         .buttonStyle(.plain)
                     }
@@ -299,10 +299,10 @@ struct RangeModeView: View {
             Text("STATS")
                 .font(.caption)
                 .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(GTCColor.secondary)
 
             if let current = rangeManager?.currentCarryDistance {
-                statItem(label: "Current", value: current, color: .green)
+                statItem(label: "Current", value: current, color: GTCColor.primary)
             }
 
             statItem(label: "Count", value: rangeManager?.currentStats.count ?? 0)
@@ -312,11 +312,11 @@ struct RangeModeView: View {
         }
     }
 
-    private func statItem(label: String, value: Int, color: Color = .primary) -> some View {
+    private func statItem(label: String, value: Int, color: Color = GTCColor.text) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(GTCColor.secondary)
             Text("\(value)")
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -338,7 +338,7 @@ struct RangeModeView: View {
 
                 TextField("", text: $saveDistanceText)
                     .font(.system(size: 48, weight: .bold))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(GTCColor.text)
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
                     .focused($isSaveFieldFocused)
@@ -362,7 +362,7 @@ struct RangeModeView: View {
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(.green)
+            .tint(GTCColor.primary)
             .disabled((Int(saveDistanceText) ?? 0) <= 0)
             .padding(.horizontal, 40)
 

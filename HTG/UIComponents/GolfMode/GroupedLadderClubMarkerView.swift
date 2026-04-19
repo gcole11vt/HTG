@@ -14,14 +14,14 @@ struct GroupedLadderClubMarkerView: View {
                 if index > 0 {
                     Text("/")
                         .font(JournalTheme.handwritten(size: fontSize))
-                        .foregroundStyle(textColor.opacity(0.5))
+                        .foregroundStyle(GTCColor.ladderSeparatorSlash)
                 }
                 Button {
                     onSelect?(entry)
                 } label: {
                     Text(entryLabel(for: entry))
                         .font(JournalTheme.handwritten(size: fontSize))
-                        .foregroundStyle(entry.isSelected ? JournalTheme.redMarker : textColor)
+                        .foregroundStyle(entry.isSelected ? GTCColor.warning : textColor)
                 }
                 .buttonStyle(.plain)
                 .disabled(onSelect == nil)
@@ -32,7 +32,7 @@ struct GroupedLadderClubMarkerView: View {
         .background {
             if group.isAnySelected {
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(JournalTheme.redMarker.opacity(0.1))
+                    .fill(GTCColor.ladderSelectionFill)
             }
         }
     }
@@ -53,18 +53,18 @@ struct GroupedLadderClubMarkerView: View {
 
     private var markerColor: Color {
         if group.isAnySelected {
-            return JournalTheme.redMarker
+            return GTCColor.warning
         } else if group.isAnySameClubAsSelected {
-            return JournalTheme.redMarker.opacity(0.5)
+            return GTCColor.ladderSameClubMarker
         }
-        return JournalTheme.inkBlue.opacity(0.6)
+        return GTCColor.ladderDefaultMarker
     }
 
     private var textColor: Color {
         if group.isAnySelected {
-            return JournalTheme.redMarker
+            return GTCColor.warning
         }
-        return JournalTheme.inkBlue.opacity(0.8)
+        return GTCColor.ladderDefaultText
     }
 }
 
@@ -90,5 +90,4 @@ struct GroupedLadderClubMarkerView: View {
         )
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .agedPaperBackground()
 }

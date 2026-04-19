@@ -2,35 +2,10 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @State private var launchViewModel: AppLaunchViewModel?
     @State private var navigationCoordinator = NavigationCoordinator()
 
     var body: some View {
-        ZStack {
-            // Main app content (TabView)
-            if launchViewModel?.hasOpenedJournal == true {
-                mainTabView
-                    .transition(.opacity)
-            }
-
-            // Opening animation overlay
-            if let viewModel = launchViewModel, !viewModel.hasOpenedJournal {
-                JournalOpeningAnimationView(ownerName: viewModel.ownerName) {
-                    withAnimation(.easeOut(duration: JournalTheme.contentFadeDuration)) {
-                        viewModel.completeOpening()
-                    }
-                }
-                .transition(.opacity)
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: launchViewModel?.hasOpenedJournal)
-        .task {
-            if launchViewModel == nil {
-                launchViewModel = AppLaunchViewModel(modelContext: modelContext)
-            }
-            await launchViewModel?.loadProfile()
-        }
+        mainTabView
     }
 
     private var mainTabView: some View {
@@ -61,6 +36,7 @@ struct ContentView: View {
                 }
         }
         .environment(navigationCoordinator)
+        .tint(GTCColor.primary)
     }
 }
 
