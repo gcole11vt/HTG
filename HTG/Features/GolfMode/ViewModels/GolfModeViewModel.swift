@@ -16,6 +16,8 @@ final class GolfModeViewModel {
     var clubs: [Club] = []
     var isLoading: Bool = false
     var errorMessage: String?
+    private let minTargetYardage = 50
+    private let maxTargetYardage = 400
 
     // Selection tracking
     var selectedClubShot: SelectedClubShot?
@@ -129,7 +131,7 @@ final class GolfModeViewModel {
     }
 
     func setTargetYardage(_ yardage: Int) {
-        targetYardage = yardage
+        targetYardage = min(max(yardage, minTargetYardage), maxTargetYardage)
         resetToRecommendation()
         updateRecommendations()
     }

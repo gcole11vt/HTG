@@ -127,6 +127,29 @@ final class RangeManager {
         }
     }
 
+    func parsedCarryDistance(from input: String) -> Int? {
+        let trimmedInput = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let distance = Int(trimmedInput), distance > 0 else { return nil }
+        return distance
+    }
+
+    func isValidCarryDistanceInput(_ input: String) -> Bool {
+        parsedCarryDistance(from: input) != nil
+    }
+
+    func defaultSaveCarryDistanceText() -> String {
+        if currentStats.median > 0 {
+            return "\(currentStats.median)"
+        }
+        if currentStats.max > 0 {
+            return "\(currentStats.max)"
+        }
+        if let currentCarryDistance, currentCarryDistance > 0 {
+            return "\(currentCarryDistance)"
+        }
+        return ""
+    }
+
     func loadSessions() async {
         isLoading = true
         do {

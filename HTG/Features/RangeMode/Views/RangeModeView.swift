@@ -226,7 +226,7 @@ struct RangeModeView: View {
             .buttonStyle(.bordered)
 
             Button {
-                saveDistanceText = "\(rangeManager?.currentStats.median ?? 0)"
+                saveDistanceText = rangeManager?.defaultSaveCarryDistanceText() ?? ""
                 showingSaveSheet = true
             } label: {
                 Text("Save Session")
@@ -348,7 +348,7 @@ struct RangeModeView: View {
             }
 
             Button {
-                if let distance = Int(saveDistanceText), distance > 0 {
+                if let distance = rangeManager?.parsedCarryDistance(from: saveDistanceText) {
                     Task {
                         await rangeManager?.saveSession(carryDistance: distance)
                         showingSaveSheet = false
@@ -363,7 +363,7 @@ struct RangeModeView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(GTCColor.primary)
-            .disabled((Int(saveDistanceText) ?? 0) <= 0)
+            .disabled(!(rangeManager?.isValidCarryDistanceInput(saveDistanceText) ?? false))
             .padding(.horizontal, 40)
 
             Spacer()
@@ -375,6 +375,7 @@ struct RangeModeView: View {
         .presentationDetents([.height(320)])
         .presentationDragIndicator(.visible)
         .onAppear {
+            saveDistanceText = rangeManager?.defaultSaveCarryDistanceText() ?? ""
             isSaveFieldFocused = true
         }
     }

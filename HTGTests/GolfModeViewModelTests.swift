@@ -81,6 +81,10 @@ struct GolfModeViewModelTests {
         viewModel.selectClubShot(clubName: "8 Iron", shotTypeName: "Full", distance: 140)
 
         #expect(viewModel.showResetIndicator == true)
+
+        viewModel.setTargetYardage(155)
+        #expect(viewModel.selectedClubShot == nil)
+        #expect(viewModel.showResetIndicator == false)
     }
 
     @Test("Reset to recommendation clears selection")
@@ -99,6 +103,10 @@ struct GolfModeViewModelTests {
 
         #expect(viewModel.selectedClubShot == nil)
         #expect(viewModel.displayedClubShot?.clubName == "7 Iron")
+        viewModel.setTargetYardage(-20)
+        #expect(viewModel.targetYardage == 50)
+        viewModel.setTargetYardage(999)
+        #expect(viewModel.targetYardage == 400)
     }
 
     // MARK: - Ladder Calculation Tests

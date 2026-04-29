@@ -21,64 +21,54 @@ struct YardageBookPageView: View {
     @State private var showingClubSelector = false
 
     var body: some View {
-        GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 8) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
                 PageTitleView()
-                    .padding(.horizontal, 16)
                     .padding(.top, 8)
 
-                HStack(alignment: .top, spacing: 0) {
-                    // Left column — top aligned
-                    VStack(alignment: .leading, spacing: 12) {
-                        YardageDisplayView(yardage: $targetYardage)
+                YardageDisplayView(yardage: $targetYardage)
 
-                        if let clubShot = displayedClubShot {
-                            ShotInfoHeaderView(
-                                carryDistance: clubShot.carryDistance,
-                                clubName: clubShot.clubName,
-                                shotTypeName: clubShot.shotTypeName
-                            )
-                            .onTapGesture {
-                                showingClubSelector = true
-                            }
-                        }
+                if let clubShot = displayedClubShot {
+                    ShotInfoHeaderView(
+                        carryDistance: clubShot.carryDistance,
+                        clubName: clubShot.clubName,
+                        shotTypeName: clubShot.shotTypeName,
+                        isRecommendationActive: !showResetIndicator,
+                        onReset: onReset
+                    )
+                    .onTapGesture {
+                        showingClubSelector = true
+                    }
+                }
 
-                        if showResetIndicator {
-                            ResetIndicatorView {
-                                onReset?()
-                            }
-                            .transition(.opacity.combined(with: .scale))
-                        }
+                YardageLadderView(
+                    targetYardage: targetYardage,
+                    minYardage: ladderMinYardage,
+                    maxYardage: ladderMaxYardage,
+                    groupedEntries: groupedLadderEntries,
+                    onSelectEntry: onSelectEntry
+                )
 
+                if showMantra {
+                    MantraView(text: mantraText)
+                }
+
+                if showPreShotRoutine || !matchingSwingThoughts.isEmpty {
+                    HStack(alignment: .top, spacing: 12) {
                         if showPreShotRoutine {
                             PreShotRoutineView(items: routineItems)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
-
-                        if showMantra {
-                            MantraView(text: mantraText)
-                        }
-
                         if !matchingSwingThoughts.isEmpty {
                             SwingThoughtsView(thoughts: matchingSwingThoughts)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
-
-                        Spacer()
                     }
-                    .padding(.leading, 16)
-                    .frame(width: geometry.size.width * 0.55)
-                    .animation(.easeInOut(duration: 0.3), value: showResetIndicator)
-
-                    // Right column — YardageLadder
-                    YardageLadderView(
-                        targetYardage: targetYardage,
-                        minYardage: ladderMinYardage,
-                        maxYardage: ladderMaxYardage,
-                        groupedEntries: groupedLadderEntries,
-                        onSelectEntry: onSelectEntry
-                    )
-                    .frame(width: geometry.size.width * 0.45)
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
+            .animation(.easeInOut(duration: 0.2), value: showResetIndicator)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .sheet(isPresented: $showingClubSelector) {

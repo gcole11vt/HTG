@@ -4,16 +4,28 @@ struct PreShotRoutineView: View {
     let items: [PreShotRoutineItem]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 6) {
             Text("Pre-Shot Routine")
-                .font(JournalTheme.handwritten(size: 14))
-                .foregroundStyle(GTCColor.border)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(GTCColor.secondary)
+                .textCase(.uppercase)
 
             let sorted = items.sorted { $0.sortOrder < $1.sortOrder }
             ForEach(Array(sorted.enumerated()), id: \.element.id) { index, item in
-                Text("\(index + 1). \(item.text)")
-                    .font(JournalTheme.handwritten(size: 16))
-                    .foregroundStyle(GTCColor.routineSupportingText)
+                HStack(spacing: 8) {
+                    Text("\(index + 1)")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(GTCColor.secondary)
+                        .frame(width: 18, height: 18)
+                        .overlay(
+                            Circle()
+                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [3, 2]))
+                                .foregroundStyle(GTCColor.border)
+                        )
+                    Text(item.text)
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundStyle(GTCColor.text)
+                }
             }
         }
     }
