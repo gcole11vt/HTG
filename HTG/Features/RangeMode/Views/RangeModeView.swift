@@ -18,17 +18,28 @@ struct RangeModeView: View {
     @State private var showPermissionDeniedAlert = false
     @FocusState private var isDistanceFieldFocused: Bool
     @FocusState private var isSaveFieldFocused: Bool
+    private let sectionHeaderFont = Font.system(size: 11, weight: .medium)
+    private let statsColumnRatio: CGFloat = 0.33
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
+            ZStack {
+                GTCColor.background.ignoresSafeArea()
+
                 if let session = rangeManager?.currentSession {
-                    activeSessionView(session: session)
+                    activeScreenContent(session: session)
                 } else {
-                    startSessionView
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 14) {
+                            rangeSessionTitle
+                                .padding(.top, 8)
+                            startSessionView
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 20)
+                    }
                 }
             }
-            .navigationTitle("Range Mode")
             .task {
                 if rangeManager == nil {
                     rangeManager = RangeManager(modelContext: modelContext)
@@ -58,46 +69,74 @@ struct RangeModeView: View {
     // MARK: - Start Session
 
     private var startSessionView: some View {
-        VStack(spacing: 20) {
-            Text("Start a Range Session")
-                .font(.title2)
-                .fontWeight(.semibold)
-
+        VStack(alignment: .leading, spacing: 14) {
             if let clubs = clubManager?.clubs, !clubs.isEmpty {
-                Picker("Select Club", selection: $selectedClub) {
-                    Text("Select Club").tag(nil as Club?)
-                    ForEach(clubs) { club in
-                        Text(club.name).tag(club as Club?)
+                VStack(alignment: .leading, spacing: 8) {
+                    sectionEyebrow("Club")
+                    Picker("Select Club", selection: $selectedClub) {
+                        Text("Select Club").tag(nil as Club?)
+                        ForEach(clubs) { club in
+                            Text(club.name).tag(club as Club?)
+                        }
                     }
+                    .pickerStyle(.menu)
+                    .tint(GTCColor.primary)
                 }
-                .pickerStyle(.menu)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(GTCColor.secondary.opacity(0.08))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(GTCColor.primary, lineWidth: 1.5)
+                        )
+                )
 
                 if let club = selectedClub {
                     let activeShotTypes = club.shotTypes.filter { !$0.isArchived }
 
-                    Picker("Select Shot Type", selection: $shotTypeSelection) {
-                        Text("Select Shot Type").tag(ShotTypeSelection.none)
-                        ForEach(activeShotTypes) { shotType in
-                            Text(shotType.name).tag(ShotTypeSelection.existing(shotType))
-                        }
-                        Text("Other").tag(ShotTypeSelection.other)
-                    }
-                    .pickerStyle(.menu)
-                    .onChange(of: shotTypeSelection) { _, newValue in
-                        if case .other = newValue {
-                            let activeCount = activeShotTypes.count
-                            if activeCount >= ClubDataService.maximumShotTypesPerClub {
-                                showMaxShotTypesAlert = true
+                    VStack(alignment: .leading, spacing: 8) {
+                        sectionEyebrow("Shot Type")
+                        Picker("Select Shot Type", selection: $shotTypeSelection) {
+                            Text("Select Shot Type").tag(ShotTypeSelection.none)
+                            ForEach(activeShotTypes) { shotType in
+                                Text(shotType.name).tag(ShotTypeSelection.existing(shotType))
                             }
-                        } else {
-                            customShotTypeName = ""
+                            Text("Other").tag(ShotTypeSelection.other)
+                        }
+                        .pickerStyle(.menu)
+                        .tint(GTCColor.primary)
+                        .onChange(of: shotTypeSelection) { _, newValue in
+                            if case .other = newValue {
+                                let activeCount = activeShotTypes.count
+                                if activeCount >= ClubDataService.maximumShotTypesPerClub {
+                                    showMaxShotTypesAlert = true
+                                }
+                            } else {
+                                customShotTypeName = ""
+                            }
+                        }
+
+                        if case .other = shotTypeSelection {
+                            TextField("Custom shot type name", text: $customShotTypeName)
+                                .font(JournalTheme.handwritten(size: 16))
+                                .foregroundStyle(GTCColor.text)
+                                .textFieldStyle(.roundedBorder)
                         }
                     }
-
-                    if case .other = shotTypeSelection {
-                        TextField("Custom shot type name", text: $customShotTypeName)
-                            .textFieldStyle(.roundedBorder)
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(GTCColor.secondary.opacity(0.08))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(GTCColor.primary, lineWidth: 1.5)
+                            )
+                    )
 
                     Button("Start Session") {
                         Task {
@@ -126,17 +165,25 @@ struct RangeModeView: View {
                         }
                     }
                     .buttonStyle(.borderedProminent)
+                    .tint(GTCColor.primary)
                     .disabled(startSessionDisabled(club: club))
                 }
             } else {
-                ContentUnavailableView(
-                    "No Clubs",
-                    systemImage: "bag.fill",
-                    description: Text("Add clubs to start tracking shots")
-                )
+                VStack(spacing: 12) {
+                    Image(systemName: "bag.fill")
+                        .font(.system(size: 44))
+                        .foregroundStyle(GTCColor.border)
+                    Text("No Clubs")
+                        .font(JournalTheme.handwrittenBold(size: 24))
+                        .foregroundStyle(GTCColor.primary)
+                    Text("Add clubs to start tracking shots")
+                        .font(JournalTheme.handwritten(size: 16))
+                        .foregroundStyle(GTCColor.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 24)
             }
         }
-        .padding()
     }
 
     private func startSessionDisabled(club: Club) -> Bool {
@@ -158,23 +205,45 @@ struct RangeModeView: View {
 
     // MARK: - Active Session
 
+    private func activeScreenContent(session: RangeSession) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            rangeSessionTitle
+                .padding(.top, 8)
+            activeSessionView(session: session)
+                .frame(maxHeight: .infinity, alignment: .top)
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 20)
+    }
+
+    private var rangeSessionTitle: some View {
+        Text("Range Session")
+            .font(.system(size: 26, weight: .semibold, design: .serif))
+            .foregroundStyle(GTCColor.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
     private func activeSessionView(session: RangeSession) -> some View {
-        VStack(spacing: 16) {
+        VStack(alignment: .leading, spacing: 14) {
             sessionHeader(session: session)
             shotEntrySection
             sessionActionButtons
             twoColumnSection(session: session)
+                .frame(maxHeight: .infinity, alignment: .top)
         }
         .contentShape(Rectangle())
         .onTapGesture {
             isDistanceFieldFocused = false
         }
-        .padding()
+        .onDisappear {
+            stopSpeechIfNeeded()
+        }
         .sheet(isPresented: $showingSaveSheet) {
             saveSessionSheet
         }
         .alert("Discard this session?", isPresented: $showingEndConfirmation) {
             Button("Discard", role: .destructive) {
+                stopSpeechIfNeeded()
                 Task {
                     await rangeManager?.endSession()
                     selectedClub = nil
@@ -186,32 +255,63 @@ struct RangeModeView: View {
         } message: {
             Text("All shot data will be lost.")
         }
+        .frame(maxHeight: .infinity, alignment: .top)
     }
 
     private func sessionHeader(session: RangeSession) -> some View {
-        VStack {
-            Text(session.clubName)
-                .font(.title2)
-                .fontWeight(.bold)
-            Text(session.shotTypeName)
-                .font(.subheadline)
-                .foregroundStyle(GTCColor.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            sectionEyebrow("Current Session")
+
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text(session.clubName)
+                    .font(.system(size: 28, weight: .semibold, design: .serif))
+                    .foregroundStyle(GTCColor.primary)
+
+                Text(session.shotTypeName)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(GTCColor.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(
+                        Capsule()
+                            .fill(GTCColor.secondary.opacity(0.08))
+                    )
+            }
         }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(GTCColor.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(GTCColor.primary, lineWidth: 1.5)
+                )
+        )
     }
 
     private var shotEntrySection: some View {
-        HStack(spacing: 12) {
-            TextField("Distance", text: $distanceText)
-                .keyboardType(.numberPad)
-                .textFieldStyle(.roundedBorder)
-                .frame(width: 100)
-                .focused($isDistanceFieldFocused)
+        VStack(alignment: .leading, spacing: 8) {
+            sectionEyebrow("Shot Entry")
+            HStack(spacing: 10) {
+                TextField("Distance", text: $distanceText)
+                    .font(JournalTheme.handwrittenBold(size: 20))
+                    .foregroundStyle(GTCColor.primary)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 110)
+                    .focused($isDistanceFieldFocused)
 
-            Button("Add Shot") {
-                addShot()
+                Button("Add Shot") {
+                    addShot()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(GTCColor.primary)
+                .disabled(distanceText.isEmpty)
+
+                micToggleButton
             }
-            .buttonStyle(.borderedProminent)
-            .disabled(distanceText.isEmpty)
         }
     }
 
@@ -239,67 +339,99 @@ struct RangeModeView: View {
     }
 
     private func twoColumnSection(session: RangeSession) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            previousShotsList(session: session)
-                .frame(maxWidth: .infinity)
+        GeometryReader { geometry in
+            let availableWidth = max(geometry.size.width - 12, 0)
+            let statsWidth = availableWidth * statsColumnRatio
 
-            Divider()
+            HStack(alignment: .top, spacing: 12) {
+                previousShotsList(session: session)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
-            statsColumn
-                .frame(width: 80)
+                Divider()
+                    .overlay(GTCColor.border)
+                    .frame(maxHeight: .infinity)
+
+                statsColumn
+                    .frame(width: statsWidth)
+                    .frame(maxHeight: .infinity, alignment: .topLeading)
+            }
         }
+        .frame(maxHeight: .infinity)
     }
 
     private func previousShotsList(session: RangeSession) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("PREVIOUS SHOTS")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(GTCColor.secondary)
-                .padding(.bottom, 8)
-
+        VStack(alignment: .leading, spacing: 8) {
             let sortedShots = session.shots.sorted(by: { $0.date > $1.date })
-            List {
-                ForEach(sortedShots) { shot in
-                    HStack {
-                        Text("\(shot.distance) yds")
-                            .font(.body)
-
-                        if shot.isFromVoice {
-                            Image(systemName: "mic.fill")
-                                .font(.caption2)
-                                .foregroundStyle(GTCColor.secondary)
-                        }
-
-                        Spacer()
-
-                        Button {
-                            Task { await rangeManager?.deleteShot(shot) }
-                        } label: {
-                            Image(systemName: "trash")
-                                .font(.caption)
-                                .foregroundStyle(GTCColor.warning)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        let shot = sortedShots[index]
-                        Task { await rangeManager?.deleteShot(shot) }
-                    }
+            HStack {
+                sectionEyebrow("Previous Shots")
+                Spacer()
+                if sortedShots.count > 8 {
+                    Image(systemName: "arrow.down")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(GTCColor.secondary)
+                        .accessibilityLabel("More shots below")
                 }
             }
-            .listStyle(.plain)
+
+            if sortedShots.isEmpty {
+                Text("No shots yet")
+                    .font(JournalTheme.handwritten(size: 14))
+                    .foregroundStyle(GTCColor.secondary)
+                    .padding(.vertical, 8)
+            } else {
+                List {
+                    ForEach(sortedShots) { shot in
+                        HStack {
+                            Text("\(shot.distance) yds")
+                                .font(JournalTheme.handwritten(size: 15))
+                                .foregroundStyle(GTCColor.text)
+
+                            if shot.isFromVoice {
+                                Image(systemName: "mic.fill")
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundStyle(GTCColor.secondary)
+                            }
+
+                            Spacer()
+
+                            Button {
+                                Task { await rangeManager?.deleteShot(shot) }
+                            } label: {
+                                Image(systemName: "trash")
+                                    .font(.caption)
+                                    .foregroundStyle(GTCColor.warning)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .listRowBackground(GTCColor.surface)
+                    }
+                    .onDelete { indexSet in
+                        for index in indexSet {
+                            let shot = sortedShots[index]
+                            Task { await rangeManager?.deleteShot(shot) }
+                        }
+                    }
+                }
+                .listStyle(.plain)
+                .frame(maxHeight: .infinity)
+            }
         }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(GTCColor.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(GTCColor.border, lineWidth: 1)
+                )
+        )
     }
 
     private var statsColumn: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("STATS")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(GTCColor.secondary)
+            sectionEyebrow("Stats")
 
             if let current = rangeManager?.currentCarryDistance {
                 statItem(label: "Current", value: current, color: GTCColor.primary)
@@ -310,16 +442,26 @@ struct RangeModeView: View {
             statItem(label: "Max", value: rangeManager?.currentStats.max ?? 0)
             statItem(label: "75th", value: rangeManager?.currentStats.percentile75 ?? 0)
         }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(GTCColor.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(GTCColor.border, lineWidth: 1)
+                )
+        )
     }
 
     private func statItem(label: String, value: Int, color: Color = GTCColor.text) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
-                .font(.caption2)
+                .font(.system(size: 11, weight: .medium))
                 .foregroundStyle(GTCColor.secondary)
             Text("\(value)")
-                .font(.title3)
-                .fontWeight(.semibold)
+                .font(JournalTheme.handwrittenBold(size: 20))
                 .foregroundStyle(color)
         }
     }
@@ -330,18 +472,22 @@ struct RangeModeView: View {
         VStack(spacing: 16) {
             Spacer()
 
+            sectionEyebrow("Save Carry Distance")
+
             Text("Save Carry Distance")
-                .font(.headline)
+                .font(.system(size: 24, weight: .semibold, design: .serif))
+                .foregroundStyle(GTCColor.primary)
 
             HStack(spacing: 12) {
                 Spacer()
 
                 TextField("", text: $saveDistanceText)
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundStyle(GTCColor.text)
+                    .font(JournalTheme.yardageFont)
+                    .foregroundStyle(GTCColor.primary)
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
                     .focused($isSaveFieldFocused)
+                    .minimumScaleFactor(0.5)
                     .frame(width: 160)
 
                 Spacer()
@@ -349,6 +495,7 @@ struct RangeModeView: View {
 
             Button {
                 if let distance = rangeManager?.parsedCarryDistance(from: saveDistanceText) {
+                    stopSpeechIfNeeded()
                     Task {
                         await rangeManager?.saveSession(carryDistance: distance)
                         showingSaveSheet = false
@@ -362,7 +509,7 @@ struct RangeModeView: View {
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(GTCColor.primary)
+            .tint(GTCColor.warning)
             .disabled(!(rangeManager?.isValidCarryDistanceInput(saveDistanceText) ?? false))
             .padding(.horizontal, 40)
 
@@ -378,6 +525,30 @@ struct RangeModeView: View {
             saveDistanceText = rangeManager?.defaultSaveCarryDistanceText() ?? ""
             isSaveFieldFocused = true
         }
+    }
+
+    private var micToggleButton: some View {
+        Button {
+            toggleSpeechMode()
+        } label: {
+            Image(systemName: speechService.isListening ? "mic.fill" : "mic")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(speechService.isListening ? GTCColor.warning : GTCColor.primary)
+                .frame(width: 32, height: 32)
+                .background(
+                    Circle()
+                        .fill(speechService.isListening ? GTCColor.warning.opacity(0.12) : GTCColor.surface)
+                        .overlay(
+                            Circle()
+                                .stroke(
+                                    speechService.isListening ? GTCColor.warning : GTCColor.border,
+                                    lineWidth: 1
+                                )
+                        )
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(speechService.isListening ? "Stop voice input" : "Start voice input")
     }
 
     // MARK: - Speech
@@ -416,6 +587,20 @@ struct RangeModeView: View {
     }
 
     // MARK: - Helpers
+
+    @ViewBuilder
+    private func sectionEyebrow(_ text: String) -> some View {
+        Text(text)
+            .font(sectionHeaderFont)
+            .foregroundStyle(GTCColor.secondary)
+            .textCase(.uppercase)
+    }
+
+    private func stopSpeechIfNeeded() {
+        guard speechService.isListening else { return }
+        speechService.continuousMode = false
+        speechService.stopListening()
+    }
 
     private func applyPreselectionIfNeeded() {
         guard let clubName = navigationCoordinator.rangePreselectedClubName,
