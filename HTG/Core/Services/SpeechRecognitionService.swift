@@ -31,6 +31,8 @@ final class SpeechRecognitionService {
 
     private var silenceTimerTask: Task<Void, Never>?
     private let synthesizer = AVSpeechSynthesizer()
+    private var recognitionTaskStartedAt: Date?
+    private var rapidTaskFailureCount = 0
 
     nonisolated init() {}
 
@@ -106,6 +108,10 @@ final class SpeechRecognitionService {
         }
 
         recognitionRequest.shouldReportPartialResults = true
+        // On-device recognition has no 1-minute task limit and works without connectivity.
+        if speechRecognizer.supportsOnDeviceRecognition {
+            recognitionRequest.requiresOnDeviceRecognition = true
+        }
 
         let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
@@ -118,6 +124,7 @@ final class SpeechRecognitionService {
         try audioEngine.start()
 
         isListening = true
+        recognitionTaskStartedAt = Date()
 
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             Task { @MainActor in
@@ -126,6 +133,7 @@ final class SpeechRecognitionService {
                 if let result = result {
                     self.lastRecognizedText = result.bestTranscription.formattedString
                     self.lastExtractedDistance = self.extractDistance(from: self.lastRecognizedText)
+                    self.rapidTaskFailureCount = 0
 
                     if self.continuousMode {
                         self.resetSilenceTimer()
@@ -133,9 +141,7 @@ final class SpeechRecognitionService {
                 }
 
                 if error != nil || result?.isFinal == true {
-                    if !self.continuousMode {
-                        self.stopListening()
-                    }
+                    await self.handleRecognitionTaskEnded()
                 }
             }
         }
@@ -164,6 +170,38 @@ final class SpeechRecognitionService {
         while synthesizer.isSpeaking {
             try? await Task.sleep(for: .milliseconds(100))
         }
+    }
+
+    /// Recognition tasks die on their own (server-based recognition is capped at ~1 minute,
+    /// and transient errors kill the task). In continuous mode the session must survive that:
+    /// process any pending input, then start a fresh task.
+    private func handleRecognitionTaskEnded() async {
+        guard continuousMode else {
+            stopListening()
+            return
+        }
+        // isListening is false only when stopListening() already ran (deliberate stop or a
+        // restart in flight) — the cancel-triggered callback must not restart again.
+        guard isListening else { return }
+
+        silenceTimerTask?.cancel()
+
+        // A task that dies almost immediately after starting means recognition itself is
+        // failing (no connectivity and no on-device model). Give up instead of spinning.
+        if let startedAt = recognitionTaskStartedAt, Date().timeIntervalSince(startedAt) < 2 {
+            rapidTaskFailureCount += 1
+        } else {
+            rapidTaskFailureCount = 0
+        }
+        guard rapidTaskFailureCount < 3 else {
+            rapidTaskFailureCount = 0
+            continuousMode = false
+            stopListening()
+            onStopRequested?()
+            return
+        }
+
+        await handleSilenceTimeout()
     }
 
     private func resetSilenceTimer() {
@@ -207,7 +245,7 @@ final class SpeechRecognitionService {
         if let distance = lastExtractedDistance {
             onDistanceConfirmed?(distance)
             stopListening()
-            await speakBack("\(distance)")
+            await speakBack("\(distance). Next shot.")
             lastRecognizedText = ""
             lastExtractedDistance = nil
             do {
