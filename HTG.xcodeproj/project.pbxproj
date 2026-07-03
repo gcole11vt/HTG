@@ -28,8 +28,12 @@
 		B1000007229F0007 /* ShotRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000017229F0007 /* ShotRecommendation.swift */; };
 		B1000008229F0008 /* RangeStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000018229F0008 /* RangeStats.swift */; };
 		B1000009229F0009 /* SyncTombstone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000019229F0009 /* SyncTombstone.swift */; };
+		SP000021229F0021 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = SP000011229F0011 /* Supabase */; };
 		SY000001229F0001 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000011229F0011 /* SyncEngine.swift */; };
 		SY000002229F0002 /* SyncRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000012229F0012 /* SyncRecords.swift */; };
+		SY000003229F0003 /* SupabaseClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000013229F0013 /* SupabaseClientProvider.swift */; };
+		SY000004229F0004 /* SyncRemoteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000014229F0014 /* SyncRemoteStore.swift */; };
+		SY000005229F0005 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000015229F0015 /* SupabaseAuthService.swift */; };
 		C1000043229F0043 /* SyncEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000053229F0053 /* SyncEngineTests.swift */; };
 		C1000001229F0001 /* ClubDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011229F0001 /* ClubDataService.swift */; };
 		C1000002229F0002 /* ClubDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000012229F0002 /* ClubDataServiceTests.swift */; };
@@ -129,6 +133,9 @@
 		B1000019229F0009 /* SyncTombstone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTombstone.swift; sourceTree = "<group>"; };
 		SY000011229F0011 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		SY000012229F0012 /* SyncRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncRecords.swift; sourceTree = "<group>"; };
+		SY000013229F0013 /* SupabaseClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientProvider.swift; sourceTree = "<group>"; };
+		SY000014229F0014 /* SyncRemoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncRemoteStore.swift; sourceTree = "<group>"; };
+		SY000015229F0015 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
 		C1000053229F0053 /* SyncEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngineTests.swift; sourceTree = "<group>"; };
 		C1000011229F0001 /* ClubDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataService.swift; sourceTree = "<group>"; };
 		C1000012229F0002 /* ClubDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataServiceTests.swift; sourceTree = "<group>"; };
@@ -189,6 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				SP000021229F0021 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +369,9 @@
 			children = (
 				SY000011229F0011 /* SyncEngine.swift */,
 				SY000012229F0012 /* SyncRecords.swift */,
+				SY000013229F0013 /* SupabaseClientProvider.swift */,
+				SY000014229F0014 /* SyncRemoteStore.swift */,
+				SY000015229F0015 /* SupabaseAuthService.swift */,
 			);
 			path = Sync;
 			sourceTree = "<group>";
@@ -527,6 +538,7 @@
 			);
 			name = HTG;
 			packageProductDependencies = (
+				SP000011229F0011 /* Supabase */,
 			);
 			productName = HTG;
 			productReference = A1000201229F0201 /* HTG.app */;
@@ -606,6 +618,9 @@
 			mainGroup = A1000600229F0600;
 			minimizedProjectReferenceProxies = 1;
 			productRefGroup = A1000604229F0604 /* Products */;
+			packageReferences = (
+				SP000001229F0001 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -661,6 +676,9 @@
 				B1000009229F0009 /* SyncTombstone.swift in Sources */,
 				SY000001229F0001 /* SyncEngine.swift in Sources */,
 				SY000002229F0002 /* SyncRecords.swift in Sources */,
+				SY000003229F0003 /* SupabaseClientProvider.swift in Sources */,
+				SY000004229F0004 /* SyncRemoteStore.swift in Sources */,
+				SY000005229F0005 /* SupabaseAuthService.swift in Sources */,
 				C1000001229F0001 /* ClubDataService.swift in Sources */,
 				C1000003229F0003 /* ShotRecommendationService.swift in Sources */,
 				C1000005229F0005 /* RangeDataService.swift in Sources */,
@@ -1041,6 +1059,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		SP000001229F0001 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		SP000011229F0011 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = SP000001229F0001 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A1000100229F0100 /* Project object */;
 }
