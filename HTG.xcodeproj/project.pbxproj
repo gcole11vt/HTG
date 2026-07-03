@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		423D23574E55079FA79F4509 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AC2F285D4669422FAAC308 /* RootView.swift */; };
 		A1000001229F0001 /* HTGApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000011229F0001 /* HTGApp.swift */; };
 		A1000002229F0002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000012229F0002 /* ContentView.swift */; };
 		A1000003229F0003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000013229F0003 /* Assets.xcassets */; };
@@ -23,40 +24,34 @@
 		B1000004229F0004 /* Shot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000014229F0004 /* Shot.swift */; };
 		B1000005229F0005 /* StoredShotType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000015229F0005 /* StoredShotType.swift */; };
 		B1000006229F0006 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000016229F0006 /* UserProfile.swift */; };
-		B10000A1229F00A1 /* PreShotRoutineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B1229F00A1 /* PreShotRoutineItem.swift */; };
-		B10000A2229F00A2 /* SwingThought.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B2229F00A2 /* SwingThought.swift */; };
 		B1000007229F0007 /* ShotRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000017229F0007 /* ShotRecommendation.swift */; };
 		B1000008229F0008 /* RangeStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000018229F0008 /* RangeStats.swift */; };
 		B1000009229F0009 /* SyncTombstone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000019229F0009 /* SyncTombstone.swift */; };
-		SP000021229F0021 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = SP000011229F0011 /* Supabase */; };
-		SY000001229F0001 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000011229F0011 /* SyncEngine.swift */; };
-		SY000002229F0002 /* SyncRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000012229F0012 /* SyncRecords.swift */; };
-		SY000003229F0003 /* SupabaseClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000013229F0013 /* SupabaseClientProvider.swift */; };
-		SY000004229F0004 /* SyncRemoteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000014229F0014 /* SyncRemoteStore.swift */; };
-		SY000005229F0005 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000015229F0015 /* SupabaseAuthService.swift */; };
-		SY000006229F0006 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000016229F0016 /* SyncService.swift */; };
-		C1000044229F0044 /* SyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000054229F0054 /* SyncServiceTests.swift */; };
-		C1000043229F0043 /* SyncEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000053229F0053 /* SyncEngineTests.swift */; };
+		B10000A1229F00A1 /* PreShotRoutineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B1229F00A1 /* PreShotRoutineItem.swift */; };
+		B10000A2229F00A2 /* SwingThought.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B2229F00A2 /* SwingThought.swift */; };
+		BFA70035F272D25E87BD8105 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D421787BE5B93D37BE6780E4 /* LandingView.swift */; };
 		C1000001229F0001 /* ClubDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011229F0001 /* ClubDataService.swift */; };
 		C1000002229F0002 /* ClubDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000012229F0002 /* ClubDataServiceTests.swift */; };
-		C1000042229F0042 /* SyncTouchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000052229F0052 /* SyncTouchTests.swift */; };
 		C1000003229F0003 /* ShotRecommendationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000013229F0003 /* ShotRecommendationService.swift */; };
 		C1000004229F0004 /* ShotRecommendationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000014229F0004 /* ShotRecommendationServiceTests.swift */; };
 		C1000005229F0005 /* RangeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000015229F0005 /* RangeDataService.swift */; };
 		C1000006229F0006 /* RangeDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000016229F0006 /* RangeDataServiceTests.swift */; };
 		C1000007229F0007 /* ProfileDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000017229F0007 /* ProfileDataService.swift */; };
-		C10000A1229F00A1 /* SwingThoughtDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000B1229F00A1 /* SwingThoughtDataService.swift */; };
 		C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000018229F0008 /* ProfileDataServiceTests.swift */; };
-		C10000A2229F00A2 /* SwingThoughtDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000B2229F00A2 /* SwingThoughtDataServiceTests.swift */; };
 		C1000009229F0009 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000019229F0009 /* SpeechRecognitionService.swift */; };
 		C100000A229F000A /* SpeechRecognitionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001A229F000A /* SpeechRecognitionServiceTests.swift */; };
 		C100000B229F000B /* ClubDistanceResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001B229F000B /* ClubDistanceResolver.swift */; };
 		C100000C229F000C /* ClubDistanceResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C100001C229F000C /* ClubDistanceResolverTests.swift */; };
+		C1000042229F0042 /* SyncTouchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000052229F0052 /* SyncTouchTests.swift */; };
+		C1000043229F0043 /* SyncEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000053229F0053 /* SyncEngineTests.swift */; };
+		C1000044229F0044 /* SyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000054229F0054 /* SyncServiceTests.swift */; };
+		C10000A1229F00A1 /* SwingThoughtDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000B1229F00A1 /* SwingThoughtDataService.swift */; };
+		C10000A2229F00A2 /* SwingThoughtDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000B2229F00A2 /* SwingThoughtDataServiceTests.swift */; };
 		D1000001229F0001 /* ClubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000011229F0001 /* ClubManager.swift */; };
 		D1000002229F0002 /* RangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000012229F0002 /* RangeManager.swift */; };
 		D1000003229F0003 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000013229F0003 /* ProfileManager.swift */; };
-		D1000004229F0044 /* AccountSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000014229F0054 /* AccountSyncManager.swift */; };
 		D1000004229F0004 /* GolfModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000014229F0004 /* GolfModeViewModel.swift */; };
+		D1000004229F0044 /* AccountSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000014229F0054 /* AccountSyncManager.swift */; };
 		E1000001229F0001 /* ClubListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000011229F0001 /* ClubListView.swift */; };
 		E1000002229F0002 /* GolfModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000012229F0002 /* GolfModeView.swift */; };
 		E1000003229F0003 /* RangeModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000013229F0003 /* RangeModeView.swift */; };
@@ -68,11 +63,6 @@
 		F1000005229F0005 /* AppSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000015229F0005 /* AppSettingsService.swift */; };
 		F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000016229F0006 /* AppSettingsServiceTests.swift */; };
 		G1000001229F0001 /* JournalTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000011229F0001 /* JournalTheme.swift */; };
-		M1000001229F0001 /* GTCColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = M1000011229F0001 /* GTCColor.swift */; };
-		S1000001229F0001 /* GTCCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = S1000011229F0001 /* GTCCardStyle.swift */; };
-		Y1000001229F0001 /* YardageSheetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000011229F0001 /* YardageSheetService.swift */; };
-		Y1000002229F0002 /* YardageSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000012229F0002 /* YardageSheetView.swift */; };
-		Y1000003229F0003 /* YardageSheetServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000013229F0003 /* YardageSheetServiceTests.swift */; };
 		H1000001229F0001 /* YardageDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011229F0001 /* YardageDisplayView.swift */; };
 		H1000002229F0002 /* ClubShotBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012229F0002 /* ClubShotBadgeView.swift */; };
 		H1000003229F0003 /* ResetIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013229F0003 /* ResetIndicatorView.swift */; };
@@ -86,10 +76,22 @@
 		K1000003229F0003 /* GroupedLadderClubMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000013229F0003 /* GroupedLadderClubMarkerView.swift */; };
 		K1000004229F0004 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000014229F0004 /* PageTitleView.swift */; };
 		K1000005229F0005 /* ShotInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000015229F0005 /* ShotInfoHeaderView.swift */; };
+		M1000001229F0001 /* GTCColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = M1000011229F0001 /* GTCColor.swift */; };
 		N1000001229F0001 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000011229F0001 /* NavigationCoordinator.swift */; };
 		P1000001229F0001 /* PreShotRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = P1000011229F0001 /* PreShotRoutineView.swift */; };
 		P1000002229F0002 /* MantraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = P1000012229F0002 /* MantraView.swift */; };
 		P1000003229F0003 /* SwingThoughtsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = P1000013229F0003 /* SwingThoughtsView.swift */; };
+		S1000001229F0001 /* GTCCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = S1000011229F0001 /* GTCCardStyle.swift */; };
+		SP000021229F0021 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = SP000011229F0011 /* Supabase */; };
+		SY000001229F0001 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000011229F0011 /* SyncEngine.swift */; };
+		SY000002229F0002 /* SyncRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000012229F0012 /* SyncRecords.swift */; };
+		SY000003229F0003 /* SupabaseClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000013229F0013 /* SupabaseClientProvider.swift */; };
+		SY000004229F0004 /* SyncRemoteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000014229F0014 /* SyncRemoteStore.swift */; };
+		SY000005229F0005 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000015229F0015 /* SupabaseAuthService.swift */; };
+		SY000006229F0006 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000016229F0016 /* SyncService.swift */; };
+		Y1000001229F0001 /* YardageSheetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000011229F0001 /* YardageSheetService.swift */; };
+		Y1000002229F0002 /* YardageSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000012229F0002 /* YardageSheetView.swift */; };
+		Y1000003229F0003 /* YardageSheetServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000013229F0003 /* YardageSheetServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,44 +131,40 @@
 		B1000014229F0004 /* Shot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shot.swift; sourceTree = "<group>"; };
 		B1000015229F0005 /* StoredShotType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredShotType.swift; sourceTree = "<group>"; };
 		B1000016229F0006 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
-		B10000B1229F00A1 /* PreShotRoutineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreShotRoutineItem.swift; sourceTree = "<group>"; };
-		B10000B2229F00A2 /* SwingThought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThought.swift; sourceTree = "<group>"; };
 		B1000017229F0007 /* ShotRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendation.swift; sourceTree = "<group>"; };
 		B1000018229F0008 /* RangeStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeStats.swift; sourceTree = "<group>"; };
 		B1000019229F0009 /* SyncTombstone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTombstone.swift; sourceTree = "<group>"; };
-		SY000011229F0011 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
-		SY000012229F0012 /* SyncRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncRecords.swift; sourceTree = "<group>"; };
-		SY000013229F0013 /* SupabaseClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientProvider.swift; sourceTree = "<group>"; };
-		SY000014229F0014 /* SyncRemoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncRemoteStore.swift; sourceTree = "<group>"; };
-		SY000015229F0015 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
-		SY000016229F0016 /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
-		C1000054229F0054 /* SyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncServiceTests.swift; sourceTree = "<group>"; };
-		C1000053229F0053 /* SyncEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngineTests.swift; sourceTree = "<group>"; };
+		B10000B1229F00A1 /* PreShotRoutineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreShotRoutineItem.swift; sourceTree = "<group>"; };
+		B10000B2229F00A2 /* SwingThought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThought.swift; sourceTree = "<group>"; };
+		B2AC2F285D4669422FAAC308 /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		C1000011229F0001 /* ClubDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataService.swift; sourceTree = "<group>"; };
 		C1000012229F0002 /* ClubDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataServiceTests.swift; sourceTree = "<group>"; };
-		C1000052229F0052 /* SyncTouchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTouchTests.swift; sourceTree = "<group>"; };
 		C1000013229F0003 /* ShotRecommendationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendationService.swift; sourceTree = "<group>"; };
 		C1000014229F0004 /* ShotRecommendationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendationServiceTests.swift; sourceTree = "<group>"; };
 		C1000015229F0005 /* RangeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeDataService.swift; sourceTree = "<group>"; };
 		C1000016229F0006 /* RangeDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeDataServiceTests.swift; sourceTree = "<group>"; };
 		C1000017229F0007 /* ProfileDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataService.swift; sourceTree = "<group>"; };
-		C10000B1229F00A1 /* SwingThoughtDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtDataService.swift; sourceTree = "<group>"; };
 		C1000018229F0008 /* ProfileDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataServiceTests.swift; sourceTree = "<group>"; };
-		C10000B2229F00A2 /* SwingThoughtDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtDataServiceTests.swift; sourceTree = "<group>"; };
 		C1000019229F0009 /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 		C100001A229F000A /* SpeechRecognitionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionServiceTests.swift; sourceTree = "<group>"; };
 		C100001B229F000B /* ClubDistanceResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDistanceResolver.swift; sourceTree = "<group>"; };
 		C100001C229F000C /* ClubDistanceResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDistanceResolverTests.swift; sourceTree = "<group>"; };
+		C1000052229F0052 /* SyncTouchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTouchTests.swift; sourceTree = "<group>"; };
+		C1000053229F0053 /* SyncEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngineTests.swift; sourceTree = "<group>"; };
+		C1000054229F0054 /* SyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncServiceTests.swift; sourceTree = "<group>"; };
+		C10000B1229F00A1 /* SwingThoughtDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtDataService.swift; sourceTree = "<group>"; };
+		C10000B2229F00A2 /* SwingThoughtDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtDataServiceTests.swift; sourceTree = "<group>"; };
 		D1000011229F0001 /* ClubManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubManager.swift; sourceTree = "<group>"; };
 		D1000012229F0002 /* RangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeManager.swift; sourceTree = "<group>"; };
 		D1000013229F0003 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
-		D1000014229F0054 /* AccountSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncManager.swift; sourceTree = "<group>"; };
-		EN000011229F0011 /* HTG.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HTG.entitlements; sourceTree = "<group>"; };
 		D1000014229F0004 /* GolfModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeViewModel.swift; sourceTree = "<group>"; };
+		D1000014229F0054 /* AccountSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncManager.swift; sourceTree = "<group>"; };
+		D421787BE5B93D37BE6780E4 /* LandingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 		E1000011229F0001 /* ClubListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubListView.swift; sourceTree = "<group>"; };
 		E1000012229F0002 /* GolfModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeView.swift; sourceTree = "<group>"; };
 		E1000013229F0003 /* RangeModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeModeView.swift; sourceTree = "<group>"; };
 		E1000014229F0004 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		EN000011229F0011 /* HTG.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HTG.entitlements; sourceTree = "<group>"; };
 		F1000011229F0001 /* SelectedClubShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedClubShot.swift; sourceTree = "<group>"; };
 		F1000012229F0002 /* LadderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadderEntry.swift; sourceTree = "<group>"; };
 		F1000013229F0003 /* GolfModeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeViewModelTests.swift; sourceTree = "<group>"; };
@@ -174,11 +172,6 @@
 		F1000015229F0005 /* AppSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsService.swift; sourceTree = "<group>"; };
 		F1000016229F0006 /* AppSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsServiceTests.swift; sourceTree = "<group>"; };
 		G1000011229F0001 /* JournalTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTheme.swift; sourceTree = "<group>"; };
-		M1000011229F0001 /* GTCColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GTCColor.swift; sourceTree = "<group>"; };
-		S1000011229F0001 /* GTCCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GTCCardStyle.swift; sourceTree = "<group>"; };
-		Y1000011229F0001 /* YardageSheetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetService.swift; sourceTree = "<group>"; };
-		Y1000012229F0002 /* YardageSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetView.swift; sourceTree = "<group>"; };
-		Y1000013229F0003 /* YardageSheetServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetServiceTests.swift; sourceTree = "<group>"; };
 		H1000011229F0001 /* YardageDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageDisplayView.swift; sourceTree = "<group>"; };
 		H1000012229F0002 /* ClubShotBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubShotBadgeView.swift; sourceTree = "<group>"; };
 		H1000013229F0003 /* ResetIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetIndicatorView.swift; sourceTree = "<group>"; };
@@ -192,10 +185,21 @@
 		K1000013229F0003 /* GroupedLadderClubMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLadderClubMarkerView.swift; sourceTree = "<group>"; };
 		K1000014229F0004 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		K1000015229F0005 /* ShotInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotInfoHeaderView.swift; sourceTree = "<group>"; };
+		M1000011229F0001 /* GTCColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GTCColor.swift; sourceTree = "<group>"; };
 		N1000011229F0001 /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		P1000011229F0001 /* PreShotRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreShotRoutineView.swift; sourceTree = "<group>"; };
 		P1000012229F0002 /* MantraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantraView.swift; sourceTree = "<group>"; };
 		P1000013229F0003 /* SwingThoughtsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThoughtsView.swift; sourceTree = "<group>"; };
+		S1000011229F0001 /* GTCCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GTCCardStyle.swift; sourceTree = "<group>"; };
+		SY000011229F0011 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
+		SY000012229F0012 /* SyncRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncRecords.swift; sourceTree = "<group>"; };
+		SY000013229F0013 /* SupabaseClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientProvider.swift; sourceTree = "<group>"; };
+		SY000014229F0014 /* SyncRemoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncRemoteStore.swift; sourceTree = "<group>"; };
+		SY000015229F0015 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
+		SY000016229F0016 /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
+		Y1000011229F0001 /* YardageSheetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetService.swift; sourceTree = "<group>"; };
+		Y1000012229F0002 /* YardageSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetView.swift; sourceTree = "<group>"; };
+		Y1000013229F0003 /* YardageSheetServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +228,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E6D6FC4702308F1FDF984D2 /* Landing */ = {
+			isa = PBXGroup;
+			children = (
+				FCDF83D111467DDA8303481B /* Views */,
+			);
+			name = Landing;
+			path = Landing;
+			sourceTree = "<group>";
+		};
 		A1000600229F0600 = {
 			isa = PBXGroup;
 			children = (
@@ -293,6 +306,7 @@
 				A1000011229F0001 /* HTGApp.swift */,
 				EN000011229F0011 /* HTG.entitlements */,
 				A1000012229F0002 /* ContentView.swift */,
+				B2AC2F285D4669422FAAC308 /* RootView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -304,6 +318,7 @@
 				D1000021229F0021 /* RangeMode */,
 				D1000022229F0022 /* GolfMode */,
 				D1000023229F0023 /* Profile */,
+				2E6D6FC4702308F1FDF984D2 /* Landing */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -371,19 +386,6 @@
 				SY000020229F0020 /* Sync */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		SY000020229F0020 /* Sync */ = {
-			isa = PBXGroup;
-			children = (
-				SY000011229F0011 /* SyncEngine.swift */,
-				SY000012229F0012 /* SyncRecords.swift */,
-				SY000013229F0013 /* SupabaseClientProvider.swift */,
-				SY000014229F0014 /* SyncRemoteStore.swift */,
-				SY000015229F0015 /* SupabaseAuthService.swift */,
-				SY000016229F0016 /* SyncService.swift */,
-			);
-			path = Sync;
 			sourceTree = "<group>";
 		};
 		D1000020229F0020 /* ClubManagement */ = {
@@ -499,6 +501,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		FCDF83D111467DDA8303481B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D421787BE5B93D37BE6780E4 /* LandingView.swift */,
+			);
+			name = Views;
+			path = Views;
+			sourceTree = "<group>";
+		};
 		G1000020229F0020 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -530,6 +541,19 @@
 				P1000013229F0003 /* SwingThoughtsView.swift */,
 			);
 			path = GolfMode;
+			sourceTree = "<group>";
+		};
+		SY000020229F0020 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				SY000011229F0011 /* SyncEngine.swift */,
+				SY000012229F0012 /* SyncRecords.swift */,
+				SY000013229F0013 /* SupabaseClientProvider.swift */,
+				SY000014229F0014 /* SyncRemoteStore.swift */,
+				SY000015229F0015 /* SupabaseAuthService.swift */,
+				SY000016229F0016 /* SyncService.swift */,
+			);
+			path = Sync;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -569,8 +593,6 @@
 				A1000022229F0022 /* PBXTargetDependency */,
 			);
 			name = HTGTests;
-			packageProductDependencies = (
-			);
 			productName = HTGTests;
 			productReference = A1000301229F0301 /* HTGTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -589,8 +611,6 @@
 				A1000023229F0023 /* PBXTargetDependency */,
 			);
 			name = HTGUITests;
-			packageProductDependencies = (
-			);
 			productName = HTGUITests;
 			productReference = A1000401229F0401 /* HTGUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -628,10 +648,10 @@
 			);
 			mainGroup = A1000600229F0600;
 			minimizedProjectReferenceProxies = 1;
-			productRefGroup = A1000604229F0604 /* Products */;
 			packageReferences = (
 				SP000001229F0001 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
+			productRefGroup = A1000604229F0604 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -736,6 +756,8 @@
 				P1000001229F0001 /* PreShotRoutineView.swift in Sources */,
 				P1000002229F0002 /* MantraView.swift in Sources */,
 				P1000003229F0003 /* SwingThoughtsView.swift in Sources */,
+				423D23574E55079FA79F4509 /* RootView.swift in Sources */,
+				BFA70035F272D25E87BD8105 /* LandingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
