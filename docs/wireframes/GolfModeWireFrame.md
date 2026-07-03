@@ -1,7 +1,7 @@
 # Golf Mode Wireframe Mapping
 
 ## Purpose
-This document maps the current Golf Mode wireframe implementation into box-level style definitions and subcomponent behavior so it can be used as the reference style system for Range Mode refactoring.
+This document maps the current Golf Mode wireframe implementation into box-level style definitions and subcomponent behavior so it can be used as the canonical reference style system for Range Mode and Club Management Mode refactoring.
 
 ## Source Files
 - `HTG/Features/GolfMode/Views/GolfModeView.swift`
