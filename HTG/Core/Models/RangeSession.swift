@@ -7,6 +7,7 @@ final class RangeSession {
     var date: Date
     var clubName: String
     var shotTypeName: String
+    var updatedAt: Date = Date()
     @Relationship(deleteRule: .cascade) var shots: [Shot]
 
     init(id: UUID = UUID(), date: Date = Date(), clubName: String, shotTypeName: String, shots: [Shot] = []) {

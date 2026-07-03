@@ -7,6 +7,7 @@ final class Shot {
     var distance: Int
     var date: Date
     var isFromVoice: Bool
+    var updatedAt: Date = Date()
     @Relationship(inverse: \RangeSession.shots) var session: RangeSession?
 
     init(id: UUID = UUID(), distance: Int, date: Date = Date(), isFromVoice: Bool = false, session: RangeSession? = nil) {

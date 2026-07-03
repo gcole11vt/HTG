@@ -9,6 +9,7 @@ final class ShotType {
     var sortOrder: Int
     var isArchived: Bool = false
     var archivedDate: Date?
+    var updatedAt: Date = Date()
     @Relationship(inverse: \Club.shotTypes) var club: Club?
 
     init(id: UUID = UUID(), name: String, carryDistance: Int, sortOrder: Int, club: Club? = nil) {

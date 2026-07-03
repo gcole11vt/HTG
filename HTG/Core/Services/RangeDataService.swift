@@ -24,17 +24,20 @@ final class RangeDataService: Sendable {
 
     func deleteShot(_ shot: Shot, from session: RangeSession) async throws {
         session.shots.removeAll { $0.id == shot.id }
+        modelContext.insert(SyncTombstone(entity: .shot, recordID: shot.id))
         modelContext.delete(shot)
         try modelContext.save()
     }
 
     func deleteSession(_ session: RangeSession) async throws {
+        modelContext.insert(SyncTombstone(entity: .rangeSession, recordID: session.id))
         modelContext.delete(session)
         try modelContext.save()
     }
 
     func updateShotTypeCarryDistance(_ shotType: ShotType, distance: Int) async throws {
         shotType.carryDistance = distance
+        shotType.updatedAt = Date()
         try modelContext.save()
     }
 

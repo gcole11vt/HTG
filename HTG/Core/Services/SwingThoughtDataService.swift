@@ -32,6 +32,7 @@ final class SwingThoughtDataService: Sendable {
     }
 
     func deleteRoutineItem(_ item: PreShotRoutineItem) async throws {
+        modelContext.insert(SyncTombstone(entity: .preShotRoutineItem, recordID: item.id))
         modelContext.delete(item)
         try modelContext.save()
     }
@@ -39,12 +40,14 @@ final class SwingThoughtDataService: Sendable {
     func reorderRoutineItems(_ items: [PreShotRoutineItem]) async throws {
         for (index, item) in items.enumerated() {
             item.sortOrder = index
+            item.updatedAt = Date()
         }
         try modelContext.save()
     }
 
     func updateRoutineItemText(_ item: PreShotRoutineItem, text: String) async throws {
         item.text = text
+        item.updatedAt = Date()
         try modelContext.save()
     }
 
@@ -57,6 +60,7 @@ final class SwingThoughtDataService: Sendable {
     }
 
     func deleteSwingThought(_ thought: SwingThought) async throws {
+        modelContext.insert(SyncTombstone(entity: .swingThought, recordID: thought.id))
         modelContext.delete(thought)
         try modelContext.save()
     }
@@ -80,16 +84,19 @@ final class SwingThoughtDataService: Sendable {
 
     func updateMantra(for profile: UserProfile, text: String) async throws {
         profile.mantra = text
+        profile.updatedAt = Date()
         try modelContext.save()
     }
 
     func setShowPreShotRoutine(for profile: UserProfile, visible: Bool) async throws {
         profile.showPreShotRoutine = visible
+        profile.updatedAt = Date()
         try modelContext.save()
     }
 
     func setShowMantra(for profile: UserProfile, visible: Bool) async throws {
         profile.showMantra = visible
+        profile.updatedAt = Date()
         try modelContext.save()
     }
 }

@@ -40,11 +40,13 @@ final class ClubDataService: Sendable {
 
     func archiveClub(_ club: Club) async throws {
         club.isArchived = true
+        club.updatedAt = Date()
         try modelContext.save()
     }
 
     func restoreClub(_ club: Club) async throws {
         club.isArchived = false
+        club.updatedAt = Date()
         try modelContext.save()
     }
 
@@ -67,6 +69,7 @@ final class ClubDataService: Sendable {
     }
 
     func deleteClub(_ club: Club) async throws {
+        modelContext.insert(SyncTombstone(entity: .club, recordID: club.id))
         modelContext.delete(club)
         try modelContext.save()
     }
@@ -76,12 +79,14 @@ final class ClubDataService: Sendable {
         if let nickname {
             club.nickname = nickname
         }
+        club.updatedAt = Date()
         try modelContext.save()
     }
 
     func reorderClubs(_ clubs: [Club]) async throws {
         for (index, club) in clubs.enumerated() {
             club.sortOrder = index
+            club.updatedAt = Date()
         }
         try modelContext.save()
     }
@@ -105,6 +110,7 @@ final class ClubDataService: Sendable {
     func updateShotType(_ shotType: ShotType, name: String, distance: Int) async throws {
         shotType.name = name
         shotType.carryDistance = distance
+        shotType.updatedAt = Date()
         try modelContext.save()
     }
 
@@ -116,12 +122,14 @@ final class ClubDataService: Sendable {
 
         shotType.isArchived = true
         shotType.archivedDate = Date()
+        shotType.updatedAt = Date()
         try modelContext.save()
     }
 
     func restoreShotType(_ shotType: ShotType) async throws {
         shotType.isArchived = false
         shotType.archivedDate = nil
+        shotType.updatedAt = Date()
         try modelContext.save()
     }
 
@@ -141,6 +149,7 @@ final class ClubDataService: Sendable {
         guard !expired.isEmpty else { return }
         for shotType in expired {
             shotType.club?.shotTypes.removeAll { $0.id == shotType.id }
+            modelContext.insert(SyncTombstone(entity: .shotType, recordID: shotType.id))
             modelContext.delete(shotType)
         }
         try modelContext.save()

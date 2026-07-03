@@ -7,6 +7,7 @@ final class SwingThought {
     var text: String
     var tagType: String
     var tagValue: String
+    var updatedAt: Date = Date()
 
     @Relationship(inverse: \UserProfile.swingThoughts) var profile: UserProfile?
 

@@ -27,8 +27,10 @@
 		B10000A2229F00A2 /* SwingThought.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B2229F00A2 /* SwingThought.swift */; };
 		B1000007229F0007 /* ShotRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000017229F0007 /* ShotRecommendation.swift */; };
 		B1000008229F0008 /* RangeStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000018229F0008 /* RangeStats.swift */; };
+		B1000009229F0009 /* SyncTombstone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000019229F0009 /* SyncTombstone.swift */; };
 		C1000001229F0001 /* ClubDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011229F0001 /* ClubDataService.swift */; };
 		C1000002229F0002 /* ClubDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000012229F0002 /* ClubDataServiceTests.swift */; };
+		C1000042229F0042 /* SyncTouchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000052229F0052 /* SyncTouchTests.swift */; };
 		C1000003229F0003 /* ShotRecommendationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000013229F0003 /* ShotRecommendationService.swift */; };
 		C1000004229F0004 /* ShotRecommendationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000014229F0004 /* ShotRecommendationServiceTests.swift */; };
 		C1000005229F0005 /* RangeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000015229F0005 /* RangeDataService.swift */; };
@@ -121,8 +123,10 @@
 		B10000B2229F00A2 /* SwingThought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThought.swift; sourceTree = "<group>"; };
 		B1000017229F0007 /* ShotRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendation.swift; sourceTree = "<group>"; };
 		B1000018229F0008 /* RangeStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeStats.swift; sourceTree = "<group>"; };
+		B1000019229F0009 /* SyncTombstone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTombstone.swift; sourceTree = "<group>"; };
 		C1000011229F0001 /* ClubDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataService.swift; sourceTree = "<group>"; };
 		C1000012229F0002 /* ClubDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataServiceTests.swift; sourceTree = "<group>"; };
+		C1000052229F0052 /* SyncTouchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTouchTests.swift; sourceTree = "<group>"; };
 		C1000013229F0003 /* ShotRecommendationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendationService.swift; sourceTree = "<group>"; };
 		C1000014229F0004 /* ShotRecommendationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendationServiceTests.swift; sourceTree = "<group>"; };
 		C1000015229F0005 /* RangeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeDataService.swift; sourceTree = "<group>"; };
@@ -226,6 +230,7 @@
 			children = (
 				A1000014229F0004 /* HTGTests.swift */,
 				C1000012229F0002 /* ClubDataServiceTests.swift */,
+				C1000052229F0052 /* SyncTouchTests.swift */,
 				C1000014229F0004 /* ShotRecommendationServiceTests.swift */,
 				C1000016229F0006 /* RangeDataServiceTests.swift */,
 				C1000018229F0008 /* ProfileDataServiceTests.swift */,
@@ -318,6 +323,7 @@
 				B10000B2229F00A2 /* SwingThought.swift */,
 				B1000017229F0007 /* ShotRecommendation.swift */,
 				B1000018229F0008 /* RangeStats.swift */,
+				B1000019229F0009 /* SyncTombstone.swift */,
 				F1000011229F0001 /* SelectedClubShot.swift */,
 				F1000014229F0004 /* AppSettings.swift */,
 			);
@@ -635,6 +641,7 @@
 				B10000A2229F00A2 /* SwingThought.swift in Sources */,
 				B1000007229F0007 /* ShotRecommendation.swift in Sources */,
 				B1000008229F0008 /* RangeStats.swift in Sources */,
+				B1000009229F0009 /* SyncTombstone.swift in Sources */,
 				C1000001229F0001 /* ClubDataService.swift in Sources */,
 				C1000003229F0003 /* ShotRecommendationService.swift in Sources */,
 				C1000005229F0005 /* RangeDataService.swift in Sources */,
@@ -688,6 +695,7 @@
 			files = (
 				A1000004229F0004 /* HTGTests.swift in Sources */,
 				C1000002229F0002 /* ClubDataServiceTests.swift in Sources */,
+				C1000042229F0042 /* SyncTouchTests.swift in Sources */,
 				C1000004229F0004 /* ShotRecommendationServiceTests.swift in Sources */,
 				C1000006229F0006 /* RangeDataServiceTests.swift in Sources */,
 				C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */,

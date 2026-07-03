@@ -41,6 +41,7 @@ final class ProfileDataService: Sendable {
         if let primaryShotType {
             profile.primaryShotType = primaryShotType
         }
+        profile.updatedAt = Date()
         try modelContext.save()
     }
 }

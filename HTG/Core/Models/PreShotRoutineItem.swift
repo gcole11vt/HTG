@@ -6,6 +6,7 @@ final class PreShotRoutineItem {
     @Attribute(.unique) var id: UUID
     var text: String
     var sortOrder: Int
+    var updatedAt: Date = Date()
     @Relationship(inverse: \UserProfile.preShotRoutineItems) var profile: UserProfile?
 
     init(id: UUID = UUID(), text: String, sortOrder: Int, profile: UserProfile? = nil) {

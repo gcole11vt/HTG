@@ -8,6 +8,7 @@ final class Club {
     var nickname: String
     var sortOrder: Int
     var isArchived: Bool
+    var updatedAt: Date = Date()
     @Relationship(deleteRule: .cascade) var shotTypes: [ShotType]
 
     init(id: UUID = UUID(), name: String, nickname: String = "", sortOrder: Int, isArchived: Bool = false, shotTypes: [ShotType] = []) {

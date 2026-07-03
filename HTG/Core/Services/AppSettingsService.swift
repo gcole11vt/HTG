@@ -26,6 +26,7 @@ final class AppSettingsService: Sendable {
     func updateYardageRangePercentage(_ percentage: Int) async throws {
         let settings = try await getOrCreateSettings()
         settings.yardageRangePercentage = percentage
+        settings.updatedAt = Date()
         try modelContext.save()
     }
 }

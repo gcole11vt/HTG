@@ -10,6 +10,7 @@ final class UserProfile {
     var mantra: String
     var showPreShotRoutine: Bool
     var showMantra: Bool
+    var updatedAt: Date = Date()
     @Relationship(deleteRule: .cascade) var preShotRoutineItems: [PreShotRoutineItem]
     @Relationship(deleteRule: .cascade) var swingThoughts: [SwingThought]
 
