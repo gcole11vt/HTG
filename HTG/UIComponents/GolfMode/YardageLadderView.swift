@@ -38,25 +38,26 @@ struct YardageLadderView: View {
                                         .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
-                                .overlay(alignment: .center) {
-                                    if column.id == targetColumnID {
-                                        Path { path in
-                                            let centerX = barWidth(for: column.entry) / 2
-                                            path.move(to: CGPoint(x: centerX, y: 0))
-                                            path.addLine(to: CGPoint(x: centerX, y: barAreaHeight - 2))
-                                        }
-                                        .stroke(
-                                            GTCColor.accent,
-                                            style: StrokeStyle(lineWidth: 1.5, dash: [4, 4])
-                                        )
-                                    }
-                                }
 
                                 comboRow(for: column.entry, carryDistance: column.carryDistance)
                                     .frame(height: labelAreaHeight, alignment: .top)
                             }
                             .frame(width: baseColumnWidth, alignment: .bottom)
                             .id(column.id)
+                        }
+                    }
+                    .overlay(alignment: .topLeading) {
+                        if let indicatorX = targetIndicatorOffset(columns: columns, columnWidth: baseColumnWidth) {
+                            Path { path in
+                                path.move(to: .zero)
+                                path.addLine(to: CGPoint(x: 0, y: barAreaHeight - 2))
+                            }
+                            .stroke(
+                                GTCColor.accent,
+                                style: StrokeStyle(lineWidth: 1.5, dash: [4, 4])
+                            )
+                            .frame(width: 1.5, height: barAreaHeight - 2)
+                            .offset(x: indicatorX)
                         }
                     }
                 }
@@ -77,8 +78,8 @@ struct YardageLadderView: View {
         .padding(.vertical, 10)
         .padding(.horizontal, 8)
         .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(GTCColor.surface)
+            RoundedRectangle(cornerRadius: JournalTheme.cardCornerRadius)
+                .fill(GTCColor.background)
         )
     }
 
@@ -126,7 +127,7 @@ struct YardageLadderView: View {
         if entry.isSelected {
             return GTCColor.primary
         }
-        return GTCColor.secondary.opacity(0.35)
+        return GTCColor.ladderBarDefault
     }
 
     private func maxColumns(for width: CGFloat) -> Int {
@@ -169,6 +170,35 @@ struct YardageLadderView: View {
             }
             .buttonStyle(.plain)
         }
+    }
+
+    /// X position of the dashed target line, in the HStack's coordinate space.
+    /// Sits at the exact-match column when one exists; otherwise interpolated
+    /// between the two columns whose distances bracket the target, proportional
+    /// to the actual yardage — not snapped to the nearest club.
+    private func targetIndicatorOffset(columns: [LadderColumn], columnWidth: CGFloat) -> CGFloat? {
+        guard !columns.isEmpty else { return nil }
+
+        func centerX(_ index: Int) -> CGFloat {
+            CGFloat(index) * (columnWidth + columnSpacing) + columnWidth / 2
+        }
+
+        let exactMatches = columns.enumerated().filter { $0.element.carryDistance == targetYardage }
+        if !exactMatches.isEmpty {
+            return centerX(exactMatches[exactMatches.count / 2].offset)
+        }
+
+        guard let lowerIndex = columns.lastIndex(where: { $0.carryDistance < targetYardage }) else {
+            return centerX(0)
+        }
+        guard let upperIndex = columns.firstIndex(where: { $0.carryDistance > targetYardage }) else {
+            return centerX(columns.count - 1)
+        }
+
+        let lowerDistance = columns[lowerIndex].carryDistance
+        let upperDistance = columns[upperIndex].carryDistance
+        let fraction = CGFloat(targetYardage - lowerDistance) / CGFloat(max(upperDistance - lowerDistance, 1))
+        return centerX(lowerIndex) + fraction * (centerX(upperIndex) - centerX(lowerIndex))
     }
 
     private func centeredTargetColumnID(from columns: [LadderColumn]) -> String? {

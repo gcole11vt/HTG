@@ -39,6 +39,8 @@ enum GTCColor {
     static var ladderDefaultText: Color { primary.opacity(0.8) }
     static var ladderSeparatorSlash: Color { primary.opacity(0.5) }
     static var ladderTickMinorFill: Color { primary.opacity(0.5) }
+    /// Unselected ladder bar — dark enough to read on the page background.
+    static var ladderBarDefault: Color { secondary.opacity(0.55) }
 
     static var routineSupportingText: Color { primary.opacity(0.7) }
     static var mantraSupportingText: Color { primary.opacity(0.8) }
