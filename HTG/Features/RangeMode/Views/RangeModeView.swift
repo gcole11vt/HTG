@@ -465,7 +465,6 @@ struct RangeModeView: View {
         .presentationDragIndicator(.visible)
         .onAppear {
             saveDistanceText = rangeManager?.defaultSaveCarryDistanceText() ?? ""
-            isSaveFieldFocused = true
         }
     }
 
