@@ -5,10 +5,7 @@ struct PreShotRoutineView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Pre-Shot Routine")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(GTCColor.secondary)
-                .textCase(.uppercase)
+            GTCSectionEyebrow("Pre-Shot Routine")
 
             let sorted = items.sorted { $0.sortOrder < $1.sortOrder }
             ForEach(Array(sorted.enumerated()), id: \.element.id) { index, item in

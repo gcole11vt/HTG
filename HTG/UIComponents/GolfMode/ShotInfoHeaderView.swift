@@ -12,7 +12,7 @@ struct ShotInfoHeaderView: View {
             HStack {
                 if isRecommendationActive {
                     Text("Recommended")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(JournalTheme.chipLabelFont)
                         .foregroundStyle(GTCColor.primary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
@@ -22,7 +22,7 @@ struct ShotInfoHeaderView: View {
                         )
                 } else {
                     Text(" ")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(JournalTheme.chipLabelFont)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
                         .hidden()
@@ -51,7 +51,7 @@ struct ShotInfoHeaderView: View {
 
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 Text(clubName)
-                    .font(.system(size: 28, weight: .semibold, design: .serif))
+                    .font(JournalTheme.cardTitleFont)
                     .foregroundStyle(GTCColor.primary)
 
                 Text("\(carryDistance) yd")
@@ -59,26 +59,9 @@ struct ShotInfoHeaderView: View {
                     .foregroundStyle(GTCColor.text)
             }
 
-            Text(shotTypeName)
-                .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(GTCColor.secondary)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(
-                    Capsule()
-                        .fill(GTCColor.secondary.opacity(0.08))
-                )
+            GTCMetaChip(shotTypeName)
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(GTCColor.secondary.opacity(0.08))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(GTCColor.primary, lineWidth: 1.5)
-                )
-        )
+        .gtcTintedAccentCard()
     }
 }
 

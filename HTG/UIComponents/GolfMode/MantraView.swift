@@ -5,10 +5,7 @@ struct MantraView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Mantra")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(GTCColor.secondary)
-                .textCase(.uppercase)
+            GTCSectionEyebrow("Mantra")
 
             Text("\"\(text)\"")
                 .font(.system(size: 18, weight: .regular, design: .serif))

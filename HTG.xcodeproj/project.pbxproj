@@ -57,6 +57,7 @@
 		F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000016229F0006 /* AppSettingsServiceTests.swift */; };
 		G1000001229F0001 /* JournalTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000011229F0001 /* JournalTheme.swift */; };
 		M1000001229F0001 /* GTCColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = M1000011229F0001 /* GTCColor.swift */; };
+		S1000001229F0001 /* GTCCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = S1000011229F0001 /* GTCCardStyle.swift */; };
 		H1000001229F0001 /* YardageDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011229F0001 /* YardageDisplayView.swift */; };
 		H1000002229F0002 /* ClubShotBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012229F0002 /* ClubShotBadgeView.swift */; };
 		H1000003229F0003 /* ResetIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013229F0003 /* ResetIndicatorView.swift */; };
@@ -147,6 +148,7 @@
 		F1000016229F0006 /* AppSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsServiceTests.swift; sourceTree = "<group>"; };
 		G1000011229F0001 /* JournalTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTheme.swift; sourceTree = "<group>"; };
 		M1000011229F0001 /* GTCColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GTCColor.swift; sourceTree = "<group>"; };
+		S1000011229F0001 /* GTCCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GTCCardStyle.swift; sourceTree = "<group>"; };
 		H1000011229F0001 /* YardageDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageDisplayView.swift; sourceTree = "<group>"; };
 		H1000012229F0002 /* ClubShotBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubShotBadgeView.swift; sourceTree = "<group>"; };
 		H1000013229F0003 /* ResetIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetIndicatorView.swift; sourceTree = "<group>"; };
@@ -447,6 +449,7 @@
 			isa = PBXGroup;
 			children = (
 				M1000011229F0001 /* GTCColor.swift */,
+				S1000011229F0001 /* GTCCardStyle.swift */,
 				G1000011229F0001 /* JournalTheme.swift */,
 			);
 			path = Theme;
@@ -643,6 +646,7 @@
 				F1000005229F0005 /* AppSettingsService.swift in Sources */,
 				G1000001229F0001 /* JournalTheme.swift in Sources */,
 				M1000001229F0001 /* GTCColor.swift in Sources */,
+				S1000001229F0001 /* GTCCardStyle.swift in Sources */,
 				H1000001229F0001 /* YardageDisplayView.swift in Sources */,
 				H1000002229F0002 /* ClubShotBadgeView.swift in Sources */,
 				H1000003229F0003 /* ResetIndicatorView.swift in Sources */,

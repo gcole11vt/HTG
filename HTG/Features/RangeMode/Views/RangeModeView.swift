@@ -18,8 +18,6 @@ struct RangeModeView: View {
     @State private var showPermissionDeniedAlert = false
     @FocusState private var isDistanceFieldFocused: Bool
     @FocusState private var isSaveFieldFocused: Bool
-    private let sectionHeaderFont = Font.system(size: 11, weight: .medium)
-    private let statsColumnRatio: CGFloat = 0.33
 
     var body: some View {
         NavigationStack {
@@ -72,7 +70,7 @@ struct RangeModeView: View {
         VStack(alignment: .leading, spacing: 14) {
             if let clubs = clubManager?.clubs, !clubs.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    sectionEyebrow("Club")
+                    GTCSectionEyebrow("Club")
                     Picker("Select Club", selection: $selectedClub) {
                         Text("Select Club").tag(nil as Club?)
                         ForEach(clubs) { club in
@@ -83,22 +81,13 @@ struct RangeModeView: View {
                     .tint(GTCColor.primary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .background(
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(GTCColor.secondary.opacity(0.08))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(GTCColor.primary, lineWidth: 1.5)
-                        )
-                )
+                .gtcTintedAccentCard()
 
                 if let club = selectedClub {
                     let activeShotTypes = club.shotTypes.filter { !$0.isArchived }
 
                     VStack(alignment: .leading, spacing: 8) {
-                        sectionEyebrow("Shot Type")
+                        GTCSectionEyebrow("Shot Type")
                         Picker("Select Shot Type", selection: $shotTypeSelection) {
                             Text("Select Shot Type").tag(ShotTypeSelection.none)
                             ForEach(activeShotTypes) { shotType in
@@ -127,16 +116,7 @@ struct RangeModeView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(GTCColor.secondary.opacity(0.08))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14)
-                                    .stroke(GTCColor.primary, lineWidth: 1.5)
-                            )
-                    )
+                    .gtcTintedAccentCard()
 
                     Button("Start Session") {
                         Task {
@@ -164,8 +144,7 @@ struct RangeModeView: View {
                             }
                         }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(GTCColor.primary)
+                    .gtcProminentActionButtonStyle()
                     .disabled(startSessionDisabled(club: club))
                 }
             } else {
@@ -218,7 +197,7 @@ struct RangeModeView: View {
 
     private var rangeSessionTitle: some View {
         Text("Range Session")
-            .font(.system(size: 26, weight: .semibold, design: .serif))
+            .font(JournalTheme.pageTitleFont)
             .foregroundStyle(GTCColor.primary)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -260,54 +239,36 @@ struct RangeModeView: View {
 
     private func sessionHeader(session: RangeSession) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionEyebrow("Current Session")
+            GTCSectionEyebrow("Current Session")
 
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 Text(session.clubName)
-                    .font(.system(size: 28, weight: .semibold, design: .serif))
+                    .font(JournalTheme.cardTitleFont)
                     .foregroundStyle(GTCColor.primary)
 
-                Text(session.shotTypeName)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(GTCColor.secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(
-                        Capsule()
-                            .fill(GTCColor.secondary.opacity(0.08))
-                    )
+                GTCMetaChip(session.shotTypeName)
             }
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(GTCColor.surface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(GTCColor.primary, lineWidth: 1.5)
-                )
-        )
+        .gtcAccentCard()
     }
 
     private var shotEntrySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionEyebrow("Shot Entry")
+            GTCSectionEyebrow("Shot Entry")
             HStack(spacing: 10) {
                 TextField("Distance", text: $distanceText)
                     .font(JournalTheme.handwrittenBold(size: 20))
                     .foregroundStyle(GTCColor.primary)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
-                    .frame(width: 110)
+                    .frame(width: JournalTheme.distanceInputWidth)
                     .focused($isDistanceFieldFocused)
 
                 Button("Add Shot") {
                     addShot()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(GTCColor.primary)
+                .gtcProminentActionButtonStyle()
                 .disabled(distanceText.isEmpty)
 
                 micToggleButton
@@ -332,8 +293,7 @@ struct RangeModeView: View {
                 Text("Save Session")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(GTCColor.primary)
+            .gtcProminentActionButtonStyle()
             .disabled((rangeManager?.currentStats.count ?? 0) == 0)
         }
     }
@@ -341,7 +301,7 @@ struct RangeModeView: View {
     private func twoColumnSection(session: RangeSession) -> some View {
         GeometryReader { geometry in
             let availableWidth = max(geometry.size.width - 12, 0)
-            let statsWidth = availableWidth * statsColumnRatio
+            let statsWidth = availableWidth * JournalTheme.statsColumnWidthRatio
 
             HStack(alignment: .top, spacing: 12) {
                 previousShotsList(session: session)
@@ -363,7 +323,7 @@ struct RangeModeView: View {
         VStack(alignment: .leading, spacing: 8) {
             let sortedShots = session.shots.sorted(by: { $0.date > $1.date })
             HStack {
-                sectionEyebrow("Previous Shots")
+                GTCSectionEyebrow("Previous Shots")
                 Spacer()
                 if sortedShots.count > 8 {
                     Image(systemName: "arrow.down")
@@ -416,22 +376,13 @@ struct RangeModeView: View {
                 .frame(maxHeight: .infinity)
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
         .frame(maxHeight: .infinity, alignment: .top)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(GTCColor.surface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(GTCColor.border, lineWidth: 1)
-                )
-        )
+        .gtcNeutralCard()
     }
 
     private var statsColumn: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionEyebrow("Stats")
+            GTCSectionEyebrow("Stats")
 
             if let current = rangeManager?.currentCarryDistance {
                 statItem(label: "Current", value: current, color: GTCColor.primary)
@@ -442,23 +393,14 @@ struct RangeModeView: View {
             statItem(label: "Max", value: rangeManager?.currentStats.max ?? 0)
             statItem(label: "75th", value: rangeManager?.currentStats.percentile75 ?? 0)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(GTCColor.surface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(GTCColor.border, lineWidth: 1)
-                )
-        )
+        .gtcNeutralCard()
     }
 
     private func statItem(label: String, value: Int, color: Color = GTCColor.text) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
-                .font(.system(size: 11, weight: .medium))
+                .font(JournalTheme.metricLabelFont)
                 .foregroundStyle(GTCColor.secondary)
             Text("\(value)")
                 .font(JournalTheme.handwrittenBold(size: 20))
@@ -472,10 +414,10 @@ struct RangeModeView: View {
         VStack(spacing: 16) {
             Spacer()
 
-            sectionEyebrow("Save Carry Distance")
+            GTCSectionEyebrow("Save Carry Distance")
 
             Text("Save Carry Distance")
-                .font(.system(size: 24, weight: .semibold, design: .serif))
+                .font(JournalTheme.sheetTitleFont)
                 .foregroundStyle(GTCColor.primary)
 
             HStack(spacing: 12) {
@@ -488,7 +430,7 @@ struct RangeModeView: View {
                     .keyboardType(.numberPad)
                     .focused($isSaveFieldFocused)
                     .minimumScaleFactor(0.5)
-                    .frame(width: 160)
+                    .frame(width: JournalTheme.sheetNumericInputWidth)
 
                 Spacer()
             }
@@ -519,7 +461,7 @@ struct RangeModeView: View {
         .onTapGesture {
             isSaveFieldFocused = false
         }
-        .presentationDetents([.height(320)])
+        .presentationDetents([.height(JournalTheme.sheetDetentHeight)])
         .presentationDragIndicator(.visible)
         .onAppear {
             saveDistanceText = rangeManager?.defaultSaveCarryDistanceText() ?? ""
@@ -537,7 +479,7 @@ struct RangeModeView: View {
                 .frame(width: 32, height: 32)
                 .background(
                     Circle()
-                        .fill(speechService.isListening ? GTCColor.warning.opacity(0.12) : GTCColor.surface)
+                        .fill(speechService.isListening ? GTCColor.listeningMicFill : GTCColor.surface)
                         .overlay(
                             Circle()
                                 .stroke(
@@ -587,14 +529,6 @@ struct RangeModeView: View {
     }
 
     // MARK: - Helpers
-
-    @ViewBuilder
-    private func sectionEyebrow(_ text: String) -> some View {
-        Text(text)
-            .font(sectionHeaderFont)
-            .foregroundStyle(GTCColor.secondary)
-            .textCase(.uppercase)
-    }
 
     private func stopSpeechIfNeeded() {
         guard speechService.isListening else { return }

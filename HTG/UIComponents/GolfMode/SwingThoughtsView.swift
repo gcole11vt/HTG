@@ -5,10 +5,7 @@ struct SwingThoughtsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Swing Thoughts")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(GTCColor.secondary)
-                .textCase(.uppercase)
+            GTCSectionEyebrow("Swing Thoughts")
 
             ForEach(thoughts) { thought in
                 HStack(alignment: .top, spacing: 4) {
