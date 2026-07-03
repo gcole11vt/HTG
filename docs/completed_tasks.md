@@ -58,3 +58,10 @@
 
 ---
 
+
+**Task name:**  Supabase sync foundation
+**Priority:** P1
+**Status:** Complete
+**What it is:**  Cross-device sync with Supabase (chosen over CloudKit). SwiftData stays the offline source of truth; `SyncService.syncAll()` runs a per-entity push/pull cycle (parents before children) with pure last-write-wins merge logic in `SyncEngine` (unit tested). All 8 synced models carry `updatedAt`, every data-service mutation stamps it, and hard-deletes record a `SyncTombstone` that propagates through a `sync_deletions` table. Auth is Sign in with Apple exchanged for a Supabase session (`SupabaseAuthService`); Profile tab gained an Account & Sync card (sign in, sync now, status, sign out). supabase-swift SDK added via SPM. Remote side is fully specified in `docs/supabase/schema.sql` (tables + RLS) with setup steps in `docs/supabase/setup.md` — the app runs offline-only until `SupabaseConfig` is filled in with a real project URL/anon key.
+
+---
