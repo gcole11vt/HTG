@@ -22,7 +22,6 @@ struct ProfileView: View {
                     preShotRoutineSection(profile: profile)
                     mantraSection(profile: profile)
                     swingThoughtsSection(profile: profile)
-                    statsSection
                 } else if profileManager?.isLoading == true {
                     Section {
                         ProgressView("Loading profile...")
@@ -279,20 +278,6 @@ struct ProfileView: View {
         newSwingThoughtText = ""
         newSwingThoughtTagType = "all"
         newSwingThoughtTagValue = ""
-    }
-
-    // MARK: - Existing Sections
-
-    private var statsSection: some View {
-        Section("About Handicap") {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Your handicap represents your playing ability.")
-                    .font(.subheadline)
-                Text("Valid range: 0 (scratch) to 54 (beginner)")
-                    .font(.caption)
-                    .foregroundStyle(GTCColor.secondary)
-            }
-        }
     }
 
     private func saveProfile() {

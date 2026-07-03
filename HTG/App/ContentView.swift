@@ -6,6 +6,10 @@ struct ContentView: View {
     @State private var navigationCoordinator = NavigationCoordinator()
     @State private var didBootstrapClubDefaults = false
 
+    init() {
+        UITabBar.appearance().unselectedItemTintColor = UIColor(GTCColor.secondary)
+    }
+
     var body: some View {
         mainTabView
     }
