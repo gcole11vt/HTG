@@ -44,6 +44,13 @@
 
 ---
 
+**Task name:**  Printable yardage sheets
+**Priority:** P2
+**Status:** Complete
+**What it is:**  Tournament-legal printed yardages. A printer icon on the Clubs tab opens a sheet with a live US Letter preview and two layouts: By Club (each club with its shot types and yardages, longest club first) and By Yardage (one flat list sorted longest to shortest). Print goes through AirPrint; Share exports the PDF. Archived clubs/shot types and un-dialed (0-yard) shot types are excluded. Data building lives in `YardageSheetBuilder` (unit tested), PDF rendering in `YardageSheetPDFRenderer`, UI in `YardageSheetView`.
+
+---
+
 **Task name:**  Range Mode continuous voice reliability
 **Priority:** P1
 **Status:** Complete

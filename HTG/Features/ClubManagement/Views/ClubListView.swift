@@ -6,6 +6,7 @@ struct ClubListView: View {
     @State private var clubManager: ClubManager?
     @State private var profileManager: ProfileManager?
     @State private var showingAddClub = false
+    @State private var showingYardageSheet = false
     @State private var refreshID = UUID()
     @State private var expandedClubIDs: Set<UUID> = []
     @State private var detailClub: Club?
@@ -66,6 +67,14 @@ struct ClubListView: View {
                 ClubDetailView(club: club, clubManager: clubManager, primaryShotType: primaryShotType)
             }
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showingYardageSheet = true
+                    } label: {
+                        Image(systemName: "printer")
+                    }
+                    .accessibilityLabel("Print yardages")
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showingAddClub = true
@@ -76,6 +85,9 @@ struct ClubListView: View {
             }
             .sheet(isPresented: $showingAddClub) {
                 AddClubSheet(clubManager: clubManager)
+            }
+            .sheet(isPresented: $showingYardageSheet) {
+                YardageSheetView(clubs: clubManager?.clubs ?? [], primaryShotType: primaryShotType)
             }
             .task {
                 if clubManager == nil {
