@@ -1,9 +1,11 @@
 import SwiftUI
 import SwiftData
+import AuthenticationServices
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var profileManager: ProfileManager?
+    @State private var syncManager: AccountSyncManager?
     @State private var nameText: String = ""
     @State private var handicapText: String = ""
     @State private var primaryShotTypeText: String = "Full"
@@ -30,6 +32,7 @@ struct ProfileView: View {
                             preShotRoutineSection(profile: profile)
                             mantraSection(profile: profile)
                             swingThoughtsSection(profile: profile)
+                            accountSyncSection
                         }
                         .listStyle(.plain)
                         .listRowSpacing(-20)
@@ -51,6 +54,10 @@ struct ProfileView: View {
                         handicapText = "\(profile.handicap)"
                         primaryShotTypeText = profile.primaryShotType
                     }
+                }
+                if syncManager == nil {
+                    syncManager = AccountSyncManager(modelContext: modelContext)
+                    await syncManager?.restoreSession()
                 }
             }
             .alert("Error", isPresented: .init(
@@ -316,6 +323,99 @@ struct ProfileView: View {
         } header: {
             GTCSectionEyebrow("Swing Thoughts")
         }
+    }
+
+    // MARK: - Account & Sync Section
+
+    private var accountSyncSection: some View {
+        Section {
+            Group {
+                if let syncManager, syncManager.isConfigured {
+                    if syncManager.isSignedIn {
+                        signedInCard(syncManager: syncManager)
+                    } else {
+                        signedOutCard(syncManager: syncManager)
+                    }
+                } else {
+                    syncUnconfiguredCard
+                }
+            }
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        } header: {
+            GTCSectionEyebrow("Account & Sync")
+        }
+    }
+
+    private var syncUnconfiguredCard: some View {
+        Text("Cloud sync isn't set up yet. Add your Supabase project keys to enable backup across devices.")
+            .font(JournalTheme.handwritten(size: 14))
+            .foregroundStyle(GTCColor.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .gtcNeutralCard(fill: GTCColor.background)
+    }
+
+    private func signedOutCard(syncManager: AccountSyncManager) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Sign in to back up your clubs, sessions, and profile across devices.")
+                .font(JournalTheme.handwritten(size: 14))
+                .foregroundStyle(GTCColor.text)
+
+            SignInWithAppleButton(.signIn) { _ in
+            } onCompletion: { result in
+                Task { await syncManager.handleSignInWithApple(result) }
+            }
+            .signInWithAppleButtonStyle(.black)
+            .frame(height: 44)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .gtcAccentCard(fill: GTCColor.background)
+    }
+
+    private func signedInCard(syncManager: AccountSyncManager) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            syncStatusRow(state: syncManager.syncState)
+
+            HStack {
+                Button("Sign Out") {
+                    Task { await syncManager.signOut() }
+                }
+                .buttonStyle(.bordered)
+                .tint(GTCColor.primary)
+
+                Spacer()
+
+                Button("Sync Now") {
+                    Task { await syncManager.sync() }
+                }
+                .gtcProminentActionButtonStyle()
+                .disabled(syncManager.syncState == .syncing)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .gtcAccentCard(fill: GTCColor.background)
+    }
+
+    private func syncStatusRow(state: AccountSyncManager.SyncState) -> some View {
+        HStack(spacing: 8) {
+            switch state {
+            case .idle:
+                Text("Signed in — ready to sync")
+            case .syncing:
+                ProgressView()
+                Text("Syncing…")
+            case .success(let date):
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(GTCColor.primary)
+                Text("Synced \(date.formatted(date: .omitted, time: .shortened))")
+            case .failure(let message):
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.orange)
+                Text(message)
+            }
+        }
+        .font(JournalTheme.handwritten(size: 14))
+        .foregroundStyle(GTCColor.text)
     }
 
     private func swingThoughtTagLabel(_ thought: SwingThought) -> String {

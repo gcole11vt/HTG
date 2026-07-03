@@ -34,6 +34,8 @@
 		SY000003229F0003 /* SupabaseClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000013229F0013 /* SupabaseClientProvider.swift */; };
 		SY000004229F0004 /* SyncRemoteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000014229F0014 /* SyncRemoteStore.swift */; };
 		SY000005229F0005 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000015229F0015 /* SupabaseAuthService.swift */; };
+		SY000006229F0006 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SY000016229F0016 /* SyncService.swift */; };
+		C1000044229F0044 /* SyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000054229F0054 /* SyncServiceTests.swift */; };
 		C1000043229F0043 /* SyncEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000053229F0053 /* SyncEngineTests.swift */; };
 		C1000001229F0001 /* ClubDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011229F0001 /* ClubDataService.swift */; };
 		C1000002229F0002 /* ClubDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000012229F0002 /* ClubDataServiceTests.swift */; };
@@ -53,6 +55,7 @@
 		D1000001229F0001 /* ClubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000011229F0001 /* ClubManager.swift */; };
 		D1000002229F0002 /* RangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000012229F0002 /* RangeManager.swift */; };
 		D1000003229F0003 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000013229F0003 /* ProfileManager.swift */; };
+		D1000004229F0044 /* AccountSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000014229F0054 /* AccountSyncManager.swift */; };
 		D1000004229F0004 /* GolfModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000014229F0004 /* GolfModeViewModel.swift */; };
 		E1000001229F0001 /* ClubListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000011229F0001 /* ClubListView.swift */; };
 		E1000002229F0002 /* GolfModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000012229F0002 /* GolfModeView.swift */; };
@@ -136,6 +139,8 @@
 		SY000013229F0013 /* SupabaseClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientProvider.swift; sourceTree = "<group>"; };
 		SY000014229F0014 /* SyncRemoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncRemoteStore.swift; sourceTree = "<group>"; };
 		SY000015229F0015 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
+		SY000016229F0016 /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
+		C1000054229F0054 /* SyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncServiceTests.swift; sourceTree = "<group>"; };
 		C1000053229F0053 /* SyncEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngineTests.swift; sourceTree = "<group>"; };
 		C1000011229F0001 /* ClubDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataService.swift; sourceTree = "<group>"; };
 		C1000012229F0002 /* ClubDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataServiceTests.swift; sourceTree = "<group>"; };
@@ -155,6 +160,8 @@
 		D1000011229F0001 /* ClubManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubManager.swift; sourceTree = "<group>"; };
 		D1000012229F0002 /* RangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeManager.swift; sourceTree = "<group>"; };
 		D1000013229F0003 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		D1000014229F0054 /* AccountSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncManager.swift; sourceTree = "<group>"; };
+		EN000011229F0011 /* HTG.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HTG.entitlements; sourceTree = "<group>"; };
 		D1000014229F0004 /* GolfModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeViewModel.swift; sourceTree = "<group>"; };
 		E1000011229F0001 /* ClubListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubListView.swift; sourceTree = "<group>"; };
 		E1000012229F0002 /* GolfModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeView.swift; sourceTree = "<group>"; };
@@ -246,6 +253,7 @@
 				C1000012229F0002 /* ClubDataServiceTests.swift */,
 				C1000052229F0052 /* SyncTouchTests.swift */,
 				C1000053229F0053 /* SyncEngineTests.swift */,
+				C1000054229F0054 /* SyncServiceTests.swift */,
 				C1000014229F0004 /* ShotRecommendationServiceTests.swift */,
 				C1000016229F0006 /* RangeDataServiceTests.swift */,
 				C1000018229F0008 /* ProfileDataServiceTests.swift */,
@@ -283,6 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				A1000011229F0001 /* HTGApp.swift */,
+				EN000011229F0011 /* HTG.entitlements */,
 				A1000012229F0002 /* ContentView.swift */,
 			);
 			path = App;
@@ -372,6 +381,7 @@
 				SY000013229F0013 /* SupabaseClientProvider.swift */,
 				SY000014229F0014 /* SyncRemoteStore.swift */,
 				SY000015229F0015 /* SupabaseAuthService.swift */,
+				SY000016229F0016 /* SyncService.swift */,
 			);
 			path = Sync;
 			sourceTree = "<group>";
@@ -441,6 +451,7 @@
 			isa = PBXGroup;
 			children = (
 				D1000013229F0003 /* ProfileManager.swift */,
+				D1000014229F0054 /* AccountSyncManager.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -679,6 +690,7 @@
 				SY000003229F0003 /* SupabaseClientProvider.swift in Sources */,
 				SY000004229F0004 /* SyncRemoteStore.swift in Sources */,
 				SY000005229F0005 /* SupabaseAuthService.swift in Sources */,
+				SY000006229F0006 /* SyncService.swift in Sources */,
 				C1000001229F0001 /* ClubDataService.swift in Sources */,
 				C1000003229F0003 /* ShotRecommendationService.swift in Sources */,
 				C1000005229F0005 /* RangeDataService.swift in Sources */,
@@ -688,6 +700,7 @@
 				D1000001229F0001 /* ClubManager.swift in Sources */,
 				D1000002229F0002 /* RangeManager.swift in Sources */,
 				D1000003229F0003 /* ProfileManager.swift in Sources */,
+				D1000004229F0044 /* AccountSyncManager.swift in Sources */,
 				D1000004229F0004 /* GolfModeViewModel.swift in Sources */,
 				E1000001229F0001 /* ClubListView.swift in Sources */,
 				E1000002229F0002 /* GolfModeView.swift in Sources */,
@@ -734,6 +747,7 @@
 				C1000002229F0002 /* ClubDataServiceTests.swift in Sources */,
 				C1000042229F0042 /* SyncTouchTests.swift in Sources */,
 				C1000043229F0043 /* SyncEngineTests.swift in Sources */,
+				C1000044229F0044 /* SyncServiceTests.swift in Sources */,
 				C1000004229F0004 /* ShotRecommendationServiceTests.swift in Sources */,
 				C1000006229F0006 /* RangeDataServiceTests.swift in Sources */,
 				C1000008229F0008 /* ProfileDataServiceTests.swift in Sources */,
@@ -900,6 +914,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HTG/App/HTG.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -930,6 +945,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HTG/App/HTG.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
