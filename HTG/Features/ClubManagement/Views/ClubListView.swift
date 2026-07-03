@@ -26,8 +26,16 @@ struct ClubListView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ClubActiveClubsListSectionView(
+            ZStack {
+                GTCColor.background.ignoresSafeArea()
+
+                VStack(alignment: .leading, spacing: JournalTheme.sectionSpacing) {
+                    clubsHeader
+                        .padding(.top, 8)
+                        .padding(.horizontal, JournalTheme.screenHorizontalPadding)
+
+                    List {
+                        ClubActiveClubsListSectionView(
                     clubs: sortedClubs,
                     primaryShotType: primaryShotType,
                     isLoading: clubManager?.isLoading == true,
@@ -57,31 +65,14 @@ struct ClubListView: View {
                     }
                 )
             }
-            .id(refreshID)
-            .listStyle(.plain)
-            .listRowSpacing(-20)
-            .scrollContentBackground(.hidden)
-            .background(GTCColor.background)
-            .navigationTitle("My Clubs")
+                    .id(refreshID)
+                    .listStyle(.plain)
+                    .listRowSpacing(-20)
+                    .scrollContentBackground(.hidden)
+                }
+            }
             .navigationDestination(item: $detailClub) { club in
                 ClubDetailView(club: club, clubManager: clubManager, primaryShotType: primaryShotType)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        showingYardageSheet = true
-                    } label: {
-                        Image(systemName: "printer")
-                    }
-                    .accessibilityLabel("Print yardages")
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingAddClub = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
             }
             .sheet(isPresented: $showingAddClub) {
                 AddClubSheet(clubManager: clubManager)
@@ -115,6 +106,40 @@ struct ClubListView: View {
                 Text(clubManager?.errorMessage ?? "")
             }
         }
+    }
+
+    private var clubsHeader: some View {
+        HStack(spacing: 10) {
+            Text("My Clubs")
+                .font(JournalTheme.pageTitleFont)
+                .foregroundStyle(GTCColor.primary)
+            Spacer()
+            headerIconButton("printer", label: "Print yardages") {
+                showingYardageSheet = true
+            }
+            headerIconButton("plus", label: "Add club") {
+                showingAddClub = true
+            }
+        }
+    }
+
+    private func headerIconButton(_ systemImage: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(GTCColor.primary)
+                .frame(width: 32, height: 32)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(GTCColor.surface)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(GTCColor.border, lineWidth: 1)
+                        )
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
     }
 }
 
@@ -260,6 +285,7 @@ struct ExpandableClubRowView: View {
                         Spacer()
                         Text("\(shotType.carryDistance) yds")
                             .font(JournalTheme.handwritten(size: 15))
+                            .fontWeight(shotType.name == primaryShotType ? .bold : .regular)
                             .foregroundStyle(GTCColor.secondary)
                     }
                 }
