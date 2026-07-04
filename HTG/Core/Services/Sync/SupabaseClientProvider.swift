@@ -5,8 +5,8 @@ import Supabase
 /// See `docs/supabase/setup.md`. The anon key is safe to ship in the app;
 /// row-level security scopes all data access to the signed-in user.
 enum SupabaseConfig {
-    static let projectURL = "https://YOUR-PROJECT-REF.supabase.co"
-    static let anonKey = "YOUR-SUPABASE-ANON-KEY"
+    static let projectURL = "https://patarifvkyxlaxqjzmww.supabase.co"
+    static let anonKey = "sb_publishable_qzndMy6YM3FPyDAwNUjMJg_G3D4ElAk"
 
     static var isConfigured: Bool {
         !projectURL.contains("YOUR-") && !anonKey.contains("YOUR-")

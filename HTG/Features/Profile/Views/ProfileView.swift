@@ -367,6 +367,16 @@ struct ProfileView: View {
             }
             .signInWithAppleButtonStyle(.black)
             .frame(height: 44)
+
+            if case .failure(let message) = syncManager.syncState {
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                    Text(message)
+                }
+                .font(JournalTheme.handwritten(size: 14))
+                .foregroundStyle(GTCColor.text)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .gtcAccentCard(fill: GTCColor.background)
