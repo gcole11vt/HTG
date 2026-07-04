@@ -30,6 +30,16 @@
 		B10000A1229F00A1 /* PreShotRoutineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B1229F00A1 /* PreShotRoutineItem.swift */; };
 		B10000A2229F00A2 /* SwingThought.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000B2229F00A2 /* SwingThought.swift */; };
 		BFA70035F272D25E87BD8105 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D421787BE5B93D37BE6780E4 /* LandingView.swift */; };
+		BG000001229F0001 /* BagYardageEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000011229F0001 /* BagYardageEstimator.swift */; };
+		BG000002229F0002 /* BagYardageEstimatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000012229F0002 /* BagYardageEstimatorTests.swift */; };
+		BG000003229F0003 /* BagSetupCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000013229F0003 /* BagSetupCatalog.swift */; };
+		BG000004229F0004 /* BagSetupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000014229F0004 /* BagSetupManager.swift */; };
+		BG000005229F0005 /* BagSetupManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000015229F0005 /* BagSetupManagerTests.swift */; };
+		BG000006229F0006 /* BagSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000016229F0006 /* BagSetupView.swift */; };
+		BG000007229F0007 /* BagSetupSelectionStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000017229F0007 /* BagSetupSelectionStepView.swift */; };
+		BG000008229F0008 /* BagSetupArrangeStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000018229F0008 /* BagSetupArrangeStepView.swift */; };
+		BG000009229F0009 /* BagSetupYardageStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG000019229F0009 /* BagSetupYardageStepView.swift */; };
+		BG00000A229F000A /* BagSetupFinishStepViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BG00001A229F000A /* BagSetupFinishStepViews.swift */; };
 		C1000001229F0001 /* ClubDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011229F0001 /* ClubDataService.swift */; };
 		C1000002229F0002 /* ClubDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000012229F0002 /* ClubDataServiceTests.swift */; };
 		C1000003229F0003 /* ShotRecommendationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000013229F0003 /* ShotRecommendationService.swift */; };
@@ -137,6 +147,16 @@
 		B10000B1229F00A1 /* PreShotRoutineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreShotRoutineItem.swift; sourceTree = "<group>"; };
 		B10000B2229F00A2 /* SwingThought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingThought.swift; sourceTree = "<group>"; };
 		B2AC2F285D4669422FAAC308 /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		BG000011229F0001 /* BagYardageEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagYardageEstimator.swift; sourceTree = "<group>"; };
+		BG000012229F0002 /* BagYardageEstimatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagYardageEstimatorTests.swift; sourceTree = "<group>"; };
+		BG000013229F0003 /* BagSetupCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupCatalog.swift; sourceTree = "<group>"; };
+		BG000014229F0004 /* BagSetupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupManager.swift; sourceTree = "<group>"; };
+		BG000015229F0005 /* BagSetupManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupManagerTests.swift; sourceTree = "<group>"; };
+		BG000016229F0006 /* BagSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupView.swift; sourceTree = "<group>"; };
+		BG000017229F0007 /* BagSetupSelectionStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupSelectionStepView.swift; sourceTree = "<group>"; };
+		BG000018229F0008 /* BagSetupArrangeStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupArrangeStepView.swift; sourceTree = "<group>"; };
+		BG000019229F0009 /* BagSetupYardageStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupYardageStepView.swift; sourceTree = "<group>"; };
+		BG00001A229F000A /* BagSetupFinishStepViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagSetupFinishStepViews.swift; sourceTree = "<group>"; };
 		C1000011229F0001 /* ClubDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataService.swift; sourceTree = "<group>"; };
 		C1000012229F0002 /* ClubDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubDataServiceTests.swift; sourceTree = "<group>"; };
 		C1000013229F0003 /* ShotRecommendationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotRecommendationService.swift; sourceTree = "<group>"; };
@@ -275,6 +295,8 @@
 				F1000013229F0003 /* GolfModeViewModelTests.swift */,
 				F1000016229F0006 /* AppSettingsServiceTests.swift */,
 				C100001C229F000C /* ClubDistanceResolverTests.swift */,
+				BG000012229F0002 /* BagYardageEstimatorTests.swift */,
+				BG000015229F0005 /* BagSetupManagerTests.swift */,
 				J1000012229F0002 /* NicknameGeneratorTests.swift */,
 				Y1000013229F0003 /* YardageSheetServiceTests.swift */,
 			);
@@ -318,6 +340,7 @@
 				D1000021229F0021 /* RangeMode */,
 				D1000022229F0022 /* GolfMode */,
 				D1000023229F0023 /* Profile */,
+				BG000020229F0020 /* BagSetup */,
 				2E6D6FC4702308F1FDF984D2 /* Landing */,
 			);
 			path = Features;
@@ -380,6 +403,7 @@
 				C1000019229F0009 /* SpeechRecognitionService.swift */,
 				F1000015229F0005 /* AppSettingsService.swift */,
 				C100001B229F000B /* ClubDistanceResolver.swift */,
+				BG000011229F0001 /* BagYardageEstimator.swift */,
 				J1000011229F0001 /* NicknameGenerator.swift */,
 				N1000011229F0001 /* NavigationCoordinator.swift */,
 				Y1000011229F0001 /* YardageSheetService.swift */,
@@ -423,6 +447,44 @@
 				D1000033229F0033 /* ViewModels */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		BG000020229F0020 /* BagSetup */ = {
+			isa = PBXGroup;
+			children = (
+				BG000021229F0021 /* Models */,
+				BG000022229F0022 /* ViewModels */,
+				BG000023229F0023 /* Views */,
+			);
+			path = BagSetup;
+			sourceTree = "<group>";
+		};
+		BG000021229F0021 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BG000013229F0003 /* BagSetupCatalog.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BG000022229F0022 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BG000014229F0004 /* BagSetupManager.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BG000023229F0023 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BG000016229F0006 /* BagSetupView.swift */,
+				BG000017229F0007 /* BagSetupSelectionStepView.swift */,
+				BG000018229F0008 /* BagSetupArrangeStepView.swift */,
+				BG000019229F0009 /* BagSetupYardageStepView.swift */,
+				BG00001A229F000A /* BagSetupFinishStepViews.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		D1000030229F0030 /* ViewModels */ = {
@@ -743,6 +805,14 @@
 				H1000006229F0006 /* YardageLadderView.swift in Sources */,
 				H1000007229F0007 /* YardageBookPageView.swift in Sources */,
 				C100000B229F000B /* ClubDistanceResolver.swift in Sources */,
+				BG000001229F0001 /* BagYardageEstimator.swift in Sources */,
+				BG000003229F0003 /* BagSetupCatalog.swift in Sources */,
+				BG000004229F0004 /* BagSetupManager.swift in Sources */,
+				BG000006229F0006 /* BagSetupView.swift in Sources */,
+				BG000007229F0007 /* BagSetupSelectionStepView.swift in Sources */,
+				BG000008229F0008 /* BagSetupArrangeStepView.swift in Sources */,
+				BG000009229F0009 /* BagSetupYardageStepView.swift in Sources */,
+				BG00000A229F000A /* BagSetupFinishStepViews.swift in Sources */,
 				J1000001229F0001 /* NicknameGenerator.swift in Sources */,
 				N1000001229F0001 /* NavigationCoordinator.swift in Sources */,
 				K1000001229F0001 /* GroupedLadderEntry.swift in Sources */,
@@ -778,6 +848,8 @@
 				F1000003229F0003 /* GolfModeViewModelTests.swift in Sources */,
 				F1000006229F0006 /* AppSettingsServiceTests.swift in Sources */,
 				C100000C229F000C /* ClubDistanceResolverTests.swift in Sources */,
+				BG000002229F0002 /* BagYardageEstimatorTests.swift in Sources */,
+				BG000005229F0005 /* BagSetupManagerTests.swift in Sources */,
 				J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */,
 				Y1000003229F0003 /* YardageSheetServiceTests.swift in Sources */,
 			);

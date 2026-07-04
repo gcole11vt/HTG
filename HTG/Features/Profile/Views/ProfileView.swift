@@ -15,6 +15,7 @@ struct ProfileView: View {
     @State private var newSwingThoughtText: String = ""
     @State private var newSwingThoughtTagType: String = "all"
     @State private var newSwingThoughtTagValue: String = ""
+    @State private var showingBagSetup = false
 
     var body: some View {
         NavigationStack {
@@ -33,6 +34,7 @@ struct ProfileView: View {
                             mantraSection(profile: profile)
                             swingThoughtsSection(profile: profile)
                             accountSyncSection
+                            bagSetupSection
                         }
                         .listStyle(.plain)
                         .listRowSpacing(-20)
@@ -70,6 +72,9 @@ struct ProfileView: View {
             }
             .sheet(isPresented: $showingAddSwingThought) {
                 addSwingThoughtSheet
+            }
+            .fullScreenCover(isPresented: $showingBagSetup) {
+                BagSetupView()
             }
         }
     }
@@ -426,6 +431,23 @@ struct ProfileView: View {
         }
         .font(JournalTheme.handwritten(size: 14))
         .foregroundStyle(GTCColor.text)
+    }
+
+    // MARK: - First Time Set Up Section
+
+    private var bagSetupSection: some View {
+        Section {
+            Button {
+                showingBagSetup = true
+            } label: {
+                Label("Initial Bag Set Up", systemImage: "figure.golf")
+            }
+            .gtcProminentActionButtonStyle()
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        } header: {
+            GTCSectionEyebrow("First Time Set Up")
+        }
     }
 
     private func swingThoughtTagLabel(_ thought: SwingThought) -> String {

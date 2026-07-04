@@ -175,6 +175,30 @@ final class ClubDataService: Sendable {
         return uniqueNames.sorted()
     }
 
+    func replaceBag(with entries: [(name: String, fullDistance: Int)]) async throws -> [Club] {
+        guard entries.count <= Self.maximumClubs else {
+            throw ClubDataServiceError.maximumClubsReached
+        }
+
+        let existingClubs = try await fetchAllClubs() + (try await fetchArchivedClubs())
+        for club in existingClubs {
+            modelContext.insert(SyncTombstone(entity: .club, recordID: club.id))
+            modelContext.delete(club)
+        }
+
+        var newClubs: [Club] = []
+        for (index, entry) in entries.enumerated() {
+            let club = Club(name: entry.name, nickname: NicknameGenerator.generate(from: entry.name), sortOrder: index)
+            let fullShotType = ShotType(name: "Full", carryDistance: entry.fullDistance, sortOrder: 0, club: club)
+            club.shotTypes = [fullShotType]
+            modelContext.insert(club)
+            newClubs.append(club)
+        }
+
+        try modelContext.save()
+        return newClubs
+    }
+
     func loadDefaultClubs() async throws {
         let existingClubs = try await fetchAllClubs()
         guard existingClubs.isEmpty else { return }

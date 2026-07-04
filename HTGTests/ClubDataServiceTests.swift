@@ -464,4 +464,64 @@ struct ClubDataServiceTests {
         #expect(shotType.name == "Punch")
         #expect(shotType.carryDistance == 140)
     }
+
+    // MARK: - Replace Bag
+
+    @Test("Replace bag swaps existing clubs for the new set in order")
+    func replaceBagSwapsExistingClubs() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        try await service.loadDefaultClubs()
+
+        let clubs = try await service.replaceBag(with: [
+            (name: "Driver", fullDistance: 250),
+            (name: "7 Iron", fullDistance: 165)
+        ])
+        #expect(clubs.count == 2)
+
+        let fetched = try await service.fetchAllClubs()
+        #expect(fetched.map(\.name) == ["Driver", "7 Iron"])
+        #expect(fetched.map(\.sortOrder) == [0, 1])
+    }
+
+    @Test("Replace bag creates a Full shot type with the given distance")
+    func replaceBagCreatesFullShotType() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        _ = try await service.replaceBag(with: [(name: "Sand Wedge", fullDistance: 90)])
+
+        let fetched = try await service.fetchAllClubs()
+        #expect(fetched.first?.shotTypes.count == 1)
+        #expect(fetched.first?.shotTypes.first?.name == "Full")
+        #expect(fetched.first?.shotTypes.first?.carryDistance == 90)
+        #expect(fetched.first?.nickname == "SW")
+    }
+
+    @Test("Replace bag removes archived clubs too")
+    func replaceBagRemovesArchivedClubs() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let old = try await service.addClub(name: "Old Club", defaultDistance: 150)
+        try await service.archiveClub(old)
+
+        _ = try await service.replaceBag(with: [(name: "Driver", fullDistance: 250)])
+
+        let archived = try await service.fetchArchivedClubs()
+        #expect(archived.isEmpty)
+    }
+
+    @Test("Replace bag enforces maximum of 13 clubs")
+    func replaceBagEnforcesMaximum() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let entries = (1...14).map { (name: "Club \($0)", fullDistance: 100 + $0) }
+
+        await #expect(throws: ClubDataServiceError.maximumClubsReached) {
+            _ = try await service.replaceBag(with: entries)
+        }
+    }
 }
