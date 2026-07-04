@@ -10,9 +10,12 @@ enum VoiceCommand: Equatable {
 @MainActor
 @Observable
 final class SpeechRecognitionService {
-    private let audioEngine = AVAudioEngine()
-    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    // nonisolated(unsafe): the engine and request are touched from a background task during
+    // startup and from the audio tap thread; AVAudioEngine serializes its own internal state.
+    nonisolated(unsafe) private let audioEngine = AVAudioEngine()
+    nonisolated(unsafe) private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
+    private var isStartingEngine = false
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
 
     var isListening: Bool = false
@@ -31,6 +34,7 @@ final class SpeechRecognitionService {
 
     private var silenceTimerTask: Task<Void, Never>?
     private let synthesizer = AVSpeechSynthesizer()
+    private let synthesizerCompletionDelegate = SpeechSynthesizerCompletionDelegate()
     private var recognitionTaskStartedAt: Date?
     private var rapidTaskFailureCount = 0
 
@@ -80,16 +84,45 @@ final class SpeechRecognitionService {
         return nil
     }
 
-    func requestAuthorization() async -> Bool {
-        await withCheckedContinuation { continuation in
-            SFSpeechRecognizer.requestAuthorization { status in
-                continuation.resume(returning: status == .authorized)
+    // Nonisolated so permission requests run off the main thread: TCC calls can block,
+    // and a slow/wedged one must not freeze the UI.
+    nonisolated func requestAuthorization() async -> Bool {
+        guard await requestSpeechAuthorization() else { return false }
+        return await requestRecordPermission()
+    }
+
+    private nonisolated func requestSpeechAuthorization() async -> Bool {
+        switch SFSpeechRecognizer.authorizationStatus() {
+        case .authorized:
+            return true
+        case .notDetermined:
+            return await withCheckedContinuation { continuation in
+                SFSpeechRecognizer.requestAuthorization { status in
+                    continuation.resume(returning: status == .authorized)
+                }
             }
+        default:
+            return false
+        }
+    }
+
+    private nonisolated func requestRecordPermission() async -> Bool {
+        switch AVAudioApplication.shared.recordPermission {
+        case .granted:
+            return true
+        case .undetermined:
+            return await withCheckedContinuation { continuation in
+                AVAudioApplication.requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
+            }
+        default:
+            return false
         }
     }
 
     func startListening() async throws {
-        guard !isListening else { return }
+        guard !isListening, !isStartingEngine else { return }
         guard let speechRecognizer = speechRecognizer, speechRecognizer.isAvailable else {
             throw SpeechRecognitionError.recognizerUnavailable
         }
@@ -98,35 +131,31 @@ final class SpeechRecognitionService {
         recognitionTask?.cancel()
         recognitionTask = nil
 
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.duckOthers, .defaultToSpeaker])
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        guard let recognitionRequest = recognitionRequest else {
-            throw SpeechRecognitionError.requestCreationFailed
-        }
-
-        recognitionRequest.shouldReportPartialResults = true
+        let request = SFSpeechAudioBufferRecognitionRequest()
+        request.shouldReportPartialResults = true
         // On-device recognition has no 1-minute task limit and works without connectivity.
         if speechRecognizer.supportsOnDeviceRecognition {
-            recognitionRequest.requiresOnDeviceRecognition = true
+            request.requiresOnDeviceRecognition = true
         }
+        recognitionRequest = request
 
-        let inputNode = audioEngine.inputNode
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
-            self?.recognitionRequest?.append(buffer)
+        // Session activation and engine startup are blocking calls into the media daemons
+        // and must stay off the main thread — a stalled daemon would freeze the whole UI.
+        isStartingEngine = true
+        defer { isStartingEngine = false }
+        do {
+            try await Task.detached { [self] in
+                try startAudioEngineBlockingWork()
+            }.value
+        } catch {
+            recognitionRequest = nil
+            throw error
         }
-
-        audioEngine.prepare()
-        try audioEngine.start()
 
         isListening = true
         recognitionTaskStartedAt = Date()
 
-        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
+        recognitionTask = speechRecognizer.recognitionTask(with: request) { [weak self] result, error in
             Task { @MainActor in
                 guard let self = self else { return }
 
@@ -147,6 +176,35 @@ final class SpeechRecognitionService {
         }
     }
 
+    private nonisolated func startAudioEngineBlockingWork() throws {
+        let audioSession = AVAudioSession.sharedInstance()
+        // .measurement mode strips signal processing and makes TTS output very quiet, and
+        // playAndRecord ignores Bluetooth devices unless explicitly allowed — both matter here.
+        try audioSession.setCategory(
+            .playAndRecord,
+            mode: .default,
+            options: [.duckOthers, .defaultToSpeaker, .allowBluetoothHFP, .allowBluetoothA2DP]
+        )
+        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+
+        let inputNode = audioEngine.inputNode
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+
+        // Without record permission the input node reports a 0 Hz / 0-channel format,
+        // and installTap raises an uncatchable ObjC exception. Bail out instead.
+        guard recordingFormat.sampleRate > 0, recordingFormat.channelCount > 0 else {
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+            throw SpeechRecognitionError.audioSessionFailed
+        }
+
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
+            self?.recognitionRequest?.append(buffer)
+        }
+
+        audioEngine.prepare()
+        try audioEngine.start()
+    }
+
     func stopListening() {
         silenceTimerTask?.cancel()
         silenceTimerTask = nil
@@ -160,16 +218,20 @@ final class SpeechRecognitionService {
     }
 
     func speakBack(_ text: String) async {
+        // Delegate is set lazily because init() is nonisolated.
+        if synthesizer.delegate !== synthesizerCompletionDelegate {
+            synthesizer.delegate = synthesizerCompletionDelegate
+        }
+
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
 
+        // speak() only queues the utterance; isSpeaking stays false until playback actually
+        // starts, so polling it here returns immediately and the engine restart cuts the
+        // utterance off. Wait for the didFinish delegate callback instead.
         synthesizer.speak(utterance)
-
-        // Wait for speech to finish
-        while synthesizer.isSpeaking {
-            try? await Task.sleep(for: .milliseconds(100))
-        }
+        await synthesizerCompletionDelegate.waitUntilDone()
     }
 
     /// Recognition tasks die on their own (server-based recognition is capped at ~1 minute,
@@ -265,6 +327,40 @@ final class SpeechRecognitionService {
                 onStopRequested?()
             }
         }
+    }
+}
+
+/// Bridges AVSpeechSynthesizer's delegate callbacks to async/await so callers can
+/// await the end of an utterance. A timeout backstop resumes the waiter even if the
+/// synthesizer never delivers a callback, so the listening loop can't stall.
+@MainActor
+private final class SpeechSynthesizerCompletionDelegate: NSObject, AVSpeechSynthesizerDelegate {
+    private var continuation: CheckedContinuation<Void, Never>?
+
+    nonisolated override init() {
+        super.init()
+    }
+
+    func waitUntilDone(timeout: Duration = .seconds(10)) async {
+        let timeoutTask = Task { @MainActor in
+            try? await Task.sleep(for: timeout)
+            finish()
+        }
+        await withCheckedContinuation { continuation = $0 }
+        timeoutTask.cancel()
+    }
+
+    private func finish() {
+        continuation?.resume()
+        continuation = nil
+    }
+
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        Task { @MainActor in self.finish() }
+    }
+
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+        Task { @MainActor in self.finish() }
     }
 }
 

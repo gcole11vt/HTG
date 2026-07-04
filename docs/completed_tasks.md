@@ -2,6 +2,13 @@
 
 ---
 
+**Task name:**  Range Mode - Voice input crash/freeze fix and yardage read-back
+**Priority:**  P1
+**Status:**  Complete
+**What it is:**  Tapping the mic button in Range Mode crashed (mic permission was never requested, so the audio tap got an invalid format), then froze (permission requests and audio engine startup blocked the main thread). Fixed by requesting both speech + mic permissions off the main thread and moving audio session/engine startup to a background task. Also fixed the yardage read-back, which was being cut off before it played (now waits for the synthesizer's didFinish callback), and audio routing so it plays at normal volume and through Bluetooth headphones.
+
+---
+
 **Task name:**  Range Mode - Carry Distance Save
 **Priority:**  P1
 **Status:**  Complete
