@@ -20,8 +20,17 @@ final class ProfileDataService: Sendable {
         let descriptor = FetchDescriptor<UserProfile>()
         let profiles = try modelContext.fetch(descriptor)
 
-        if let existingProfile = profiles.first {
-            return existingProfile
+        // Prefer a personalized profile, then the most recently updated, so
+        // an empty auto-created duplicate never shadows the synced one.
+        let best = profiles.sorted { lhs, rhs in
+            let lhsPristine = lhs.name.trimmingCharacters(in: .whitespaces).isEmpty
+            let rhsPristine = rhs.name.trimmingCharacters(in: .whitespaces).isEmpty
+            if lhsPristine != rhsPristine { return !lhsPristine }
+            return lhs.updatedAt > rhs.updatedAt
+        }.first
+
+        if let best {
+            return best
         }
 
         let newProfile = UserProfile()

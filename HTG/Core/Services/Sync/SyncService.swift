@@ -57,6 +57,13 @@ final class SyncService {
     // MARK: - Per-entity passes
 
     private func syncUserProfiles(since: Date?, remoteDeletions: [RemoteDeletionRecord]) async throws {
+        if since == nil {
+            let remoteProfiles: [UserProfileRecord] = try await remoteStore.fetchChanges(from: "user_profiles", since: nil)
+            if !remoteProfiles.isEmpty {
+                try discardPristineProfiles(excluding: Set(remoteProfiles.map(\.id)))
+            }
+        }
+        try consolidateDuplicateProfiles()
         try await syncEntity(
             table: "user_profiles",
             entity: .userProfile,
@@ -74,6 +81,12 @@ final class SyncService {
     }
 
     private func syncClubs(since: Date?, remoteDeletions: [RemoteDeletionRecord]) async throws {
+        if since == nil {
+            let remoteClubs: [ClubRecord] = try await remoteStore.fetchChanges(from: "clubs", since: nil)
+            if !remoteClubs.isEmpty {
+                try discardUntouchedSeededClubs()
+            }
+        }
         try await syncEntity(
             table: "clubs",
             entity: .club,
@@ -207,6 +220,75 @@ final class SyncService {
                 self.modelContext.insert(settings)
             }
         )
+    }
+
+    // MARK: - First-sync reconciliation
+
+    /// A fresh install seeds a placeholder bag before the user ever signs in.
+    /// When the first sync finds a real bag on the remote, drop any seeded
+    /// club the user never touched so the two bags don't pile up. Seeded
+    /// clubs were never pushed, so no tombstones are needed.
+    private func discardUntouchedSeededClubs() throws {
+        guard let seeded = defaults.dictionary(forKey: ClubDataService.seededDefaultClubsKey) as? [String: Date],
+              !seeded.isEmpty else { return }
+
+        var descriptor = FetchDescriptor<Club>()
+        descriptor.includePendingChanges = true
+        let clubs = try modelContext.fetch(descriptor)
+        for club in clubs {
+            guard let seededAt = seeded[club.id.uuidString],
+                  abs(club.updatedAt.timeIntervalSince(seededAt)) < 1 else { continue }
+            modelContext.delete(club)
+        }
+        defaults.removeObject(forKey: ClubDataService.seededDefaultClubsKey)
+        try modelContext.save()
+    }
+
+    /// Same story for the profile: launching before sign-in auto-creates an
+    /// empty profile under a fresh UUID. If the remote already has the user's
+    /// profile, drop unpersonalized local ones so the pull doesn't duplicate.
+    private func discardPristineProfiles(excluding remoteIDs: Set<UUID>) throws {
+        let profiles = try fetchAllProfiles()
+        for profile in profiles where !remoteIDs.contains(profile.id) && isPristine(profile) {
+            modelContext.delete(profile)
+        }
+        try modelContext.save()
+    }
+
+    /// Devices that already ended up with duplicate profiles converge here:
+    /// keep the best candidate and tombstone the rest (with their children)
+    /// so the extras disappear from the remote too.
+    private func consolidateDuplicateProfiles() throws {
+        let profiles = try fetchAllProfiles()
+        guard profiles.count > 1 else { return }
+
+        let ranked = profiles.sorted { lhs, rhs in
+            if isPristine(lhs) != isPristine(rhs) { return !isPristine(lhs) }
+            return lhs.updatedAt > rhs.updatedAt
+        }
+        for extra in ranked.dropFirst() {
+            for item in extra.preShotRoutineItems {
+                modelContext.insert(SyncTombstone(entity: .preShotRoutineItem, recordID: item.id))
+            }
+            for thought in extra.swingThoughts {
+                modelContext.insert(SyncTombstone(entity: .swingThought, recordID: thought.id))
+            }
+            modelContext.insert(SyncTombstone(entity: .userProfile, recordID: extra.id))
+            modelContext.delete(extra)
+        }
+        try modelContext.save()
+    }
+
+    /// Pristine means the user never personalized the profile — the state an
+    /// auto-created row is in until the user edits their information.
+    private func isPristine(_ profile: UserProfile) -> Bool {
+        profile.name.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    private func fetchAllProfiles() throws -> [UserProfile] {
+        var descriptor = FetchDescriptor<UserProfile>()
+        descriptor.includePendingChanges = true
+        return try modelContext.fetch(descriptor)
     }
 
     // MARK: - Generic entity sync

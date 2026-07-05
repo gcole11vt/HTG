@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 import SwiftData
 @testable import HTG
@@ -134,5 +135,22 @@ struct ProfileDataServiceTests {
 
         let profile = try await service.getOrCreateProfile()
         #expect(profile.primaryShotType == "3/4")
+    }
+
+    @Test("Get or create profile prefers a personalized profile over a pristine duplicate")
+    func getOrCreateProfilePrefersPersonalized() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+        let pristine = UserProfile()
+        let named = UserProfile(name: "Greg", handicap: 8)
+        named.updatedAt = Date(timeIntervalSinceNow: -1000)
+        container.mainContext.insert(pristine)
+        container.mainContext.insert(named)
+        try container.mainContext.save()
+
+        let profile = try await service.getOrCreateProfile()
+
+        #expect(profile.id == named.id)
+        #expect(profile.name == "Greg")
     }
 }

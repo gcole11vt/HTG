@@ -11,13 +11,19 @@ enum ClubDataServiceError: Error, Equatable {
 @MainActor
 final class ClubDataService: Sendable {
     private let modelContext: ModelContext
+    private let defaults: UserDefaults
 
     static let maximumClubs = 13
     static let maximumShotTypesPerClub = 5
     static let minimumShotTypesPerClub = 1
 
-    init(modelContext: ModelContext) {
+    /// Maps seeded default club IDs to their seeding timestamps so the first
+    /// sync can tell untouched placeholder clubs from a bag the user built.
+    static let seededDefaultClubsKey = "HTG.seededDefaultClubs"
+
+    init(modelContext: ModelContext, defaults: UserDefaults = .standard) {
         self.modelContext = modelContext
+        self.defaults = defaults
     }
 
     func fetchAllClubs() async throws -> [Club] {
@@ -219,6 +225,7 @@ final class ClubDataService: Sendable {
             ("Lob Wedge", 80)
         ]
 
+        var seededClubs: [String: Date] = [:]
         for (index, (name, distance)) in defaultClubs.enumerated() {
             let club = Club(name: name, nickname: NicknameGenerator.generate(from: name), sortOrder: index)
             let fullShot = ShotType(name: "Full", carryDistance: distance, sortOrder: 0, club: club)
@@ -230,8 +237,10 @@ final class ClubDataService: Sendable {
             let halfShot = ShotType(name: "1/2", carryDistance: halfDist, sortOrder: 3, club: club)
             club.shotTypes = [fullShot, threeQuarterShot, hardShot, halfShot]
             modelContext.insert(club)
+            seededClubs[club.id.uuidString] = club.updatedAt
         }
 
         try modelContext.save()
+        defaults.set(seededClubs, forKey: Self.seededDefaultClubsKey)
     }
 }
