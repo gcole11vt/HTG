@@ -1,5 +1,7 @@
 import Testing
 import SwiftData
+import SwiftUI
+import UIKit
 @testable import HTG
 
 @MainActor
@@ -170,5 +172,56 @@ struct YardageSheetBuilderTests {
         #expect(columns[1].count == 2)
         #expect(columns[0][0].carryDistance == 205)
         #expect(columns[1][1].carryDistance == 201)
+    }
+}
+
+@MainActor
+@Suite("YardageSheetPDFRenderer Tests")
+struct YardageSheetPDFRendererTests {
+
+    /// Light-mode `GTCColor.primary` (see `gtc_colors.py` COLORS["primary"]).
+    private static let lightPrimary: (red: CGFloat, green: CGFloat, blue: CGFloat) = (0x29 / 255, 0x44 / 255, 0x3A / 255)
+
+    /// Samples the center pixel of the PDF's first page.
+    private func centerPixel(ofPDF data: Data) throws -> (red: CGFloat, green: CGFloat, blue: CGFloat) {
+        let provider = try #require(CGDataProvider(data: data as CFData))
+        let document = try #require(CGPDFDocument(provider))
+        let page = try #require(document.page(at: 1))
+        let box = page.getBoxRect(.mediaBox)
+
+        var pixel = [UInt8](repeating: 0, count: 4)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapContext = try #require(CGContext(
+            data: &pixel,
+            width: 1,
+            height: 1,
+            bitsPerComponent: 8,
+            bytesPerRow: 4,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ))
+        // Shift the page so its center lands on the 1×1 bitmap.
+        bitmapContext.translateBy(x: -box.midX, y: -box.midY)
+        bitmapContext.drawPDFPage(page)
+        return (CGFloat(pixel[0]) / 255, CGFloat(pixel[1]) / 255, CGFloat(pixel[2]) / 255)
+    }
+
+    private func expectClose(_ actual: CGFloat, _ expected: CGFloat, tolerance: CGFloat = 0.02) {
+        #expect(abs(actual - expected) <= tolerance, "expected \(expected), got \(actual)")
+    }
+
+    @Test("PDF renders the light primary palette even when device traits are dark")
+    func pdfUsesLightPaletteUnderDarkTraits() throws {
+        let page = Rectangle().fill(GTCColor.primary)
+
+        var data: Data?
+        UITraitCollection(userInterfaceStyle: .dark).performAsCurrent {
+            data = YardageSheetPDFRenderer.renderPDF(for: page)
+        }
+
+        let pixel = try centerPixel(ofPDF: try #require(data))
+        expectClose(pixel.red, Self.lightPrimary.red)
+        expectClose(pixel.green, Self.lightPrimary.green)
+        expectClose(pixel.blue, Self.lightPrimary.blue)
     }
 }

@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// One printable yardage line: a club + shot type + carry distance.
 struct YardageSheetEntry: Equatable, Identifiable {
@@ -105,13 +106,25 @@ enum YardageSheetPDFRenderer {
             return nil
         }
 
-        let renderer = ImageRenderer(content: page.frame(width: pageSize.width, height: pageSize.height))
+        // Printed output must always use the light (primary) palette, never the dark scheme,
+        // regardless of the device's current appearance. The SwiftUI `\.colorScheme`
+        // environment override alone does NOT reach GTCColor's dynamic `UIColor` providers —
+        // ImageRenderer resolves those against `UITraitCollection.current`. So we also pin the
+        // current trait collection to light for the entire render pass.
+        let lightPage = page
+            .frame(width: pageSize.width, height: pageSize.height)
+            .environment(\.colorScheme, .light)
+        let renderer = ImageRenderer(content: lightPage)
         renderer.proposedSize = ProposedViewSize(pageSize)
-        renderer.render { _, renderInContext in
-            context.beginPDFPage(nil)
-            renderInContext(context)
-            context.endPDFPage()
-            context.closePDF()
+
+        let lightTraits = UITraitCollection(userInterfaceStyle: .light)
+        lightTraits.performAsCurrent {
+            renderer.render { _, renderInContext in
+                context.beginPDFPage(nil)
+                renderInContext(context)
+                context.endPDFPage()
+                context.closePDF()
+            }
         }
         return data as Data
     }

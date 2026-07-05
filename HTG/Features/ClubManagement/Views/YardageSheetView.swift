@@ -76,6 +76,8 @@ struct YardageSheetView: View {
             let scale = geometry.size.width / YardageSheetPDFRenderer.pageSize.width
             ScrollView {
                 pageView
+                    // Match the printed output, which always renders in the light palette.
+                    .environment(\.colorScheme, .light)
                     .frame(
                         width: YardageSheetPDFRenderer.pageSize.width,
                         height: YardageSheetPDFRenderer.pageSize.height
