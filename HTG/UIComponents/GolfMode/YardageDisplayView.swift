@@ -2,6 +2,7 @@ import SwiftUI
 
 struct YardageDisplayView: View {
     @Binding var yardage: Int
+    var onRefresh: (() -> Void)?
     @State private var isEditing = false
     @State private var editText = ""
     @FocusState private var isTextFieldFocused: Bool
@@ -29,6 +30,9 @@ struct YardageDisplayView: View {
                 Spacer(minLength: 8)
 
                 HStack(spacing: 6) {
+                    if let onRefresh {
+                        yardageStepButton(symbol: "arrow.clockwise", action: onRefresh)
+                    }
                     yardageStepButton(symbol: "minus") {
                         yardage = max(minYardage, yardage - 1)
                     }

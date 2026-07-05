@@ -61,6 +61,9 @@ struct GolfModeView: View {
             },
             onReset: {
                 viewModel.resetToRecommendation()
+            },
+            onRefresh: {
+                Task { await viewModel.refresh() }
             }
         )
     }

@@ -112,6 +112,13 @@ final class GolfModeViewModel {
         await loadClubs()
     }
 
+    /// Reloads the bag from the store on demand (after bag edits or a sync),
+    /// dropping any manual selection so the recommendation matches the new bag.
+    func refresh() async {
+        resetToRecommendation()
+        await loadClubs()
+    }
+
     func loadClubs() async {
         isLoading = true
         do {

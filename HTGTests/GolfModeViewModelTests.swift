@@ -413,4 +413,22 @@ struct GolfModeViewModelTests {
         #expect(fullEntry?.isPrimaryShotType == true)
         #expect(threeQuarterEntry?.isPrimaryShotType == false)
     }
+
+    @Test("Refresh reloads clubs added after the initial load and clears manual selection")
+    func refreshReloadsClubsAndClearsSelection() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.selectClubShot(clubName: "7 Iron", shotTypeName: "Full", distance: 150)
+
+        _ = createClub(name: "8 Iron", shotTypes: [("Full", 140)], sortOrder: 1, in: container.mainContext)
+        try container.mainContext.save()
+
+        await viewModel.refresh()
+
+        #expect(viewModel.clubs.count == 2)
+        #expect(viewModel.selectedClubShot == nil)
+    }
 }

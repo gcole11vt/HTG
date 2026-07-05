@@ -17,6 +17,7 @@ struct YardageBookPageView: View {
     var onSelectEntry: ((LadderEntry) -> Void)?
     var onSelectClubShot: ((SelectedClubShot) -> Void)?
     var onReset: (() -> Void)?
+    var onRefresh: (() -> Void)?
 
     @State private var showingClubSelector = false
 
@@ -29,7 +30,7 @@ struct YardageBookPageView: View {
                     PageTitleView()
                         .padding(.top, 8)
 
-                    YardageDisplayView(yardage: $targetYardage)
+                    YardageDisplayView(yardage: $targetYardage, onRefresh: onRefresh)
 
                     if let clubShot = displayedClubShot {
                         ShotInfoHeaderView(
