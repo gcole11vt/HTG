@@ -22,6 +22,19 @@ struct ShotRecommendationServiceTests {
         return club
     }
 
+    @Test("Excludes archived shot types from recommendations")
+    func excludesArchivedShotTypes() throws {
+        let container = try makeTestContainer()
+        let club = createClub(name: "7 Iron", shotTypes: [("Full", 165), ("3/4", 150)], sortOrder: 0, in: container.mainContext)
+        club.shotTypes.first { $0.name == "3/4" }?.isArchived = true
+
+        let service = ShotRecommendationService()
+        let recommendations = service.getRecommendations(targetYardage: 150, clubs: [club], filter: .all)
+
+        #expect(recommendations.count == 1)
+        #expect(recommendations.first?.shotTypeName == "Full")
+    }
+
     @Test("Returns empty array when no clubs provided")
     func returnsEmptyWhenNoClubs() {
         let service = ShotRecommendationService()

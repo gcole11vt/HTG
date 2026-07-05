@@ -7,7 +7,7 @@ import SwiftData
 struct GolfModeViewModelTests {
 
     private func makeTestContainer() throws -> ModelContainer {
-        let schema = Schema([Club.self, ShotType.self, UserProfile.self])
+        let schema = Schema([Club.self, ShotType.self, UserProfile.self, AppSettings.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
     }
@@ -430,5 +430,53 @@ struct GolfModeViewModelTests {
 
         #expect(viewModel.clubs.count == 2)
         #expect(viewModel.selectedClubShot == nil)
+    }
+
+    @Test("Refresh picks up the yardage range percentage from app settings")
+    func refreshPicksUpYardageRangeFromSettings() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(100)
+
+        // Default settings: 100 +/- 15% = 85 to 115
+        #expect(viewModel.ladderMinYardage == 85)
+        #expect(viewModel.ladderMaxYardage == 115)
+
+        let settingsService = AppSettingsService(modelContext: container.mainContext)
+        try await settingsService.updateYardageRangePercentage(25)
+
+        await viewModel.refresh()
+
+        // 100 +/- 25% = 75 to 125
+        #expect(viewModel.ladderMinYardage == 75)
+        #expect(viewModel.ladderMaxYardage == 125)
+    }
+
+    @Test("Refresh drops archived shot types from the ladder")
+    func refreshDropsArchivedShotTypesFromLadder() async throws {
+        let container = try makeTestContainer()
+        let club = createClub(
+            name: "7 Iron",
+            shotTypes: [("Full", 150), ("3/4", 148)],
+            sortOrder: 0,
+            in: container.mainContext
+        )
+
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        viewModel.setTargetYardage(150)
+        #expect(viewModel.ladderEntries.count == 2)
+
+        club.shotTypes.first { $0.name == "3/4" }?.isArchived = true
+        try container.mainContext.save()
+
+        await viewModel.refresh()
+
+        let entries = viewModel.ladderEntries
+        #expect(entries.count == 1)
+        #expect(entries.first?.shotTypeName == "Full")
     }
 }

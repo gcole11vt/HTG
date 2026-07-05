@@ -8,6 +8,7 @@ final class GolfModeViewModel {
     private let clubService: ClubDataService
     private let profileService: ProfileDataService
     private let swingThoughtService: SwingThoughtDataService
+    private let settingsService: AppSettingsService
 
     var profile: UserProfile?
     var targetYardage: Int = 150
@@ -47,11 +48,11 @@ final class GolfModeViewModel {
 
     // Ladder range calculations
     var ladderMinYardage: Int {
-        Int(Double(targetYardage) * (1.0 - Double(yardageRangePercentage) / 100.0))
+        Int((Double(targetYardage) * (1.0 - Double(yardageRangePercentage) / 100.0)).rounded())
     }
 
     var ladderMaxYardage: Int {
-        Int(Double(targetYardage) * (1.0 + Double(yardageRangePercentage) / 100.0))
+        Int((Double(targetYardage) * (1.0 + Double(yardageRangePercentage) / 100.0)).rounded())
     }
 
     var ladderEntries: [LadderEntry] {
@@ -71,6 +72,7 @@ final class GolfModeViewModel {
         self.clubService = ClubDataService(modelContext: modelContext)
         self.profileService = ProfileDataService(modelContext: modelContext)
         self.swingThoughtService = SwingThoughtDataService(modelContext: modelContext)
+        self.settingsService = AppSettingsService(modelContext: modelContext)
     }
 
     // MARK: - Swing Thoughts & Routine
@@ -112,8 +114,9 @@ final class GolfModeViewModel {
         await loadClubs()
     }
 
-    /// Reloads the bag from the store on demand (after bag edits or a sync),
-    /// dropping any manual selection so the recommendation matches the new bag.
+    /// Reloads the bag and app settings from the store on demand (after bag edits
+    /// or a sync), dropping any manual selection so the recommendation and the
+    /// yardage ladder match the new data.
     func refresh() async {
         resetToRecommendation()
         await loadClubs()
@@ -123,6 +126,8 @@ final class GolfModeViewModel {
         isLoading = true
         do {
             clubs = try await clubService.fetchAllClubs()
+            let settings = try await settingsService.getOrCreateSettings()
+            yardageRangePercentage = settings.yardageRangePercentage
             let loadedProfile = try await profileService.getOrCreateProfile()
             profile = loadedProfile
             primaryShotTypeName = loadedProfile.primaryShotType
@@ -194,7 +199,7 @@ final class GolfModeViewModel {
         let selectedShotTypeName = displayedClubShot?.shotTypeName
 
         for club in clubs {
-            for shotType in club.shotTypes {
+            for shotType in club.shotTypes where !shotType.isArchived {
                 let distance = shotType.carryDistance
 
                 // Only include shots within the ladder range

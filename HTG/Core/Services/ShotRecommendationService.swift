@@ -16,7 +16,7 @@ final class ShotRecommendationService: Sendable {
         var allOptions: [ShotRecommendation] = []
 
         for club in clubs {
-            for shotType in club.shotTypes {
+            for shotType in club.shotTypes where !shotType.isArchived {
                 // Apply filter
                 if filter != .all && shotType.name != filter.rawValue {
                     continue
