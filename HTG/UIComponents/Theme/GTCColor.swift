@@ -1,35 +1,46 @@
 import SwiftUI
+import UIKit
 
 /// GTC-aligned palette (see `gtc_colors.py`). Use these instead of system colors or ad-hoc RGB.
+/// Each core color resolves dynamically to its light or dark value based on the active interface style.
 enum GTCColor {
-    private static func srgb(_ hex: UInt32) -> Color {
-        Color(
-            red: Double((hex >> 16) & 0xFF) / 255,
-            green: Double((hex >> 8) & 0xFF) / 255,
-            blue: Double(hex & 0xFF) / 255
+    private static func components(_ hex: UInt32) -> (red: CGFloat, green: CGFloat, blue: CGFloat) {
+        (
+            red: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255
         )
+    }
+
+    /// Builds a color that adapts to light/dark mode from two sRGB hex values.
+    private static func srgb(light: UInt32, dark: UInt32) -> Color {
+        Color(UIColor { traitCollection in
+            let hex = traitCollection.userInterfaceStyle == .dark ? dark : light
+            let c = components(hex)
+            return UIColor(red: c.red, green: c.green, blue: c.blue, alpha: 1)
+        })
     }
 
     // MARK: - Core palette
 
-    static let primary = srgb(0x29443A) // dark forest green
-    static let secondary = srgb(0x7E9286) // muted sage
-    static let background = srgb(0xF7F7F2) // off-white
-    static let surface = srgb(0xFFFFFF) // pure white
-    static let border = srgb(0xCDD4CE) // light grey-green
-    static let accent = srgb(0x705C49) // warm brown
-    static let text = srgb(0x2C342F) // near-black green
-    static let warning = srgb(0x92400E) // amber-brown
+    static let primary = srgb(light: 0x29443A, dark: 0xA7C8B7) // forest green / soft sage
+    static let secondary = srgb(light: 0x7E9286, dark: 0x8FA99A) // muted sage
+    static let background = srgb(light: 0xF7F7F2, dark: 0x101713) // off-white / very dark forest
+    static let surface = srgb(light: 0xFFFFFF, dark: 0x17211C) // pure white / raised dark green
+    static let border = srgb(light: 0xCDD4CE, dark: 0x314239) // light grey-green / green-grey divider
+    static let accent = srgb(light: 0x705C49, dark: 0xC4A484) // warm brown / warm tan
+    static let text = srgb(light: 0x2C342F, dark: 0xE8EFEA) // near-black green / near-white green tint
+    static let warning = srgb(light: 0x92400E, dark: 0xF59E0B) // amber-brown / amber
 
     /// Swipe/archive affordance (not in `gtc_colors.py` until synced).
-    static let swipe = srgb(0xC97B2F) // warm orange (archive / swipe tint)
+    static let swipe = srgb(light: 0xC97B2F, dark: 0xD98C3A) // warm orange (archive / swipe tint)
 
     // MARK: - Test mode (from `gtc_colors.py`)
 
-    static let testMode = srgb(0x3B82F6) // bright blue
-    static let testModeBackground = srgb(0xEFF6FF) // very light blue
-    static let testModeBorder = srgb(0x93C5FD) // light blue
-    static let testModeBadge = srgb(0xDBEAFE) // pale blue
+    static let testMode = srgb(light: 0x3B82F6, dark: 0x60A5FA) // bright blue
+    static let testModeBackground = srgb(light: 0xEFF6FF, dark: 0x10243F) // very light / deep blue
+    static let testModeBorder = srgb(light: 0x93C5FD, dark: 0x2563EB) // light / vivid blue
+    static let testModeBadge = srgb(light: 0xDBEAFE, dark: 0x1E3A5F) // pale / dark blue
 
     // MARK: - Derived (ladder / routine; replaces scattered `.opacity` literals)
 
