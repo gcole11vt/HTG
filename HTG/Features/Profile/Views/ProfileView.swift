@@ -11,6 +11,8 @@ struct ProfileView: View {
     @State private var primaryShotTypeText: String = "Full"
     @State private var isEditing = false
     @State private var newRoutineItemText: String = ""
+    @State private var editingRoutineItem: PreShotRoutineItem?
+    @State private var editingRoutineItemText: String = ""
     @State private var showingAddSwingThought = false
     @State private var newSwingThoughtText: String = ""
     @State private var newSwingThoughtTagType: String = "all"
@@ -60,7 +62,16 @@ struct ProfileView: View {
                 if syncManager == nil {
                     syncManager = AccountSyncManager(modelContext: modelContext)
                     await syncManager?.restoreSession()
+                    await reloadProfileAfterSync()
                 }
+            }
+            .alert("Edit Step", isPresented: .init(
+                get: { editingRoutineItem != nil },
+                set: { if !$0 { editingRoutineItem = nil } }
+            )) {
+                TextField("Step", text: $editingRoutineItemText)
+                Button("Save") { saveEditedRoutineItem() }
+                Button("Cancel", role: .cancel) { editingRoutineItem = nil }
             }
             .alert("Error", isPresented: .init(
                 get: { profileManager?.errorMessage != nil },
@@ -204,11 +215,7 @@ struct ProfileView: View {
 
             let sortedItems = profile.preShotRoutineItems.sorted { $0.sortOrder < $1.sortOrder }
             ForEach(sortedItems) { item in
-                Text(item.text)
-                    .font(JournalTheme.handwritten(size: 15))
-                    .foregroundStyle(GTCColor.text)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .gtcNeutralCard(fill: GTCColor.background)
+                routineItemRow(item: item)
             }
             .onDelete { indexSet in
                 for index in indexSet {
@@ -244,6 +251,41 @@ struct ProfileView: View {
         } header: {
             GTCSectionEyebrow("Pre-Shot Routine")
         }
+    }
+
+    private func routineItemRow(item: PreShotRoutineItem) -> some View {
+        HStack(spacing: 14) {
+            Text(item.text)
+                .font(JournalTheme.handwritten(size: 15))
+                .foregroundStyle(GTCColor.text)
+            Spacer()
+            Button {
+                editingRoutineItemText = item.text
+                editingRoutineItem = item
+            } label: {
+                Image(systemName: "pencil")
+                    .font(.system(size: 14))
+                    .foregroundStyle(GTCColor.secondary)
+            }
+            .buttonStyle(.plain)
+            Button {
+                Task { await profileManager?.deleteRoutineItem(item) }
+            } label: {
+                Image(systemName: "trash")
+                    .font(.system(size: 14))
+                    .foregroundStyle(GTCColor.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .gtcNeutralCard(fill: GTCColor.background)
+    }
+
+    private func saveEditedRoutineItem() {
+        guard let item = editingRoutineItem else { return }
+        let text = editingRoutineItemText.trimmingCharacters(in: .whitespaces)
+        editingRoutineItem = nil
+        guard !text.isEmpty else { return }
+        Task { await profileManager?.updateRoutineItemText(item, text: text) }
     }
 
     // MARK: - Mantra Section
@@ -320,9 +362,15 @@ struct ProfileView: View {
             Button {
                 showingAddSwingThought = true
             } label: {
-                Label("Add Swing Thought", systemImage: "plus")
+                HStack {
+                    Label("Add Swing Thought", systemImage: "plus")
+                        .font(JournalTheme.handwritten(size: 16))
+                        .foregroundStyle(GTCColor.primary)
+                    Spacer()
+                }
+                .gtcAccentCard(fill: GTCColor.background)
             }
-            .gtcProminentActionButtonStyle()
+            .buttonStyle(.plain)
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
         } header: {
@@ -401,7 +449,10 @@ struct ProfileView: View {
                 Spacer()
 
                 Button("Sync Now") {
-                    Task { await syncManager.sync() }
+                    Task {
+                        await syncManager.sync()
+                        await reloadProfileAfterSync()
+                    }
                 }
                 .gtcProminentActionButtonStyle()
                 .disabled(syncManager.syncState == .syncing)
@@ -440,9 +491,18 @@ struct ProfileView: View {
             Button {
                 showingBagSetup = true
             } label: {
-                Label("Initial Bag Set Up", systemImage: "figure.golf")
+                HStack {
+                    Label("Initial Bag Set Up", systemImage: "figure.golf")
+                        .font(JournalTheme.handwritten(size: 16))
+                        .foregroundStyle(GTCColor.primary)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(GTCColor.secondary)
+                }
+                .gtcAccentCard(fill: GTCColor.background)
             }
-            .gtcProminentActionButtonStyle()
+            .buttonStyle(.plain)
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
         } header: {
@@ -552,6 +612,16 @@ struct ProfileView: View {
         newSwingThoughtText = ""
         newSwingThoughtTagType = "all"
         newSwingThoughtTagValue = ""
+    }
+
+    /// Sync can replace or consolidate the profile row, so re-resolve it and
+    /// re-prime the display fields once a sync finishes.
+    private func reloadProfileAfterSync() async {
+        await profileManager?.loadProfile()
+        guard !isEditing, let profile = profileManager?.profile else { return }
+        nameText = profile.name
+        handicapText = "\(profile.handicap)"
+        primaryShotTypeText = profile.primaryShotType
     }
 
     private func saveProfile() {
