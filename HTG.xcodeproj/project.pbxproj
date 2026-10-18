@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		GT010018229F0018 /* DistanceTextLadderServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT010019229F0019 /* DistanceTextLadderServiceTests.swift */; };
+		GT010016229F0016 /* YardageTextBookPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT010017229F0017 /* YardageTextBookPageView.swift */; };
+		GT010014229F0014 /* GolfModeFocusColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT010015229F0015 /* GolfModeFocusColumnView.swift */; };
+		GT010012229F0012 /* GolfModeShotHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT010013229F0013 /* GolfModeShotHeaderView.swift */; };
+		GT010010229F0010 /* DistanceTextLadderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT010011229F0011 /* DistanceTextLadderRowView.swift */; };
+		GT01000E229F000E /* DistanceTextLadderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT01000F229F000F /* DistanceTextLadderView.swift */; };
+		GT01000C229F000C /* DistanceTextLadderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT01000D229F000D /* DistanceTextLadderService.swift */; };
+		GT01000A229F000A /* DistanceTextLadder.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT01000B229F000B /* DistanceTextLadder.swift */; };
 		423D23574E55079FA79F4509 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AC2F285D4669422FAAC308 /* RootView.swift */; };
 		A1000001229F0001 /* HTGApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000011229F0001 /* HTGApp.swift */; };
 		A1000002229F0002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000012229F0002 /* ContentView.swift */; };
@@ -127,6 +135,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		GT010019229F0019 /* DistanceTextLadderServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceTextLadderServiceTests.swift; sourceTree = "<group>"; };
+		GT010017229F0017 /* YardageTextBookPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageTextBookPageView.swift; sourceTree = "<group>"; };
+		GT010015229F0015 /* GolfModeFocusColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeFocusColumnView.swift; sourceTree = "<group>"; };
+		GT010013229F0013 /* GolfModeShotHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfModeShotHeaderView.swift; sourceTree = "<group>"; };
+		GT010011229F0011 /* DistanceTextLadderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceTextLadderRowView.swift; sourceTree = "<group>"; };
+		GT01000F229F000F /* DistanceTextLadderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceTextLadderView.swift; sourceTree = "<group>"; };
+		GT01000D229F000D /* DistanceTextLadderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceTextLadderService.swift; sourceTree = "<group>"; };
+		GT01000B229F000B /* DistanceTextLadder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceTextLadder.swift; sourceTree = "<group>"; };
 		A1000011229F0001 /* HTGApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTGApp.swift; sourceTree = "<group>"; };
 		A1000012229F0002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A1000013229F0003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -310,6 +326,7 @@
 				BG000015229F0005 /* BagSetupManagerTests.swift */,
 				J1000012229F0002 /* NicknameGeneratorTests.swift */,
 				Y1000013229F0003 /* YardageSheetServiceTests.swift */,
+				GT010019229F0019 /* DistanceTextLadderServiceTests.swift */,
 			);
 			path = HTGTests;
 			sourceTree = "<group>";
@@ -393,6 +410,7 @@
 				B1000015229F0005 /* StoredShotType.swift */,
 				B1000016229F0006 /* UserProfile.swift */,
 				GS01000F229F000F /* DistanceViewStyle.swift */,
+				GT01000B229F000B /* DistanceTextLadder.swift */,
 				B10000B1229F00A1 /* PreShotRoutineItem.swift */,
 				B10000B2229F00A2 /* SwingThought.swift */,
 				B1000017229F0007 /* ShotRecommendation.swift */,
@@ -419,6 +437,7 @@
 				J1000011229F0001 /* NicknameGenerator.swift */,
 				N1000011229F0001 /* NavigationCoordinator.swift */,
 				Y1000011229F0001 /* YardageSheetService.swift */,
+				GT01000D229F000D /* DistanceTextLadderService.swift */,
 				SY000020229F0020 /* Sync */,
 			);
 			path = Services;
@@ -606,6 +625,11 @@
 				H1000015229F0005 /* LadderClubMarkerView.swift */,
 				H1000016229F0006 /* YardageLadderView.swift */,
 				H1000017229F0007 /* YardageBookPageView.swift */,
+				GT010017229F0017 /* YardageTextBookPageView.swift */,
+				GT010015229F0015 /* GolfModeFocusColumnView.swift */,
+				GT010013229F0013 /* GolfModeShotHeaderView.swift */,
+				GT010011229F0011 /* DistanceTextLadderRowView.swift */,
+				GT01000F229F000F /* DistanceTextLadderView.swift */,
 				K1000013229F0003 /* GroupedLadderClubMarkerView.swift */,
 				K1000014229F0004 /* PageTitleView.swift */,
 				K1000015229F0005 /* ShotInfoHeaderView.swift */,
@@ -778,6 +802,7 @@
 				B1000005229F0005 /* StoredShotType.swift in Sources */,
 				B1000006229F0006 /* UserProfile.swift in Sources */,
 				GS01000B229F000B /* DistanceViewStyle.swift in Sources */,
+				GT01000A229F000A /* DistanceTextLadder.swift in Sources */,
 				B10000A1229F00A1 /* PreShotRoutineItem.swift in Sources */,
 				B10000A2229F00A2 /* SwingThought.swift in Sources */,
 				B1000007229F0007 /* ShotRecommendation.swift in Sources */,
@@ -815,6 +840,7 @@
 				M1000001229F0001 /* GTCColor.swift in Sources */,
 				S1000001229F0001 /* GTCCardStyle.swift in Sources */,
 				Y1000001229F0001 /* YardageSheetService.swift in Sources */,
+				GT01000C229F000C /* DistanceTextLadderService.swift in Sources */,
 				Y1000002229F0002 /* YardageSheetView.swift in Sources */,
 				H1000001229F0001 /* YardageDisplayView.swift in Sources */,
 				H1000002229F0002 /* ClubShotBadgeView.swift in Sources */,
@@ -823,6 +849,11 @@
 				H1000005229F0005 /* LadderClubMarkerView.swift in Sources */,
 				H1000006229F0006 /* YardageLadderView.swift in Sources */,
 				H1000007229F0007 /* YardageBookPageView.swift in Sources */,
+				GT010016229F0016 /* YardageTextBookPageView.swift in Sources */,
+				GT010014229F0014 /* GolfModeFocusColumnView.swift in Sources */,
+				GT010012229F0012 /* GolfModeShotHeaderView.swift in Sources */,
+				GT010010229F0010 /* DistanceTextLadderRowView.swift in Sources */,
+				GT01000E229F000E /* DistanceTextLadderView.swift in Sources */,
 				C100000B229F000B /* ClubDistanceResolver.swift in Sources */,
 				BG000001229F0001 /* BagYardageEstimator.swift in Sources */,
 				BG000003229F0003 /* BagSetupCatalog.swift in Sources */,
@@ -872,6 +903,7 @@
 				BG000005229F0005 /* BagSetupManagerTests.swift in Sources */,
 				J1000002229F0002 /* NicknameGeneratorTests.swift in Sources */,
 				Y1000003229F0003 /* YardageSheetServiceTests.swift in Sources */,
+				GT010018229F0018 /* DistanceTextLadderServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

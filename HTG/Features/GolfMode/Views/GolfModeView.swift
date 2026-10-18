@@ -27,12 +27,52 @@ struct GolfModeView: View {
         }
     }
 
+    @ViewBuilder
     private func yardageBookContent(viewModel: GolfModeViewModel) -> some View {
+        switch viewModel.viewStyle {
+        case .ladder: ladderPage(viewModel: viewModel)
+        case .text: textPage(viewModel: viewModel)
+        }
+    }
+
+    private func targetYardageBinding(viewModel: GolfModeViewModel) -> Binding<Int> {
+        Binding(
+            get: { viewModel.targetYardage },
+            set: { viewModel.setTargetYardage($0) }
+        )
+    }
+
+    private func textPage(viewModel: GolfModeViewModel) -> some View {
+        let ladder = viewModel.textLadder
+        return YardageTextBookPageView(
+            targetYardage: targetYardageBinding(viewModel: viewModel),
+            displayedClubShot: viewModel.displayedClubShot,
+            showResetIndicator: viewModel.showResetIndicator,
+            ladder: ladder,
+            recenterGeneration: viewModel.ladderRecenterGeneration,
+            clubs: viewModel.clubs,
+            allShotTypeNames: viewModel.shotTypeNamesInBag,
+            showPreShotRoutine: viewModel.showPreShotRoutine,
+            routineItems: viewModel.sortedRoutineItems,
+            showMantra: viewModel.showMantra,
+            mantraText: viewModel.mantraText,
+            matchingSwingThoughts: viewModel.matchingSwingThoughts,
+            onSelectRow: { viewModel.selectTextLadderRow($0) },
+            onSelectClubShot: { selection in
+                viewModel.selectClubShot(
+                    clubName: selection.clubName,
+                    shotTypeName: selection.shotTypeName,
+                    distance: selection.carryDistance
+                )
+            },
+            onReset: { viewModel.resetToRecommendation() },
+            onRefresh: { Task { await viewModel.refresh() } }
+        )
+    }
+
+    private func ladderPage(viewModel: GolfModeViewModel) -> some View {
         YardageBookPageView(
-            targetYardage: Binding(
-                get: { viewModel.targetYardage },
-                set: { viewModel.setTargetYardage($0) }
-            ),
+            targetYardage: targetYardageBinding(viewModel: viewModel),
             displayedClubShot: viewModel.displayedClubShot,
             showResetIndicator: viewModel.showResetIndicator,
             ladderMinYardage: viewModel.ladderMinYardage,
