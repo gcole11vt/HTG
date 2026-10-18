@@ -7,7 +7,10 @@ import SwiftData
 struct GolfModeViewModelTests {
 
     private func makeTestContainer() throws -> ModelContainer {
-        let schema = Schema([Club.self, ShotType.self, UserProfile.self, AppSettings.self])
+        let schema = Schema([
+            Club.self, ShotType.self, UserProfile.self, AppSettings.self,
+            PreShotRoutineItem.self, SwingThought.self
+        ])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
     }
@@ -35,6 +38,39 @@ struct GolfModeViewModelTests {
         await viewModel.refresh()
 
         #expect(viewModel.viewStyle == .ladder)
+    }
+
+    @Test("Matching swing thoughts shown by default")
+    func matchingSwingThoughtsShownByDefault() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        let profile = try await ProfileDataService(modelContext: container.mainContext).getOrCreateProfile()
+        try await SwingThoughtDataService(modelContext: container.mainContext)
+            .addSwingThought(to: profile, text: "Tempo", tagType: "all", tagValue: "")
+
+        await viewModel.refresh()
+
+        #expect(viewModel.matchingSwingThoughts.count == 1)
+    }
+
+    @Test("Matching swing thoughts hidden when Show in Golf Mode is off")
+    func matchingSwingThoughtsHiddenWhenToggleOff() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        let profile = try await ProfileDataService(modelContext: container.mainContext).getOrCreateProfile()
+        let service = SwingThoughtDataService(modelContext: container.mainContext)
+        try await service.addSwingThought(to: profile, text: "Tempo", tagType: "all", tagValue: "")
+        await viewModel.refresh()
+        #expect(viewModel.matchingSwingThoughts.count == 1)
+
+        try await service.setShowSwingThoughts(for: profile, visible: false)
+        await viewModel.refresh()
+
+        #expect(viewModel.matchingSwingThoughts.isEmpty)
     }
 
     // MARK: - Selection Tracking Tests

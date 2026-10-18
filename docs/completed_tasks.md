@@ -2,6 +2,13 @@
 
 ---
 
+**Task name:**  Profile: Golf Mode cleanup and Swing Thoughts toggle
+**Priority:**  P1
+**Status:**  Complete
+**What it is:**  (1) Removed the "Also used in Putting" footer that overlapped the View section in Golf Mode settings. (2) Added a "Show in Golf Mode" toggle for Swing Thoughts (`UserProfile.showSwingThoughts`, default on) that hides swing thoughts in the Ladder and Text views. Synced as an optional `show_swing_thoughts` column; the migration is in `docs/supabase/migrations/2026-10-18_add_show_swing_thoughts.sql` and is not yet applied to Supabase, so the setting is device-local until it is.
+
+---
+
 **Task name:**  Putting - Align Speed calibration wizard
 **Priority:**  P1
 **Status:**  Complete

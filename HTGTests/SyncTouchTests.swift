@@ -289,6 +289,10 @@ struct SyncTouchTests {
         profile.updatedAt = stale
         try await service.setShowMantra(for: profile, visible: false)
         #expect(profile.updatedAt > recent)
+
+        profile.updatedAt = stale
+        try await service.setShowSwingThoughts(for: profile, visible: false)
+        #expect(profile.updatedAt > recent)
     }
 
     // MARK: - AppSettingsService

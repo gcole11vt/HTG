@@ -256,6 +256,58 @@ struct SyncRecordMappingTests {
         #expect(profile.golfModeViewStyle == .ladder)
     }
 
+    @Test("UserProfileRecord round-trips show swing thoughts")
+    func userProfileRecordRoundTripsShowSwingThoughts() {
+        let profile = UserProfile()
+        profile.showSwingThoughts = false
+
+        let target = UserProfile()
+        UserProfileRecord(from: profile).apply(to: target)
+
+        #expect(target.showSwingThoughts == false)
+    }
+
+    @Test("UserProfileRecord encodes show_swing_thoughts")
+    func userProfileRecordEncodesShowSwingThoughts() throws {
+        let profile = UserProfile()
+        profile.showSwingThoughts = false
+
+        let data = try JSONEncoder().encode(UserProfileRecord(from: profile))
+        let json = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+
+        #expect(json["show_swing_thoughts"] as? Bool == false)
+    }
+
+    @Test("Legacy row without show_swing_thoughts decodes nil and keeps the local value")
+    func legacyRowKeepsLocalShowSwingThoughts() throws {
+        let json = """
+        {"id":"\(UUID().uuidString)","name":"Greg","handicap":8,"primary_shot_type":"Full",
+        "mantra":"Trust","show_pre_shot_routine":true,"show_mantra":true,"updated_at":1000000}
+        """
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        let record = try decoder.decode(UserProfileRecord.self, from: Data(json.utf8))
+        #expect(record.showSwingThoughts == nil)
+
+        let profile = UserProfile()
+        profile.showSwingThoughts = false
+        record.apply(to: profile)
+
+        #expect(profile.showSwingThoughts == false)
+    }
+
+    @Test("Payload stripper removes show_swing_thoughts")
+    func payloadStripperRemovesShowSwingThoughts() throws {
+        let record = UserProfileRecord(from: UserProfile())
+
+        let data = try SyncPayloadStripper.strip([record], columns: ["show_swing_thoughts"])
+        let rows = try #require(try JSONSerialization.jsonObject(with: data) as? [[String: Any]])
+
+        #expect(rows[0]["show_swing_thoughts"] == nil)
+        #expect(rows[0]["name"] != nil)
+        #expect(UserProfileRecord.optionalRemoteColumns.contains("show_swing_thoughts"))
+    }
+
     @Test("Payload stripper removes optional remote columns")
     func payloadStripperRemovesOptionalColumns() throws {
         let record = UserProfileRecord(from: UserProfile())

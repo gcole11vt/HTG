@@ -125,6 +125,15 @@ final class ProfileManager {
         }
     }
 
+    func setShowSwingThoughts(_ visible: Bool) async {
+        guard let profile else { return }
+        do {
+            try await swingThoughtService.setShowSwingThoughts(for: profile, visible: visible)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     // MARK: - Swing Thoughts
 
     func addSwingThought(text: String, tagType: String, tagValue: String) async {

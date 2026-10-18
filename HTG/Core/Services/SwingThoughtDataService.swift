@@ -99,4 +99,10 @@ final class SwingThoughtDataService: Sendable {
         profile.updatedAt = Date()
         try modelContext.save()
     }
+
+    func setShowSwingThoughts(for profile: UserProfile, visible: Bool) async throws {
+        profile.showSwingThoughts = visible
+        profile.updatedAt = Date()
+        try modelContext.save()
+    }
 }

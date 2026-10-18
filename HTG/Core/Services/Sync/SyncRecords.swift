@@ -89,9 +89,10 @@ struct UserProfileRecord: SyncRecord, Equatable {
     var updatedAt: Date
     /// Optional so legacy rows (and remotes lacking the column) decode, and nil is omitted on encode.
     var golfModeViewStyle: String?
+    var showSwingThoughts: Bool?
 
     /// Columns that may not exist on an un-migrated remote; pushes retry without them.
-    static var optionalRemoteColumns: Set<String> { ["golf_mode_view_style"] }
+    static var optionalRemoteColumns: Set<String> { ["golf_mode_view_style", "show_swing_thoughts"] }
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -103,6 +104,7 @@ struct UserProfileRecord: SyncRecord, Equatable {
         case showMantra = "show_mantra"
         case updatedAt = "updated_at"
         case golfModeViewStyle = "golf_mode_view_style"
+        case showSwingThoughts = "show_swing_thoughts"
     }
 }
 
@@ -251,7 +253,8 @@ extension UserProfileRecord {
             showPreShotRoutine: profile.showPreShotRoutine,
             showMantra: profile.showMantra,
             updatedAt: profile.updatedAt,
-            golfModeViewStyle: profile.golfModeViewStyleRawValue
+            golfModeViewStyle: profile.golfModeViewStyleRawValue,
+            showSwingThoughts: profile.showSwingThoughts
         )
     }
 
@@ -264,6 +267,9 @@ extension UserProfileRecord {
         profile.showMantra = showMantra
         if let golfModeViewStyle {
             profile.golfModeViewStyleRawValue = golfModeViewStyle
+        }
+        if let showSwingThoughts {
+            profile.showSwingThoughts = showSwingThoughts
         }
         profile.updatedAt = updatedAt
     }
