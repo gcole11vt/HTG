@@ -63,3 +63,7 @@ style (Ladder/Text) is stored on-device only: the app detects the missing
 `golf_mode_view_style` column (PostgREST `PGRST204`) and pushes profiles
 without it. Sync of everything else is unaffected. Once applied, the setting
 syncs with no app change.
+
+Likewise, until `2026-10-18_add_show_swing_thoughts.sql` is applied, the Golf
+Mode "Show in Golf Mode" toggle for Swing Thoughts stays on-device only (the app
+retries pushes without the `show_swing_thoughts` column).

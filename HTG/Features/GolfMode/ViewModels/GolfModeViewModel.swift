@@ -112,7 +112,7 @@ final class GolfModeViewModel {
     }
 
     var matchingSwingThoughts: [SwingThought] {
-        guard let profile, let clubShot = displayedClubShot else { return [] }
+        guard let profile, profile.showSwingThoughts, let clubShot = displayedClubShot else { return [] }
         return swingThoughtService.matchingSwingThoughts(
             from: profile,
             clubName: clubShot.clubName,

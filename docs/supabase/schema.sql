@@ -18,6 +18,7 @@ create table public.user_profiles (
   show_pre_shot_routine boolean not null default true,
   show_mantra boolean not null default true,
   golf_mode_view_style text not null default 'text',
+  show_swing_thoughts boolean not null default true,
   updated_at timestamptz not null
 );
 

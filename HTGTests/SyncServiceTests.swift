@@ -377,4 +377,38 @@ struct SyncServiceTests {
         let record = try JSONDecoder().decode(UserProfileRecord.self, from: data)
         #expect(record.golfModeViewStyle == "ladder")
     }
+
+    @Test("Pulled remote profile applies show swing thoughts")
+    func pulledProfileAppliesShowSwingThoughts() async throws {
+        let container = try makeTestContainer()
+        let store = FakeRemoteStore()
+        let service = makeService(container: container, store: store)
+        try store.seed(
+            [UserProfileRecord(id: UUID(), name: "Greg", handicap: 8, primaryShotType: "Full", mantra: "Trust your swing", showPreShotRoutine: true, showMantra: true, updatedAt: Date(), showSwingThoughts: false)],
+            into: "user_profiles"
+        )
+
+        try await service.syncAll()
+
+        let profiles = try container.mainContext.fetch(FetchDescriptor<UserProfile>())
+        #expect(profiles.first?.showSwingThoughts == false)
+    }
+
+    @Test("Local show swing thoughts change is pushed to the remote")
+    func localShowSwingThoughtsIsPushed() async throws {
+        let container = try makeTestContainer()
+        let store = FakeRemoteStore()
+        let service = makeService(container: container, store: store)
+        let profileService = ProfileDataService(modelContext: container.mainContext)
+        try await profileService.updateProfile(name: "Greg", handicap: 8)
+        let profile = try await profileService.getOrCreateProfile()
+        try await SwingThoughtDataService(modelContext: container.mainContext)
+            .setShowSwingThoughts(for: profile, visible: false)
+
+        try await service.syncAll()
+
+        let data = try #require(store.tables["user_profiles", default: [:]][profile.id])
+        let record = try JSONDecoder().decode(UserProfileRecord.self, from: data)
+        #expect(record.showSwingThoughts == false)
+    }
 }

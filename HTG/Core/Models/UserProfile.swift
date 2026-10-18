@@ -13,6 +13,8 @@ final class UserProfile {
     var updatedAt: Date = Date()
     /// Raw `DistanceViewStyle` value. Declaration default is required for lightweight migration.
     var golfModeViewStyleRawValue: String = DistanceViewStyle.defaultStyle.rawValue
+    /// Declaration default is required for lightweight migration.
+    var showSwingThoughts: Bool = true
     @Relationship(deleteRule: .cascade) var preShotRoutineItems: [PreShotRoutineItem]
     @Relationship(deleteRule: .cascade) var swingThoughts: [SwingThought]
 
@@ -24,6 +26,7 @@ final class UserProfile {
         mantra: String = "Trust your swing",
         showPreShotRoutine: Bool = true,
         showMantra: Bool = true,
+        showSwingThoughts: Bool = true,
         preShotRoutineItems: [PreShotRoutineItem] = [],
         swingThoughts: [SwingThought] = []
     ) {
@@ -34,6 +37,7 @@ final class UserProfile {
         self.mantra = mantra
         self.showPreShotRoutine = showPreShotRoutine
         self.showMantra = showMantra
+        self.showSwingThoughts = showSwingThoughts
         self.preShotRoutineItems = preShotRoutineItems
         self.swingThoughts = swingThoughts
     }

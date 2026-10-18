@@ -70,10 +70,6 @@ struct GolfModeSettingsView: View {
             .listRowSeparator(.hidden)
         } header: {
             GTCSectionEyebrow("View")
-        } footer: {
-            Text("Also used in Putting.")
-                .font(JournalTheme.handwritten(size: 12))
-                .foregroundStyle(GTCColor.secondary)
         }
     }
 
@@ -208,52 +204,73 @@ struct GolfModeSettingsView: View {
 
     private func swingThoughtsSection(profile: UserProfile) -> some View {
         Section {
-            if profile.swingThoughts.isEmpty {
-                Text("No swing thoughts yet")
-                    .font(JournalTheme.handwritten(size: 14))
-                    .foregroundStyle(GTCColor.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .gtcNeutralCard(fill: GTCColor.background)
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-            } else {
-                ForEach(profile.swingThoughts) { thought in
-                    HStack {
-                        Text(thought.text)
-                            .font(JournalTheme.handwritten(size: 15))
-                            .foregroundStyle(GTCColor.text)
-                        Spacer()
-                        GTCMetaChip(swingThoughtTagLabel(thought))
-                    }
-                    .gtcNeutralCard(fill: GTCColor.background)
-                }
-                .onDelete { indexSet in
-                    let thoughts = Array(profile.swingThoughts)
-                    for index in indexSet {
-                        Task { await profileManager.deleteSwingThought(thoughts[index]) }
-                    }
-                }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-            }
-
-            Button {
-                showingAddSwingThought = true
-            } label: {
-                HStack {
-                    Label("Add Swing Thought", systemImage: "plus")
-                        .font(JournalTheme.handwritten(size: 16))
-                        .foregroundStyle(GTCColor.primary)
-                    Spacer()
-                }
-                .gtcAccentCard(fill: GTCColor.background)
-            }
-            .buttonStyle(.plain)
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
+            swingThoughtsToggleRow(profile: profile)
+            swingThoughtRows(profile: profile)
+            addSwingThoughtButton
         } header: {
             GTCSectionEyebrow("Swing Thoughts")
         }
+    }
+
+    private func swingThoughtsToggleRow(profile: UserProfile) -> some View {
+        golfModeToggleRow(isOn: Binding(
+            get: { profile.showSwingThoughts },
+            set: { newValue in
+                Task { await profileManager.setShowSwingThoughts(newValue) }
+            }
+        ))
+        .gtcAccentCard(fill: GTCColor.background)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+    }
+
+    @ViewBuilder
+    private func swingThoughtRows(profile: UserProfile) -> some View {
+        if profile.swingThoughts.isEmpty {
+            Text("No swing thoughts yet")
+                .font(JournalTheme.handwritten(size: 14))
+                .foregroundStyle(GTCColor.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .gtcNeutralCard(fill: GTCColor.background)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        } else {
+            ForEach(profile.swingThoughts) { thought in
+                HStack {
+                    Text(thought.text)
+                        .font(JournalTheme.handwritten(size: 15))
+                        .foregroundStyle(GTCColor.text)
+                    Spacer()
+                    GTCMetaChip(swingThoughtTagLabel(thought))
+                }
+                .gtcNeutralCard(fill: GTCColor.background)
+            }
+            .onDelete { indexSet in
+                let thoughts = Array(profile.swingThoughts)
+                for index in indexSet {
+                    Task { await profileManager.deleteSwingThought(thoughts[index]) }
+                }
+            }
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
+    }
+
+    private var addSwingThoughtButton: some View {
+        Button {
+            showingAddSwingThought = true
+        } label: {
+            HStack {
+                Label("Add Swing Thought", systemImage: "plus")
+                    .font(JournalTheme.handwritten(size: 16))
+                    .foregroundStyle(GTCColor.primary)
+                Spacer()
+            }
+            .gtcAccentCard(fill: GTCColor.background)
+        }
+        .buttonStyle(.plain)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
     }
 
     private func swingThoughtTagLabel(_ thought: SwingThought) -> String {

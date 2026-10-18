@@ -201,4 +201,18 @@ struct SwingThoughtDataServiceTests {
         try await service.setShowMantra(for: profile, visible: false)
         #expect(profile.showMantra == false)
     }
+
+    @Test("Toggle swing thoughts visibility")
+    func toggleSwingThoughts() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+        let profileService = makeProfileService(container: container)
+        let profile = try await profileService.getOrCreateProfile()
+
+        #expect(profile.showSwingThoughts == true)
+        try await service.setShowSwingThoughts(for: profile, visible: false)
+        #expect(profile.showSwingThoughts == false)
+        try await service.setShowSwingThoughts(for: profile, visible: true)
+        #expect(profile.showSwingThoughts == true)
+    }
 }
