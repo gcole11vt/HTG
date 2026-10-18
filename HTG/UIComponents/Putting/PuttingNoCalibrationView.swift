@@ -24,6 +24,7 @@ struct PuttingNoCalibrationView: View {
         }
         .padding(.horizontal, JournalTheme.screenHorizontalPadding)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(GTCColor.background.ignoresSafeArea())
     }
 
     private var alignSpeedButton: some View {
