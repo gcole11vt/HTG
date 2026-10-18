@@ -4,6 +4,7 @@ import SwiftUI
 struct YardageDisplayView: View {
     @Binding var yardage: Int
     var onRefresh: (() -> Void)?
+    var voiceEntry: YardageVoiceEntryViewModel?
     @State private var entryText = ""
     @FocusState private var isEntryFocused: Bool
     @Environment(\.scenePhase) private var scenePhase
@@ -26,14 +27,53 @@ struct YardageDisplayView: View {
                     idleControls
                 }
             }
-            rangeHintCaption
-                .opacity(isEntryFocused ? 1 : 0)
-                .accessibilityHidden(!isEntryFocused)
+            captionLine
         }
         .onChange(of: scenePhase) { _, phase in
             if phase != .active { isEntryFocused = false }
+            // System permission prompts make the scene inactive; only a real background stops listening.
+            if phase == .background { voiceEntry?.cancel() }
         }
-        .onDisappear { isEntryFocused = false }
+        .onDisappear {
+            isEntryFocused = false
+            voiceEntry?.cancel()
+        }
+    }
+
+    private var captionLine: some View {
+        ZStack(alignment: .leading) {
+            rangeHintCaption
+                .opacity(isEntryFocused ? 1 : 0)
+                .accessibilityHidden(!isEntryFocused)
+            if !isEntryFocused, let status = voiceEntry?.statusText {
+                Text(status)
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundStyle(GTCColor.secondary)
+            }
+        }
+    }
+
+    private func micButton(_ voiceEntry: YardageVoiceEntryViewModel) -> some View {
+        let isActive = voiceEntry.isActive
+        return Button {
+            Task { await voiceEntry.toggleListening() }
+        } label: {
+            Image(systemName: isActive ? "mic.fill" : "mic")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(isActive ? GTCColor.warning : GTCColor.primary)
+                .frame(width: 32, height: 32)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(GTCColor.surface)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(isActive ? GTCColor.warning : GTCColor.border, lineWidth: 1)
+                        )
+                )
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(isActive ? "Stop listening" : "Say yardage")
     }
 
     private var yardageEntryField: some View {
@@ -61,6 +101,9 @@ struct YardageDisplayView: View {
 
     private var idleControls: some View {
         HStack(spacing: 6) {
+            if let voiceEntry {
+                micButton(voiceEntry)
+            }
             if let onRefresh {
                 yardageStepButton(symbol: "arrow.clockwise", action: onRefresh)
             }

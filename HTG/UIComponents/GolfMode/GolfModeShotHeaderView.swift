@@ -12,17 +12,25 @@ struct GolfModeShotHeaderView: View {
     var onRefresh: (() -> Void)?
 
     @State private var showingClubSelector = false
+    @State private var voiceEntry: YardageVoiceEntryViewModel?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             PageTitleView()
                 .padding(.top, 8)
 
-            YardageDisplayView(yardage: $targetYardage, onRefresh: onRefresh)
+            YardageDisplayView(yardage: $targetYardage, onRefresh: onRefresh, voiceEntry: voiceEntry)
 
             shotCard
         }
         .sheet(isPresented: $showingClubSelector) { clubSelectorSheet }
+        .onAppear {
+            if voiceEntry == nil {
+                voiceEntry = YardageVoiceEntryViewModel(listener: SpeechRecognitionYardageListener()) {
+                    targetYardage = $0
+                }
+            }
+        }
     }
 
     @ViewBuilder

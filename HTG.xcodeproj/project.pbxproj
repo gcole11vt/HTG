@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		YM0000000000000000000100 /* YardageSpokenParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = YM0000000000000000000200 /* YardageSpokenParser.swift */; };
+		YM0000000000000000000101 /* YardageVoiceEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = YM0000000000000000000201 /* YardageVoiceEntryViewModel.swift */; };
+		YM0000000000000000000102 /* YardageVoiceListening.swift in Sources */ = {isa = PBXBuildFile; fileRef = YM0000000000000000000202 /* YardageVoiceListening.swift */; };
+		YM0000000000000000000103 /* YardageSpokenParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = YM0000000000000000000203 /* YardageSpokenParserTests.swift */; };
+		YM0000000000000000000104 /* YardageVoiceEntryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = YM0000000000000000000204 /* YardageVoiceEntryViewModelTests.swift */; };
 		YE030001229F0001 /* YardageEntryValidationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = YE030002229F0002 /* YardageEntryValidationService.swift */; };
 		YE030003229F0003 /* YardageEntryValidationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = YE030004229F0004 /* YardageEntryValidationServiceTests.swift */; };
 		GT010018229F0018 /* DistanceTextLadderServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = GT010019229F0019 /* DistanceTextLadderServiceTests.swift */; };
@@ -137,6 +142,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		YM0000000000000000000200 /* YardageSpokenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSpokenParser.swift; sourceTree = "<group>"; };
+		YM0000000000000000000201 /* YardageVoiceEntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageVoiceEntryViewModel.swift; sourceTree = "<group>"; };
+		YM0000000000000000000202 /* YardageVoiceListening.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageVoiceListening.swift; sourceTree = "<group>"; };
+		YM0000000000000000000203 /* YardageSpokenParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSpokenParserTests.swift; sourceTree = "<group>"; };
+		YM0000000000000000000204 /* YardageVoiceEntryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageVoiceEntryViewModelTests.swift; sourceTree = "<group>"; };
 		YE030002229F0002 /* YardageEntryValidationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageEntryValidationService.swift; sourceTree = "<group>"; };
 		YE030004229F0004 /* YardageEntryValidationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageEntryValidationServiceTests.swift; sourceTree = "<group>"; };
 		GT010019229F0019 /* DistanceTextLadderServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceTextLadderServiceTests.swift; sourceTree = "<group>"; };
@@ -332,6 +342,8 @@
 				Y1000013229F0003 /* YardageSheetServiceTests.swift */,
 				GT010019229F0019 /* DistanceTextLadderServiceTests.swift */,
 				YE030004229F0004 /* YardageEntryValidationServiceTests.swift */,
+				YM0000000000000000000203 /* YardageSpokenParserTests.swift */,
+				YM0000000000000000000204 /* YardageVoiceEntryViewModelTests.swift */,
 			);
 			path = HTGTests;
 			sourceTree = "<group>";
@@ -444,6 +456,8 @@
 				Y1000011229F0001 /* YardageSheetService.swift */,
 				GT01000D229F000D /* DistanceTextLadderService.swift */,
 				YE030002229F0002 /* YardageEntryValidationService.swift */,
+				YM0000000000000000000200 /* YardageSpokenParser.swift */,
+				YM0000000000000000000202 /* YardageVoiceListening.swift */,
 				SY000020229F0020 /* Sync */,
 			);
 			path = Services;
@@ -544,6 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				D1000014229F0004 /* GolfModeViewModel.swift */,
+				YM0000000000000000000201 /* YardageVoiceEntryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -848,6 +863,9 @@
 				Y1000001229F0001 /* YardageSheetService.swift in Sources */,
 				GT01000C229F000C /* DistanceTextLadderService.swift in Sources */,
 				YE030001229F0001 /* YardageEntryValidationService.swift in Sources */,
+				YM0000000000000000000100 /* YardageSpokenParser.swift in Sources */,
+				YM0000000000000000000101 /* YardageVoiceEntryViewModel.swift in Sources */,
+				YM0000000000000000000102 /* YardageVoiceListening.swift in Sources */,
 				Y1000002229F0002 /* YardageSheetView.swift in Sources */,
 				H1000001229F0001 /* YardageDisplayView.swift in Sources */,
 				H1000002229F0002 /* ClubShotBadgeView.swift in Sources */,
@@ -912,6 +930,8 @@
 				Y1000003229F0003 /* YardageSheetServiceTests.swift in Sources */,
 				GT010018229F0018 /* DistanceTextLadderServiceTests.swift in Sources */,
 				YE030003229F0003 /* YardageEntryValidationServiceTests.swift in Sources */,
+				YM0000000000000000000103 /* YardageSpokenParserTests.swift in Sources */,
+				YM0000000000000000000104 /* YardageVoiceEntryViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
