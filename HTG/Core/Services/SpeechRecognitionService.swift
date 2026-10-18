@@ -31,6 +31,8 @@ final class SpeechRecognitionService {
     var onDistanceConfirmed: (@MainActor (Int) -> Void)?
     var onDeleteRequested: (@MainActor () -> Void)?
     var onStopRequested: (@MainActor () -> Void)?
+    /// Additive hook (default nil, Range Mode unaffected): every partial/final transcript.
+    var onTranscriptUpdate: (@MainActor (String) -> Void)?
 
     private var silenceTimerTask: Task<Void, Never>?
     private let synthesizer = AVSpeechSynthesizer()
@@ -155,24 +157,42 @@ final class SpeechRecognitionService {
         isListening = true
         recognitionTaskStartedAt = Date()
 
-        recognitionTask = speechRecognizer.recognitionTask(with: request) { [weak self] result, error in
+        recognitionTask = speechRecognizer.recognitionTask(
+            with: request,
+            resultHandler: Self.makeResultHandler(for: self)
+        )
+    }
+
+    /// Built in a nonisolated context on purpose: Speech invokes the handler on a background
+    /// queue, and a closure formed inside this @MainActor type would inherit MainActor isolation
+    /// and trap at runtime. Only Sendable values cross into the MainActor hop.
+    private nonisolated static func makeResultHandler(
+        for service: SpeechRecognitionService
+    ) -> @Sendable (SFSpeechRecognitionResult?, Error?) -> Void {
+        { [weak service] result, error in
+            let text = result?.bestTranscription.formattedString
+            let isFinal = result?.isFinal == true
+            let hasError = error != nil
             Task { @MainActor in
-                guard let self = self else { return }
-
-                if let result = result {
-                    self.lastRecognizedText = result.bestTranscription.formattedString
-                    self.lastExtractedDistance = self.extractDistance(from: self.lastRecognizedText)
-                    self.rapidTaskFailureCount = 0
-
-                    if self.continuousMode {
-                        self.resetSilenceTimer()
-                    }
-                }
-
-                if error != nil || result?.isFinal == true {
-                    await self.handleRecognitionTaskEnded()
-                }
+                await service?.handleRecognitionResult(text: text, isFinal: isFinal, hasError: hasError)
             }
+        }
+    }
+
+    private func handleRecognitionResult(text: String?, isFinal: Bool, hasError: Bool) async {
+        if let text {
+            lastRecognizedText = text
+            lastExtractedDistance = extractDistance(from: text)
+            rapidTaskFailureCount = 0
+            onTranscriptUpdate?(text)
+
+            if continuousMode {
+                resetSilenceTimer()
+            }
+        }
+
+        if hasError || isFinal {
+            await handleRecognitionTaskEnded()
         }
     }
 

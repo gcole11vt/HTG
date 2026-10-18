@@ -100,3 +100,10 @@
 **What it is:**  The big target yardage number in the Golf Mode header (shared by the Ladder and Text pages) is now an inline text field. One tap raises a blank number pad (the old value shows as a faint hint) and the +/- /refresh buttons swap to Cancel and Go; no more sheet or second tap. Go is enabled only for 50-400 yards, with a range caption that turns to a warning at three out-of-range digits. Behavior change: out-of-range entries are now rejected instead of silently clamped. Losing focus (tab switch, backgrounding) discards the entry. Validation lives in `YardageEntryValidationService` (range shared with `GolfModeViewModel`, reusable for Putting). 14 new unit tests. Not yet verified visually in the simulator.
 
 ---
+
+---
+
+**Task name:**  Golf Mode: Yardage microphone button
+**Priority:** P1
+**Status:** Complete
+**What it is:**  A mic button sits immediately left of the Reset (refresh) button in the Golf Mode yardage row (Ladder and Text pages). Tap it, say a yardage ("150", "one fifty", "one hundred fifty yards", "two twenty five") and it fills in the target after a short pause so later words are not cut off; tap again to stop. Only 50-400 is accepted (via `YardageEntryValidationService`); it times out after 8 seconds of nothing usable and shows a status line for denied permission or start failure. It reuses Range Mode's `SpeechRecognitionService` through `SpeechRecognitionYardageListener` plus an additive, default-nil `onTranscriptUpdate` callback, so Range Mode is unchanged. Parsing is in `YardageSpokenParser`, state in `YardageVoiceEntryViewModel` (start guard, cancel-during-start handling). Listening is cancelled on tab change/backgrounding. Unit-tested; not yet verified on a device with a real microphone.
