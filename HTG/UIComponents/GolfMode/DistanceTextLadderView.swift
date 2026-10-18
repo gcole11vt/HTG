@@ -26,14 +26,6 @@ struct DistanceTextLadderView: View {
             .scrollIndicators(.visible)
             .task(id: scrollKey) { await recenter(proxy) }
         }
-        .background(
-            RoundedRectangle(cornerRadius: JournalTheme.cardCornerRadius)
-                .fill(GTCColor.background)
-                .overlay(
-                    RoundedRectangle(cornerRadius: JournalTheme.cardCornerRadius)
-                        .stroke(GTCColor.border, lineWidth: 1)
-                )
-        )
     }
 
     private var rowStack: some View {
