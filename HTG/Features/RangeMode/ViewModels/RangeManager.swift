@@ -17,6 +17,11 @@ final class RangeManager {
     var sessionShotType: ShotType?
     var isCustomShotType: Bool = false
 
+    var saveCarryDistanceText: String = ""
+    var saveValidationMessage: String?
+
+    static let missingCarryDistanceMessage = "Enter a carry distance greater than 0 to save."
+
     var currentCarryDistance: Int? {
         guard let shotType = sessionShotType, shotType.carryDistance > 0 else { return nil }
         return shotType.carryDistance
@@ -89,6 +94,35 @@ final class RangeManager {
         sessionClub = nil
         sessionShotType = nil
         isCustomShotType = false
+        resetSaveDraft()
+    }
+
+    func prepareSaveSheet() {
+        saveCarryDistanceText = defaultSaveCarryDistanceText()
+        saveValidationMessage = nil
+    }
+
+    func updateSaveCarryDistanceText(_ text: String) {
+        saveCarryDistanceText = text
+        saveValidationMessage = nil
+    }
+
+    @discardableResult
+    func attemptSaveSession() async -> Bool {
+        guard let distance = parsedCarryDistance(from: saveCarryDistanceText) else {
+            saveValidationMessage = Self.missingCarryDistanceMessage
+            return false
+        }
+        errorMessage = nil
+        await saveSession(carryDistance: distance)
+        guard errorMessage == nil else { return false }
+        resetSaveDraft()
+        return true
+    }
+
+    private func resetSaveDraft() {
+        saveCarryDistanceText = ""
+        saveValidationMessage = nil
     }
 
     func saveSession(carryDistance: Int) async {

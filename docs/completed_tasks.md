@@ -2,6 +2,13 @@
 
 ---
 
+**Task name:**  Range session: Save button when no entry
+**Priority:**  P1
+**Status:**  Complete
+**What it is:**  (2026-10-18) Fixed the Range save sheet's Save button staying greyed out on first presentation, which was caused by stale view-local state. The draft now lives in `RangeManager`, and Save is always enabled. An empty or invalid carry distance shows an inline error and does not save. Persistence errors now appear inside the sheet instead of the sheet closing silently.
+
+---
+
 **Task name:**  Putting: Rename position
 **Priority:**  P2
 **Status:**  Complete
