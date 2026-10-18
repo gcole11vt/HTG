@@ -84,3 +84,10 @@
 **What it is:**  Pre-Shot Routine, Mantra and Swing Thoughts moved off the Profile page into a new pushed "Golf Mode" settings screen (`GolfModeSettingsView`, with the Add Swing Thought sheet extracted to `AddSwingThoughtSheetView`). The panel gained a View option (Ladder | Text) backed by the reusable `DistanceViewStyle` enum, stored on `UserProfile` (`golfModeViewStyleRawValue`, default Text) and synced as optional `golf_mode_view_style`. Golf Mode still renders the Ladder until the Text view task ships. Pushes tolerate a remote without the new column (PGRST204 retry via `SyncPayloadStripper`); the SQL is committed in `docs/supabase/migrations/` but not applied, so the setting is device-local until it is.
 
 ---
+
+**Task name:**  Golf Mode: Text view
+**Priority:** P1
+**Status:** Complete
+**What it is:**  Golf Mode now honors the View setting (Text is the default). The Text page shows a fixed header (title, target yardage, shot card) above a scrolling text ladder of the whole bag in the same order as Clubs > Print > By Yardage (distance, club, shot type), with Mantra, Pre-Shot Routine and Swing Thoughts in a fixed right column. The row nearest the target is bold, the selected/recommended row is tinted, and a dashed marker shows the target between rows when there is no exact match. Tapping a row selects that shot; changing the yardage, refresh and returning to the tab re-centre the list. Ladder math lives in the unit-agnostic `DistanceTextLadderService` (yards now, feet reusable for Putting mode); the shared header was extracted to `GolfModeShotHeaderView`. The "coming soon" note was removed from Golf Mode settings. 20 new unit tests. Not yet verified visually in the simulator.
+
+---

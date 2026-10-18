@@ -19,31 +19,22 @@ struct YardageBookPageView: View {
     var onReset: (() -> Void)?
     var onRefresh: (() -> Void)?
 
-    @State private var showingClubSelector = false
-
     var body: some View {
         ZStack {
             GTCColor.background.ignoresSafeArea()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
-                    PageTitleView()
-                        .padding(.top, 8)
-
-                    YardageDisplayView(yardage: $targetYardage, onRefresh: onRefresh)
-
-                    if let clubShot = displayedClubShot {
-                        ShotInfoHeaderView(
-                            carryDistance: clubShot.carryDistance,
-                            clubName: clubShot.clubName,
-                            shotTypeName: clubShot.shotTypeName,
-                            isRecommendationActive: !showResetIndicator,
-                            onReset: onReset
-                        )
-                        .onTapGesture {
-                            showingClubSelector = true
-                        }
-                    }
+                    GolfModeShotHeaderView(
+                        targetYardage: $targetYardage,
+                        displayedClubShot: displayedClubShot,
+                        showResetIndicator: showResetIndicator,
+                        clubs: clubs,
+                        allShotTypeNames: allShotTypeNames,
+                        onSelectClubShot: onSelectClubShot,
+                        onReset: onReset,
+                        onRefresh: onRefresh
+                    )
 
                     YardageLadderView(
                         targetYardage: targetYardage,
@@ -75,18 +66,6 @@ struct YardageBookPageView: View {
                 .animation(.easeInOut(duration: 0.2), value: showResetIndicator)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .sheet(isPresented: $showingClubSelector) {
-            if let clubShot = displayedClubShot {
-                ClubSelectorSheetView(
-                    targetYardage: targetYardage,
-                    clubs: clubs,
-                    currentSelection: clubShot,
-                    allShotTypeNames: allShotTypeNames
-                ) { selection in
-                    onSelectClubShot?(selection)
-                }
-            }
         }
     }
 }

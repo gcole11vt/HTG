@@ -63,10 +63,6 @@ struct GolfModeSettingsView: View {
                     }
                 }
                 .pickerStyle(.segmented)
-
-                Text("Text view is coming soon — Golf Mode shows the Ladder until then.")
-                    .font(JournalTheme.handwritten(size: 14))
-                    .foregroundStyle(GTCColor.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .gtcAccentCard(fill: GTCColor.background)

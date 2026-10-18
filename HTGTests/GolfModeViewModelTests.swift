@@ -493,4 +493,88 @@ struct GolfModeViewModelTests {
         #expect(entries.count == 1)
         #expect(entries.first?.shotTypeName == "Full")
     }
+
+    // MARK: - Text Ladder Tests
+
+    private func makeLoadedViewModel(in container: ModelContainer) async -> GolfModeViewModel {
+        _ = createClub(name: "Driver", shotTypes: [("Tee", 250)], sortOrder: 0, in: container.mainContext)
+        _ = createClub(name: "7 Iron", shotTypes: [("Full", 150)], sortOrder: 1, in: container.mainContext)
+        _ = createClub(name: "8 Iron", shotTypes: [("Full", 140)], sortOrder: 2, in: container.mainContext)
+        _ = createClub(name: "Pitching Wedge", shotTypes: [("Full", 120)], sortOrder: 3, in: container.mainContext)
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        return viewModel
+    }
+
+    @Test("Text ladder lists the whole bag, not only the ladder range")
+    func textLadderListsWholeBag() async throws {
+        let container = try makeTestContainer()
+        let viewModel = await makeLoadedViewModel(in: container)
+        #expect(viewModel.textLadder.rows.count == 4)
+        #expect(viewModel.ladderEntries.count == 2)
+    }
+
+    @Test("Text ladder anchors on the target yardage")
+    func textLadderAnchorsOnTarget() async throws {
+        let container = try makeTestContainer()
+        let viewModel = await makeLoadedViewModel(in: container)
+        viewModel.setTargetYardage(122)
+        #expect(viewModel.textLadder.anchorRowID == "Pitching Wedge-Full")
+        #expect(viewModel.textLadder.targetDistance == 122)
+    }
+
+    @Test("Text ladder flags the displayed club shot")
+    func textLadderFlagsDisplayed() async throws {
+        let container = try makeTestContainer()
+        let viewModel = await makeLoadedViewModel(in: container)
+        #expect(viewModel.textLadder.rows.filter(\.isSelected).map(\.id) == ["7 Iron-Full"])
+        viewModel.selectClubShot(clubName: "8 Iron", shotTypeName: "Full", distance: 140)
+        #expect(viewModel.textLadder.rows.filter(\.isSelected).map(\.id) == ["8 Iron-Full"])
+    }
+
+    @Test("Selecting a text ladder row selects that club shot")
+    func selectingTextLadderRow() async throws {
+        let container = try makeTestContainer()
+        let viewModel = await makeLoadedViewModel(in: container)
+        let row = try #require(viewModel.textLadder.rows.first { $0.id == "8 Iron-Full" })
+        viewModel.selectTextLadderRow(row)
+        #expect(viewModel.displayedClubShot?.clubName == "8 Iron")
+        #expect(viewModel.displayedClubShot?.shotTypeName == "Full")
+        #expect(viewModel.displayedClubShot?.carryDistance == 140)
+        #expect(viewModel.showResetIndicator)
+    }
+
+    @Test("Recenter generation bumps on target change and refresh only")
+    func recenterGenerationBumps() async throws {
+        let container = try makeTestContainer()
+        let viewModel = await makeLoadedViewModel(in: container)
+        let start = viewModel.ladderRecenterGeneration
+        viewModel.setTargetYardage(151)
+        #expect(viewModel.ladderRecenterGeneration == start + 1)
+        viewModel.selectClubShot(clubName: "8 Iron", shotTypeName: "Full", distance: 140)
+        #expect(viewModel.ladderRecenterGeneration == start + 1)
+        viewModel.resetToRecommendation()
+        #expect(viewModel.ladderRecenterGeneration == start + 1)
+        await viewModel.refresh()
+        #expect(viewModel.ladderRecenterGeneration == start + 2)
+    }
+
+    @Test("Tab-entry load bumps the recenter generation")
+    func tabEntryBumpsGeneration() async throws {
+        let container = try makeTestContainer()
+        let viewModel = await makeLoadedViewModel(in: container)
+        let start = viewModel.ladderRecenterGeneration
+        await viewModel.ensureDefaultsThenLoadClubs()
+        #expect(viewModel.ladderRecenterGeneration == start + 1)
+    }
+
+    @Test("Text ladder reflects bag changes after refresh")
+    func textLadderReflectsBagChanges() async throws {
+        let container = try makeTestContainer()
+        let viewModel = await makeLoadedViewModel(in: container)
+        _ = createClub(name: "9 Iron", shotTypes: [("Full", 130)], sortOrder: 4, in: container.mainContext)
+        try container.mainContext.save()
+        await viewModel.refresh()
+        #expect(viewModel.textLadder.rows.contains { $0.id == "9 Iron-Full" })
+    }
 }

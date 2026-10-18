@@ -25,6 +25,9 @@ final class GolfModeViewModel {
     var yardageRangePercentage: Int = 15
     private var primaryShotTypeName: String = "Full"
 
+    /// Bump = "scroll the text ladder back to the target".
+    private(set) var ladderRecenterGeneration = 0
+
     // Computed properties for selection
     var recommendedClubShot: SelectedClubShot? {
         guard let rec = recommendations.first else { return nil }
@@ -65,6 +68,17 @@ final class GolfModeViewModel {
         return grouped.map { distance, group in
             GroupedLadderEntry(carryDistance: distance, entries: group)
         }.sorted { $0.carryDistance > $1.carryDistance }
+    }
+
+    /// Whole-bag text ladder, matching the printed By Yardage card.
+    var textLadder: DistanceTextLadder {
+        DistanceTextLadderService.ladder(
+            items: DistanceTextLadderService.golfItems(from: clubs),
+            targetDistance: targetYardage,
+            selectedItemID: displayedClubShot.map {
+                DistanceTextLadderService.golfItemID(clubName: $0.clubName, shotTypeName: $0.shotTypeName)
+            }
+        )
     }
 
     init(modelContext: ModelContext) {
@@ -116,6 +130,7 @@ final class GolfModeViewModel {
             errorMessage = error.localizedDescription
         }
         await loadClubs()
+        ladderRecenterGeneration += 1
     }
 
     /// Reloads the bag and app settings from the store on demand (after bag edits
@@ -124,6 +139,7 @@ final class GolfModeViewModel {
     func refresh() async {
         resetToRecommendation()
         await loadClubs()
+        ladderRecenterGeneration += 1
     }
 
     func loadClubs() async {
@@ -150,6 +166,7 @@ final class GolfModeViewModel {
         targetYardage = min(max(yardage, minTargetYardage), maxTargetYardage)
         resetToRecommendation()
         updateRecommendations()
+        ladderRecenterGeneration += 1
     }
 
     func setFilter(_ filter: ShotTypeFilter) {
@@ -184,6 +201,16 @@ final class GolfModeViewModel {
             clubName: clubName,
             shotTypeName: shotTypeName,
             carryDistance: distance
+        )
+    }
+
+    /// Golf-specific mapping: golf rows carry club name and shot type as their labels.
+    /// Other modes (e.g. Putting) must supply their own selection mapping.
+    func selectTextLadderRow(_ row: DistanceTextLadderRow) {
+        selectClubShot(
+            clubName: row.item.primaryLabel,
+            shotTypeName: row.item.secondaryLabel,
+            distance: row.item.distance
         )
     }
 
