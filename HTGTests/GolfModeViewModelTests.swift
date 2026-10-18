@@ -23,6 +23,20 @@ struct GolfModeViewModelTests {
         return club
     }
 
+    @Test("View style reflects the profile's Golf Mode setting")
+    func viewStyleReflectsProfileSetting() async throws {
+        let container = try makeTestContainer()
+        _ = createClub(name: "7 Iron", shotTypes: [("Full", 150)], sortOrder: 0, in: container.mainContext)
+        let viewModel = GolfModeViewModel(modelContext: container.mainContext)
+        await viewModel.loadClubs()
+        #expect(viewModel.viewStyle == .text)
+
+        try await ProfileDataService(modelContext: container.mainContext).updateGolfModeViewStyle(.ladder)
+        await viewModel.refresh()
+
+        #expect(viewModel.viewStyle == .ladder)
+    }
+
     // MARK: - Selection Tracking Tests
 
     @Test("Initially uses recommendation as displayed club shot")

@@ -204,6 +204,83 @@ struct SyncRecordMappingTests {
         #expect(record.clubID == club.id)
     }
 
+    @Test("UserProfileRecord round-trips Golf Mode view style without bumping updatedAt")
+    func userProfileRecordRoundTripsViewStyle() {
+        let timestamp = Date(timeIntervalSince1970: 1_000_000)
+        let profile = UserProfile()
+        profile.golfModeViewStyle = .ladder
+        profile.updatedAt = timestamp
+
+        let record = UserProfileRecord(from: profile)
+        let target = UserProfile()
+        record.apply(to: target)
+
+        #expect(target.golfModeViewStyle == .ladder)
+        #expect(target.updatedAt == timestamp)
+    }
+
+    @Test("UserProfileRecord encodes golf_mode_view_style")
+    func userProfileRecordEncodesViewStyle() throws {
+        let profile = UserProfile()
+        profile.golfModeViewStyle = .ladder
+
+        let data = try JSONEncoder().encode(UserProfileRecord(from: profile))
+        let json = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+
+        #expect(json["golf_mode_view_style"] as? String == "ladder")
+    }
+
+    @Test("UserProfileRecord decodes a legacy row without golf_mode_view_style")
+    func userProfileRecordDecodesLegacyRow() throws {
+        let json = """
+        {"id":"\(UUID().uuidString)","name":"Greg","handicap":8,"primary_shot_type":"Full",
+        "mantra":"Trust","show_pre_shot_routine":true,"show_mantra":true,"updated_at":1000000}
+        """
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+
+        let record = try decoder.decode(UserProfileRecord.self, from: Data(json.utf8))
+
+        #expect(record.golfModeViewStyle == nil)
+    }
+
+    @Test("Applying a record with nil view style leaves the local value untouched")
+    func applyingNilViewStyleKeepsLocalValue() {
+        let profile = UserProfile()
+        profile.golfModeViewStyle = .ladder
+        var record = UserProfileRecord(from: UserProfile())
+        record.golfModeViewStyle = nil
+
+        record.apply(to: profile)
+
+        #expect(profile.golfModeViewStyle == .ladder)
+    }
+
+    @Test("Payload stripper removes optional remote columns")
+    func payloadStripperRemovesOptionalColumns() throws {
+        let record = UserProfileRecord(from: UserProfile())
+
+        let data = try SyncPayloadStripper.strip([record], columns: ["golf_mode_view_style"])
+        let rows = try #require(try JSONSerialization.jsonObject(with: data) as? [[String: Any]])
+
+        #expect(rows.count == 1)
+        #expect(rows[0]["golf_mode_view_style"] == nil)
+        #expect(rows[0]["name"] != nil)
+        #expect(UserProfileRecord.optionalRemoteColumns.contains("golf_mode_view_style"))
+    }
+
+    @Test("Missing-column detection matches PGRST204 naming an optional column")
+    func missingColumnDetection() {
+        let message = "Could not find the 'golf_mode_view_style' column of 'user_profiles' in the schema cache"
+        let columns: Set<String> = ["golf_mode_view_style"]
+
+        #expect(SyncPayloadStripper.isMissingColumnError(code: "PGRST204", message: message, columns: columns))
+        #expect(!SyncPayloadStripper.isMissingColumnError(code: "PGRST204", message: "Could not find the 'other' column", columns: columns))
+        #expect(!SyncPayloadStripper.isMissingColumnError(code: "42501", message: message, columns: columns))
+        #expect(!SyncPayloadStripper.isMissingColumnError(code: nil, message: message, columns: columns))
+        #expect(!SyncPayloadStripper.isMissingColumnError(code: "PGRST204", message: message, columns: []))
+    }
+
     @Test("Records encode with snake_case keys")
     func recordsEncodeWithSnakeCaseKeys() throws {
         let club = Club(name: "7 Iron", sortOrder: 1)

@@ -52,3 +52,14 @@ propagate via the `sync_deletions` table).
   `SyncTombstone` row which is cleared once pushed.
 - `lastSyncedAt` is stored per Supabase user in `UserDefaults`, so switching
   accounts triggers a full resync.
+
+## Migrations
+
+Fresh projects get everything from `schema.sql`. Existing projects should apply
+the files in `docs/supabase/migrations/` in date order via the SQL Editor.
+
+Until `2026-10-17_add_golf_mode_view_style.sql` is applied, the Golf Mode View
+style (Ladder/Text) is stored on-device only: the app detects the missing
+`golf_mode_view_style` column (PostgREST `PGRST204`) and pushes profiles
+without it. Sync of everything else is unaffected. Once applied, the setting
+syncs with no app change.

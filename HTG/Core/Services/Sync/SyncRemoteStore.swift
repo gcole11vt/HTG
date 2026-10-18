@@ -49,7 +49,21 @@ final class SupabaseRemoteStore: SyncRemoteStore {
 
     func upsert<R: SyncRecord>(_ records: [R], into table: String) async throws {
         guard !records.isEmpty else { return }
-        try await client.from(table).upsert(records).execute()
+        do {
+            try await client.from(table).upsert(records).execute()
+        } catch let error as PostgrestError
+            where SyncPayloadStripper.isMissingColumnError(
+                code: error.code, message: error.message, columns: R.optionalRemoteColumns
+            ) {
+            // Remote predates an optional column: retry once without it.
+            let data = try SyncPayloadStripper.strip(
+                records,
+                columns: R.optionalRemoteColumns,
+                encoder: PostgrestClient.Configuration.jsonEncoder
+            )
+            let rows = try JSONDecoder().decode([AnyJSON].self, from: data)
+            try await client.from(table).upsert(rows).execute()
+        }
     }
 
     func deleteRows(ids: [UUID], from table: String) async throws {
