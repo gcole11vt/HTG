@@ -2,6 +2,13 @@
 
 ---
 
+**Task name:**  Putting - Align Speed calibration wizard
+**Priority:**  P1
+**Status:**  Complete
+**What it is:**  Step-through wizard (Putting tab) that walks backswing positions 1 to N (3-8, default 5, set at setup). Each position takes one or more rolled putt distances in feet, which are averaged; short rolls are flagged. A review screen precedes the save, and saving activates the calibration so it drives putt suggestions. Available from the no-calibration state and as a recalibrate button on the Putting page. Calibrations are device-only.
+
+---
+
 **Task name:**  Range Mode - Voice input crash/freeze fix and yardage read-back
 **Priority:**  P1
 **Status:**  Complete

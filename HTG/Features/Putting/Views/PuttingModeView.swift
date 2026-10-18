@@ -6,6 +6,7 @@ struct PuttingModeView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @State private var viewModel: PuttingModeViewModel?
+    @State private var wizardPositionCount: Int?
 
     var body: some View {
         content
@@ -16,6 +17,20 @@ struct PuttingModeView: View {
                 guard navigationCoordinator.selectedTab == .putting else { return }
                 await viewModel?.load()
             }
+            .fullScreenCover(isPresented: wizardBinding) {
+                AlignSpeedView(initialPositionCount: wizardPositionCount ?? PuttingCalibrationRules.defaultPositionCount) {
+                    Task { await viewModel?.calibrationSaved() }
+                }
+            }
+    }
+
+    private var wizardBinding: Binding<Bool> {
+        Binding(get: { wizardPositionCount != nil }, set: { if !$0 { wizardPositionCount = nil } })
+    }
+
+    private func startAlignSpeed() {
+        guard let viewModel else { return }
+        Task { wizardPositionCount = await viewModel.initialPositionCountForWizard() }
     }
 
     @ViewBuilder
@@ -24,7 +39,7 @@ struct PuttingModeView: View {
             if viewModel.hasCalibration {
                 puttingPage(viewModel: viewModel)
             } else {
-                PuttingNoCalibrationView()
+                PuttingNoCalibrationView(onAlignSpeed: startAlignSpeed)
             }
         } else {
             ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -42,7 +57,8 @@ struct PuttingModeView: View {
             textLadder: viewModel.textLadder,
             groupedLadderEntries: viewModel.groupedLadderEntries,
             ladderMaxFeet: viewModel.ladderMaxFeet,
-            recenterGeneration: viewModel.recenterGeneration
+            recenterGeneration: viewModel.recenterGeneration,
+            onAlignSpeed: startAlignSpeed
         )
     }
 }

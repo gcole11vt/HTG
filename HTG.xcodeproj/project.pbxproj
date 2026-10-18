@@ -136,6 +136,12 @@
 		Y1000001229F0001 /* YardageSheetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000011229F0001 /* YardageSheetService.swift */; };
 		Y1000002229F0002 /* YardageSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000012229F0002 /* YardageSheetView.swift */; };
 		Y1000003229F0003 /* YardageSheetServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = Y1000013229F0003 /* YardageSheetServiceTests.swift */; };
+		AS070001B000000000000000 /* AlignSpeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AS070001F000000000000000 /* AlignSpeedManager.swift */; };
+		AS070002B000000000000000 /* AlignSpeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AS070002F000000000000000 /* AlignSpeedView.swift */; };
+		AS070003B000000000000000 /* AlignSpeedSetupStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AS070003F000000000000000 /* AlignSpeedSetupStepView.swift */; };
+		AS070004B000000000000000 /* AlignSpeedPositionStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AS070004F000000000000000 /* AlignSpeedPositionStepView.swift */; };
+		AS070005B000000000000000 /* AlignSpeedReviewStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AS070005F000000000000000 /* AlignSpeedReviewStepView.swift */; };
+		AS070006B000000000000000 /* AlignSpeedManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AS070006F000000000000000 /* AlignSpeedManagerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -288,6 +294,12 @@
 		Y1000011229F0001 /* YardageSheetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetService.swift; sourceTree = "<group>"; };
 		Y1000012229F0002 /* YardageSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetView.swift; sourceTree = "<group>"; };
 		Y1000013229F0003 /* YardageSheetServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YardageSheetServiceTests.swift; sourceTree = "<group>"; };
+		AS070001F000000000000000 /* AlignSpeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignSpeedManager.swift; sourceTree = "<group>"; };
+		AS070002F000000000000000 /* AlignSpeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignSpeedView.swift; sourceTree = "<group>"; };
+		AS070003F000000000000000 /* AlignSpeedSetupStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignSpeedSetupStepView.swift; sourceTree = "<group>"; };
+		AS070004F000000000000000 /* AlignSpeedPositionStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignSpeedPositionStepView.swift; sourceTree = "<group>"; };
+		AS070005F000000000000000 /* AlignSpeedReviewStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignSpeedReviewStepView.swift; sourceTree = "<group>"; };
+		AS070006F000000000000000 /* AlignSpeedManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignSpeedManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,6 +332,7 @@
 			isa = PBXGroup;
 			children = (
 				PU060010F000000000000000 /* PuttingModeViewModel.swift */,
+				AS070001F000000000000000 /* AlignSpeedManager.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -328,6 +341,10 @@
 			isa = PBXGroup;
 			children = (
 				PU060011F000000000000000 /* PuttingModeView.swift */,
+				AS070005F000000000000000 /* AlignSpeedReviewStepView.swift */,
+				AS070004F000000000000000 /* AlignSpeedPositionStepView.swift */,
+				AS070003F000000000000000 /* AlignSpeedSetupStepView.swift */,
+				AS070002F000000000000000 /* AlignSpeedView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -391,6 +408,7 @@
 				C1000053229F0053 /* SyncEngineTests.swift */,
 				GS05000F229F000F /* DistanceViewStyleTests.swift */,
 				PU060003F000000000000000 /* PuttingModeViewModelTests.swift */,
+				AS070006F000000000000000 /* AlignSpeedManagerTests.swift */,
 				PU060002F000000000000000 /* DistanceEntryConfigurationTests.swift */,
 				PT050006F000000000000000 /* PuttingCalibrationDataServiceTests.swift */,
 				PT050005F000000000000000 /* PuttingSpeedCurveServiceTests.swift */,
@@ -943,6 +961,11 @@
 				PU060013B000000000000000 /* PuttStrokeSuggestionCardView.swift in Sources */,
 				PU060012B000000000000000 /* PuttingPageView.swift in Sources */,
 				PU060011B000000000000000 /* PuttingModeView.swift in Sources */,
+				AS070001B000000000000000 /* AlignSpeedManager.swift in Sources */,
+				AS070002B000000000000000 /* AlignSpeedView.swift in Sources */,
+				AS070003B000000000000000 /* AlignSpeedSetupStepView.swift in Sources */,
+				AS070004B000000000000000 /* AlignSpeedPositionStepView.swift in Sources */,
+				AS070005B000000000000000 /* AlignSpeedReviewStepView.swift in Sources */,
 				PU060010B000000000000000 /* PuttingModeViewModel.swift in Sources */,
 				PT050004B000000000000000 /* PuttingCalibrationDataService.swift in Sources */,
 				PT050003B000000000000000 /* PuttingSpeedCurveService.swift in Sources */,
@@ -1000,6 +1023,7 @@
 				C1000043229F0043 /* SyncEngineTests.swift in Sources */,
 				GS05000B229F000B /* DistanceViewStyleTests.swift in Sources */,
 				PU060003B000000000000000 /* PuttingModeViewModelTests.swift in Sources */,
+				AS070006B000000000000000 /* AlignSpeedManagerTests.swift in Sources */,
 				PU060002B000000000000000 /* DistanceEntryConfigurationTests.swift in Sources */,
 				PT050006B000000000000000 /* PuttingCalibrationDataServiceTests.swift in Sources */,
 				PT050005B000000000000000 /* PuttingSpeedCurveServiceTests.swift in Sources */,
