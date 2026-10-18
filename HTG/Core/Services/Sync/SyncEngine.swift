@@ -5,6 +5,12 @@ import Foundation
 protocol SyncRecord: Codable, Sendable, Identifiable {
     var id: UUID { get }
     var updatedAt: Date { get }
+    /// Remote column names that may be absent on an un-migrated backend.
+    static var optionalRemoteColumns: Set<String> { get }
+}
+
+extension SyncRecord {
+    static var optionalRemoteColumns: Set<String> { [] }
 }
 
 /// A propagated hard-delete, in either direction.

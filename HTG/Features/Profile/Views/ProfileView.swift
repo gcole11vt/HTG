@@ -10,14 +10,8 @@ struct ProfileView: View {
     @State private var handicapText: String = ""
     @State private var primaryShotTypeText: String = "Full"
     @State private var isEditing = false
-    @State private var newRoutineItemText: String = ""
-    @State private var editingRoutineItem: PreShotRoutineItem?
-    @State private var editingRoutineItemText: String = ""
-    @State private var showingAddSwingThought = false
-    @State private var newSwingThoughtText: String = ""
-    @State private var newSwingThoughtTagType: String = "all"
-    @State private var newSwingThoughtTagValue: String = ""
     @State private var showingBagSetup = false
+    @State private var showingGolfModeSettings = false
 
     var body: some View {
         NavigationStack {
@@ -32,9 +26,7 @@ struct ProfileView: View {
                     if let profile = profileManager?.profile {
                         List {
                             profileSection(profile: profile)
-                            preShotRoutineSection(profile: profile)
-                            mantraSection(profile: profile)
-                            swingThoughtsSection(profile: profile)
+                            golfModeSettingsSection(profile: profile)
                             accountSyncSection
                             bagSetupSection
                         }
@@ -65,14 +57,6 @@ struct ProfileView: View {
                     await reloadProfileAfterSync()
                 }
             }
-            .alert("Edit Step", isPresented: .init(
-                get: { editingRoutineItem != nil },
-                set: { if !$0 { editingRoutineItem = nil } }
-            )) {
-                TextField("Step", text: $editingRoutineItemText)
-                Button("Save") { saveEditedRoutineItem() }
-                Button("Cancel", role: .cancel) { editingRoutineItem = nil }
-            }
             .alert("Error", isPresented: .init(
                 get: { profileManager?.errorMessage != nil },
                 set: { if !$0 { profileManager?.errorMessage = nil } }
@@ -81,8 +65,10 @@ struct ProfileView: View {
             } message: {
                 Text(profileManager?.errorMessage ?? "")
             }
-            .sheet(isPresented: $showingAddSwingThought) {
-                addSwingThoughtSheet
+            .navigationDestination(isPresented: $showingGolfModeSettings) {
+                if let profileManager {
+                    GolfModeSettingsView(profileManager: profileManager)
+                }
             }
             .fullScreenCover(isPresented: $showingBagSetup) {
                 BagSetupView()
@@ -200,173 +186,24 @@ struct ProfileView: View {
         .gtcAccentCard(fill: GTCColor.background)
     }
 
-    // MARK: - Pre-Shot Routine Section
+    // MARK: - Golf Mode Section
 
-    private func preShotRoutineSection(profile: UserProfile) -> some View {
+    private func golfModeSettingsSection(profile: UserProfile) -> some View {
         Section {
-            golfModeToggleRow(isOn: Binding(
-                get: { profile.showPreShotRoutine },
-                set: { newValue in
-                    Task { await profileManager?.setShowPreShotRoutine(newValue) }
-                }
-            ))
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-
-            let sortedItems = profile.preShotRoutineItems.sorted { $0.sortOrder < $1.sortOrder }
-            ForEach(sortedItems) { item in
-                routineItemRow(item: item)
-            }
-            .onDelete { indexSet in
-                for index in indexSet {
-                    let item = sortedItems[index]
-                    Task { await profileManager?.deleteRoutineItem(item) }
-                }
-            }
-            .onMove { from, to in
-                var reordered = sortedItems
-                reordered.move(fromOffsets: from, toOffset: to)
-                Task { await profileManager?.reorderRoutineItems(reordered) }
-            }
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-
-            HStack {
-                TextField("New step", text: $newRoutineItemText)
-                    .font(JournalTheme.handwritten(size: 16))
-                    .foregroundStyle(GTCColor.text)
-                Button("Add") {
-                    guard !newRoutineItemText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                    Task {
-                        await profileManager?.addRoutineItem(text: newRoutineItemText)
-                        newRoutineItemText = ""
-                    }
-                }
-                .gtcProminentActionButtonStyle()
-                .disabled(newRoutineItemText.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
-            .gtcAccentCard(fill: GTCColor.background)
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-        } header: {
-            GTCSectionEyebrow("Pre-Shot Routine")
-        }
-    }
-
-    private func routineItemRow(item: PreShotRoutineItem) -> some View {
-        HStack(spacing: 14) {
-            Text(item.text)
-                .font(JournalTheme.handwritten(size: 15))
-                .foregroundStyle(GTCColor.text)
-            Spacer()
             Button {
-                editingRoutineItemText = item.text
-                editingRoutineItem = item
-            } label: {
-                Image(systemName: "pencil")
-                    .font(.system(size: 14))
-                    .foregroundStyle(GTCColor.secondary)
-            }
-            .buttonStyle(.plain)
-            Button {
-                Task { await profileManager?.deleteRoutineItem(item) }
-            } label: {
-                Image(systemName: "trash")
-                    .font(.system(size: 14))
-                    .foregroundStyle(GTCColor.secondary)
-            }
-            .buttonStyle(.plain)
-        }
-        .gtcNeutralCard(fill: GTCColor.background)
-    }
-
-    private func saveEditedRoutineItem() {
-        guard let item = editingRoutineItem else { return }
-        let text = editingRoutineItemText.trimmingCharacters(in: .whitespaces)
-        editingRoutineItem = nil
-        guard !text.isEmpty else { return }
-        Task { await profileManager?.updateRoutineItemText(item, text: text) }
-    }
-
-    // MARK: - Mantra Section
-
-    private func mantraSection(profile: UserProfile) -> some View {
-        Section {
-            VStack(alignment: .leading, spacing: 10) {
-                golfModeToggleRow(isOn: Binding(
-                    get: { profile.showMantra },
-                    set: { newValue in
-                        Task { await profileManager?.setShowMantra(newValue) }
-                    }
-                ))
-
-                TextField("Your mantra", text: Binding(
-                    get: { profile.mantra },
-                    set: { newValue in
-                        Task { await profileManager?.updateMantra(newValue) }
-                    }
-                ))
-                .font(JournalTheme.handwritten(size: 16))
-                .foregroundStyle(GTCColor.text)
-                .textFieldStyle(.roundedBorder)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .gtcAccentCard(fill: GTCColor.background)
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-        } header: {
-            GTCSectionEyebrow("Mantra")
-        }
-    }
-
-    private func golfModeToggleRow(isOn: Binding<Bool>) -> some View {
-        Toggle("Show in Golf Mode", isOn: isOn)
-            .font(JournalTheme.handwritten(size: 16))
-            .foregroundStyle(GTCColor.text)
-            .tint(GTCColor.primary)
-    }
-
-    // MARK: - Swing Thoughts Section
-
-    private func swingThoughtsSection(profile: UserProfile) -> some View {
-        Section {
-            if profile.swingThoughts.isEmpty {
-                Text("No swing thoughts yet")
-                    .font(JournalTheme.handwritten(size: 14))
-                    .foregroundStyle(GTCColor.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .gtcNeutralCard(fill: GTCColor.background)
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-            } else {
-                ForEach(profile.swingThoughts) { thought in
-                    HStack {
-                        Text(thought.text)
-                            .font(JournalTheme.handwritten(size: 15))
-                            .foregroundStyle(GTCColor.text)
-                        Spacer()
-                        GTCMetaChip(swingThoughtTagLabel(thought))
-                    }
-                    .gtcNeutralCard(fill: GTCColor.background)
-                }
-                .onDelete { indexSet in
-                    let thoughts = Array(profile.swingThoughts)
-                    for index in indexSet {
-                        Task { await profileManager?.deleteSwingThought(thoughts[index]) }
-                    }
-                }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-            }
-
-            Button {
-                showingAddSwingThought = true
+                showingGolfModeSettings = true
             } label: {
                 HStack {
-                    Label("Add Swing Thought", systemImage: "plus")
+                    Label("Golf Mode Settings", systemImage: "flag")
                         .font(JournalTheme.handwritten(size: 16))
                         .foregroundStyle(GTCColor.primary)
                     Spacer()
+                    Text("View: \(profile.golfModeViewStyle.title)")
+                        .font(JournalTheme.handwritten(size: 14))
+                        .foregroundStyle(GTCColor.secondary)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(GTCColor.secondary)
                 }
                 .gtcAccentCard(fill: GTCColor.background)
             }
@@ -374,7 +211,7 @@ struct ProfileView: View {
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
         } header: {
-            GTCSectionEyebrow("Swing Thoughts")
+            GTCSectionEyebrow("Golf Mode")
         }
     }
 
@@ -508,110 +345,6 @@ struct ProfileView: View {
         } header: {
             GTCSectionEyebrow("First Time Set Up")
         }
-    }
-
-    private func swingThoughtTagLabel(_ thought: SwingThought) -> String {
-        switch thought.tagType {
-        case "club": return thought.tagValue
-        case "shotType": return thought.tagValue
-        default: return "All"
-        }
-    }
-
-    // MARK: - Add Swing Thought Sheet
-
-    private var addSwingThoughtSheet: some View {
-        NavigationStack {
-            ZStack {
-                GTCColor.background.ignoresSafeArea()
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: JournalTheme.sectionSpacing) {
-                        Text("Add Swing Thought")
-                            .font(JournalTheme.sheetTitleFont)
-                            .foregroundStyle(GTCColor.primary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                        VStack(alignment: .leading, spacing: JournalTheme.subsectionSpacing) {
-                            GTCSectionEyebrow("Swing Thought")
-                            TextField("Swing thought", text: $newSwingThoughtText)
-                                .font(JournalTheme.handwritten(size: 16))
-                                .foregroundStyle(GTCColor.text)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .gtcTintedAccentCard()
-
-                        VStack(alignment: .leading, spacing: JournalTheme.subsectionSpacing) {
-                            GTCSectionEyebrow("Applies To")
-                            Picker("Applies to", selection: $newSwingThoughtTagType) {
-                                Text("All Clubs").tag("all")
-                                Text("Specific Club").tag("club")
-                                Text("Shot Type").tag("shotType")
-                            }
-                            .pickerStyle(.menu)
-                            .tint(GTCColor.primary)
-
-                            if newSwingThoughtTagType == "club" {
-                                Picker("Club", selection: $newSwingThoughtTagValue) {
-                                    Text("Select Club").tag("")
-                                    ForEach(profileManager?.clubNames ?? [], id: \.self) { name in
-                                        Text(name).tag(name)
-                                    }
-                                }
-                                .pickerStyle(.menu)
-                                .tint(GTCColor.primary)
-                            } else if newSwingThoughtTagType == "shotType" {
-                                Picker("Shot Type", selection: $newSwingThoughtTagValue) {
-                                    Text("Select Shot Type").tag("")
-                                    ForEach(profileManager?.shotTypeNames ?? [], id: \.self) { name in
-                                        Text(name).tag(name)
-                                    }
-                                }
-                                .pickerStyle(.menu)
-                                .tint(GTCColor.primary)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .gtcTintedAccentCard()
-                    }
-                    .padding(.horizontal, JournalTheme.screenHorizontalPadding)
-                    .padding(.vertical, JournalTheme.screenHorizontalPadding)
-                }
-            }
-            .navigationTitle("Add Swing Thought")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        resetSwingThoughtForm()
-                        showingAddSwingThought = false
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        let tagValue = newSwingThoughtTagType == "all" ? "" : newSwingThoughtTagValue
-                        Task {
-                            await profileManager?.addSwingThought(
-                                text: newSwingThoughtText,
-                                tagType: newSwingThoughtTagType,
-                                tagValue: tagValue
-                            )
-                            resetSwingThoughtForm()
-                            showingAddSwingThought = false
-                        }
-                    }
-                    .gtcProminentActionButtonStyle()
-                    .disabled(newSwingThoughtText.trimmingCharacters(in: .whitespaces).isEmpty ||
-                              (newSwingThoughtTagType != "all" && newSwingThoughtTagValue.isEmpty))
-                }
-            }
-        }
-    }
-
-    private func resetSwingThoughtForm() {
-        newSwingThoughtText = ""
-        newSwingThoughtTagType = "all"
-        newSwingThoughtTagValue = ""
     }
 
     /// Sync can replace or consolidate the profile row, so re-resolve it and

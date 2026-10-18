@@ -182,6 +182,18 @@ struct SyncTouchTests {
 
     // MARK: - ProfileDataService
 
+    @Test("updateGolfModeViewStyle refreshes profile updatedAt")
+    func updateGolfModeViewStyleRefreshesUpdatedAt() async throws {
+        let container = try makeTestContainer()
+        let service = ProfileDataService(modelContext: container.mainContext)
+        let profile = try await service.getOrCreateProfile()
+        profile.updatedAt = stale
+
+        try await service.updateGolfModeViewStyle(.ladder)
+
+        #expect(profile.updatedAt > recent)
+    }
+
     @Test("updateProfile refreshes profile updatedAt")
     func updateProfileRefreshesUpdatedAt() async throws {
         let container = try makeTestContainer()

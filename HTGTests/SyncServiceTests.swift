@@ -344,4 +344,37 @@ struct SyncServiceTests {
         #expect(items.first?.profile?.id == remoteProfileID)
         #expect(!store.rowIDs(in: "user_profiles").contains(autoCreated.id))
     }
+
+    @Test("Pulled remote profile applies its Golf Mode view style")
+    func pulledProfileAppliesViewStyle() async throws {
+        let container = try makeTestContainer()
+        let store = FakeRemoteStore()
+        let service = makeService(container: container, store: store)
+        try store.seed(
+            [UserProfileRecord(id: UUID(), name: "Greg", handicap: 8, primaryShotType: "Full", mantra: "Trust your swing", showPreShotRoutine: true, showMantra: true, updatedAt: Date(), golfModeViewStyle: "ladder")],
+            into: "user_profiles"
+        )
+
+        try await service.syncAll()
+
+        let profiles = try container.mainContext.fetch(FetchDescriptor<UserProfile>())
+        #expect(profiles.first?.golfModeViewStyle == .ladder)
+    }
+
+    @Test("Local Golf Mode view style change is pushed to the remote")
+    func localViewStyleIsPushed() async throws {
+        let container = try makeTestContainer()
+        let store = FakeRemoteStore()
+        let service = makeService(container: container, store: store)
+        let profileService = ProfileDataService(modelContext: container.mainContext)
+        try await profileService.updateProfile(name: "Greg", handicap: 8)
+        try await profileService.updateGolfModeViewStyle(.ladder)
+
+        try await service.syncAll()
+
+        let profileID = try #require(try container.mainContext.fetch(FetchDescriptor<UserProfile>()).first?.id)
+        let data = try #require(store.tables["user_profiles", default: [:]][profileID])
+        let record = try JSONDecoder().decode(UserProfileRecord.self, from: data)
+        #expect(record.golfModeViewStyle == "ladder")
+    }
 }

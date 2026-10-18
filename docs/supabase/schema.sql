@@ -17,6 +17,7 @@ create table public.user_profiles (
   mantra text not null default '',
   show_pre_shot_routine boolean not null default true,
   show_mantra boolean not null default true,
+  golf_mode_view_style text not null default 'text',
   updated_at timestamptz not null
 );
 

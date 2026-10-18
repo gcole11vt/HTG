@@ -53,4 +53,11 @@ final class ProfileDataService: Sendable {
         profile.updatedAt = Date()
         try modelContext.save()
     }
+
+    func updateGolfModeViewStyle(_ style: DistanceViewStyle) async throws {
+        let profile = try await getOrCreateProfile()
+        profile.golfModeViewStyle = style
+        profile.updatedAt = Date()
+        try modelContext.save()
+    }
 }

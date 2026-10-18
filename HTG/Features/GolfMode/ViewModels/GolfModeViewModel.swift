@@ -77,6 +77,10 @@ final class GolfModeViewModel {
 
     // MARK: - Swing Thoughts & Routine
 
+    var viewStyle: DistanceViewStyle {
+        profile?.golfModeViewStyle ?? .defaultStyle
+    }
+
     var sortedRoutineItems: [PreShotRoutineItem] {
         profile?.preShotRoutineItems.sorted { $0.sortOrder < $1.sortOrder } ?? []
     }

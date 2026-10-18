@@ -153,4 +153,40 @@ struct ProfileDataServiceTests {
         #expect(profile.id == named.id)
         #expect(profile.name == "Greg")
     }
+
+    // MARK: - Golf Mode View Style
+
+    @Test("New profile defaults Golf Mode view style to Text")
+    func newProfileDefaultsViewStyleToText() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        let profile = try await service.getOrCreateProfile()
+
+        #expect(profile.golfModeViewStyle == .text)
+        #expect(profile.golfModeViewStyleRawValue == "text")
+    }
+
+    @Test("Update Golf Mode view style persists Ladder")
+    func updateViewStylePersistsLadder() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+
+        try await service.updateGolfModeViewStyle(.ladder)
+        let profile = try await service.getOrCreateProfile()
+
+        #expect(profile.golfModeViewStyle == .ladder)
+        #expect(profile.golfModeViewStyleRawValue == "ladder")
+    }
+
+    @Test("Golf Mode view style falls back to Text for an unrecognized stored value")
+    func unrecognizedViewStyleFallsBackToText() async throws {
+        let container = try makeTestContainer()
+        let service = makeService(container: container)
+        let profile = try await service.getOrCreateProfile()
+
+        profile.golfModeViewStyleRawValue = "bogus"
+
+        #expect(profile.golfModeViewStyle == .text)
+    }
 }

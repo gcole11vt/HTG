@@ -47,6 +47,20 @@ final class ProfileManager {
         }
     }
 
+    // MARK: - Golf Mode View Style
+
+    var golfModeViewStyle: DistanceViewStyle {
+        profile?.golfModeViewStyle ?? .defaultStyle
+    }
+
+    func setGolfModeViewStyle(_ style: DistanceViewStyle) async {
+        do {
+            try await service.updateGolfModeViewStyle(style)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     // MARK: - Pre-Shot Routine
 
     func addRoutineItem(text: String) async {
