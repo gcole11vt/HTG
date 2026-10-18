@@ -2,6 +2,13 @@
 
 ---
 
+**Task name:**  Golf Mode: Text view border
+**Priority:**  P2
+**Status:**  Complete
+**What it is:**  (2026-10-18) Removed the outer rounded border around the Text view distance ladder (`DistanceTextLadderView`). This is a shared component, so Putting's Text view is also borderless.
+
+---
+
 **Task name:**  Profile: Golf Mode cleanup and Swing Thoughts toggle
 **Priority:**  P1
 **Status:**  Complete
