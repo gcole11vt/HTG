@@ -5,17 +5,20 @@ struct YardageDisplayView: View {
     @Binding var yardage: Int
     var onRefresh: (() -> Void)?
     var voiceEntry: YardageVoiceEntryViewModel?
+    var configuration: DistanceEntryConfiguration = .golfYards
     @State private var entryText = ""
     @FocusState private var isEntryFocused: Bool
     @Environment(\.scenePhase) private var scenePhase
-    private let validator = YardageEntryValidationService()
+    private var validator: YardageEntryValidationService {
+        YardageEntryValidationService(validRange: configuration.validRange)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 yardageEntryField
 
-                Text("yards")
+                Text(configuration.unitLabel)
                     .font(.system(size: 14, weight: .regular))
                     .foregroundStyle(GTCColor.secondary)
 
@@ -95,8 +98,8 @@ struct YardageDisplayView: View {
         .onChange(of: isEntryFocused) { _, focused in
             if !focused { entryText = "" }
         }
-        .accessibilityLabel("Target yardage")
-        .accessibilityHint("Double tap to type a new yardage")
+        .accessibilityLabel("Target distance in \(configuration.unitLabel)")
+        .accessibilityHint("Double tap to type a new distance")
     }
 
     private var idleControls: some View {
@@ -108,10 +111,10 @@ struct YardageDisplayView: View {
                 yardageStepButton(symbol: "arrow.clockwise", action: onRefresh)
             }
             yardageStepButton(symbol: "minus") {
-                yardage = max(YardageEntryValidationService.validRange.lowerBound, yardage - 1)
+                yardage = max(configuration.validRange.lowerBound, yardage - 1)
             }
             yardageStepButton(symbol: "plus") {
-                yardage = min(YardageEntryValidationService.validRange.upperBound, yardage + 1)
+                yardage = min(configuration.validRange.upperBound, yardage + 1)
             }
         }
     }
@@ -133,8 +136,7 @@ struct YardageDisplayView: View {
     }
 
     private var rangeHintCaption: some View {
-        let range = YardageEntryValidationService.validRange
-        return Text("\(range.lowerBound)\u{2013}\(range.upperBound) yards")
+        Text(configuration.rangeHint)
             .font(.system(size: 12, weight: .regular))
             .foregroundStyle(validator.isDefinitelyOutOfRange(entryText) ? GTCColor.warning : GTCColor.secondary)
     }
@@ -166,8 +168,8 @@ struct YardageDisplayView: View {
 
     private func symbolAccessibilityLabel(_ symbol: String) -> String {
         switch symbol {
-        case "minus": return "Decrease yardage"
-        case "plus": return "Increase yardage"
+        case "minus": return "Decrease distance"
+        case "plus": return "Increase distance"
         default: return "Refresh"
         }
     }

@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		PU060014B000000000000000 /* PuttingNoCalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060014F000000000000000 /* PuttingNoCalibrationView.swift */; };
+		PU060013B000000000000000 /* PuttStrokeSuggestionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060013F000000000000000 /* PuttStrokeSuggestionCardView.swift */; };
+		PU060012B000000000000000 /* PuttingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060012F000000000000000 /* PuttingPageView.swift */; };
+		PU060011B000000000000000 /* PuttingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060011F000000000000000 /* PuttingModeView.swift */; };
+		PU060010B000000000000000 /* PuttingModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060010F000000000000000 /* PuttingModeViewModel.swift */; };
+		PU060003B000000000000000 /* PuttingModeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060003F000000000000000 /* PuttingModeViewModelTests.swift */; };
+		PU060002B000000000000000 /* DistanceEntryConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060002F000000000000000 /* DistanceEntryConfigurationTests.swift */; };
+		PU060001B000000000000000 /* DistanceEntryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060001F000000000000000 /* DistanceEntryConfiguration.swift */; };
 		PT050006B000000000000000 /* PuttingCalibrationDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = PT050006F000000000000000 /* PuttingCalibrationDataServiceTests.swift */; };
 		PT050005B000000000000000 /* PuttingSpeedCurveServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = PT050005F000000000000000 /* PuttingSpeedCurveServiceTests.swift */; };
 		PT050004B000000000000000 /* PuttingCalibrationDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = PT050004F000000000000000 /* PuttingCalibrationDataService.swift */; };
@@ -148,6 +156,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		PU060014F000000000000000 /* PuttingNoCalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingNoCalibrationView.swift; sourceTree = "<group>"; };
+		PU060013F000000000000000 /* PuttStrokeSuggestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttStrokeSuggestionCardView.swift; sourceTree = "<group>"; };
+		PU060012F000000000000000 /* PuttingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingPageView.swift; sourceTree = "<group>"; };
+		PU060011F000000000000000 /* PuttingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingModeView.swift; sourceTree = "<group>"; };
+		PU060010F000000000000000 /* PuttingModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingModeViewModel.swift; sourceTree = "<group>"; };
+		PU060003F000000000000000 /* PuttingModeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingModeViewModelTests.swift; sourceTree = "<group>"; };
+		PU060002F000000000000000 /* DistanceEntryConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceEntryConfigurationTests.swift; sourceTree = "<group>"; };
+		PU060001F000000000000000 /* DistanceEntryConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceEntryConfiguration.swift; sourceTree = "<group>"; };
 		PT050006F000000000000000 /* PuttingCalibrationDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingCalibrationDataServiceTests.swift; sourceTree = "<group>"; };
 		PT050005F000000000000000 /* PuttingSpeedCurveServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingSpeedCurveServiceTests.swift; sourceTree = "<group>"; };
 		PT050004F000000000000000 /* PuttingCalibrationDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingCalibrationDataService.swift; sourceTree = "<group>"; };
@@ -300,6 +316,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		PU06G0002000000000000000 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				PU060010F000000000000000 /* PuttingModeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		PU06G0003000000000000000 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				PU060011F000000000000000 /* PuttingModeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		PU06G0001000000000000000 /* Putting */ = {
+			isa = PBXGroup;
+			children = (
+				PU06G0002000000000000000 /* ViewModels */,
+				PU06G0003000000000000000 /* Views */,
+			);
+			path = Putting;
+			sourceTree = "<group>";
+		};
+		PU06G0004000000000000000 /* Putting */ = {
+			isa = PBXGroup;
+			children = (
+				PU060012F000000000000000 /* PuttingPageView.swift */,
+				PU060013F000000000000000 /* PuttStrokeSuggestionCardView.swift */,
+				PU060014F000000000000000 /* PuttingNoCalibrationView.swift */,
+			);
+			path = Putting;
+			sourceTree = "<group>";
+		};
 		2E6D6FC4702308F1FDF984D2 /* Landing */ = {
 			isa = PBXGroup;
 			children = (
@@ -339,6 +390,8 @@
 				C1000052229F0052 /* SyncTouchTests.swift */,
 				C1000053229F0053 /* SyncEngineTests.swift */,
 				GS05000F229F000F /* DistanceViewStyleTests.swift */,
+				PU060003F000000000000000 /* PuttingModeViewModelTests.swift */,
+				PU060002F000000000000000 /* DistanceEntryConfigurationTests.swift */,
 				PT050006F000000000000000 /* PuttingCalibrationDataServiceTests.swift */,
 				PT050005F000000000000000 /* PuttingSpeedCurveServiceTests.swift */,
 				C1000054229F0054 /* SyncServiceTests.swift */,
@@ -398,6 +451,7 @@
 				D1000020229F0020 /* ClubManagement */,
 				D1000021229F0021 /* RangeMode */,
 				D1000022229F0022 /* GolfMode */,
+				PU06G0001000000000000000 /* Putting */,
 				D1000023229F0023 /* Profile */,
 				BG000020229F0020 /* BagSetup */,
 				2E6D6FC4702308F1FDF984D2 /* Landing */,
@@ -419,6 +473,7 @@
 			children = (
 				G1000020229F0020 /* Theme */,
 				H1000020229F0020 /* GolfMode */,
+				PU06G0004000000000000000 /* Putting */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -441,6 +496,7 @@
 				B1000015229F0005 /* StoredShotType.swift */,
 				B1000016229F0006 /* UserProfile.swift */,
 				GS01000F229F000F /* DistanceViewStyle.swift */,
+				PU060001F000000000000000 /* DistanceEntryConfiguration.swift */,
 				PT050002F000000000000000 /* PuttingSpeedCurve.swift */,
 				PT050001F000000000000000 /* PuttingCalibration.swift */,
 				GT01000B229F000B /* DistanceTextLadder.swift */,
@@ -841,6 +897,7 @@
 				B1000005229F0005 /* StoredShotType.swift in Sources */,
 				B1000006229F0006 /* UserProfile.swift in Sources */,
 				GS01000B229F000B /* DistanceViewStyle.swift in Sources */,
+				PU060001B000000000000000 /* DistanceEntryConfiguration.swift in Sources */,
 				PT050002B000000000000000 /* PuttingSpeedCurve.swift in Sources */,
 				PT050001B000000000000000 /* PuttingCalibration.swift in Sources */,
 				GT01000A229F000A /* DistanceTextLadder.swift in Sources */,
@@ -882,6 +939,11 @@
 				S1000001229F0001 /* GTCCardStyle.swift in Sources */,
 				Y1000001229F0001 /* YardageSheetService.swift in Sources */,
 				GT01000C229F000C /* DistanceTextLadderService.swift in Sources */,
+				PU060014B000000000000000 /* PuttingNoCalibrationView.swift in Sources */,
+				PU060013B000000000000000 /* PuttStrokeSuggestionCardView.swift in Sources */,
+				PU060012B000000000000000 /* PuttingPageView.swift in Sources */,
+				PU060011B000000000000000 /* PuttingModeView.swift in Sources */,
+				PU060010B000000000000000 /* PuttingModeViewModel.swift in Sources */,
 				PT050004B000000000000000 /* PuttingCalibrationDataService.swift in Sources */,
 				PT050003B000000000000000 /* PuttingSpeedCurveService.swift in Sources */,
 				YE030001229F0001 /* YardageEntryValidationService.swift in Sources */,
@@ -937,6 +999,8 @@
 				C1000042229F0042 /* SyncTouchTests.swift in Sources */,
 				C1000043229F0043 /* SyncEngineTests.swift in Sources */,
 				GS05000B229F000B /* DistanceViewStyleTests.swift in Sources */,
+				PU060003B000000000000000 /* PuttingModeViewModelTests.swift in Sources */,
+				PU060002B000000000000000 /* DistanceEntryConfigurationTests.swift in Sources */,
 				PT050006B000000000000000 /* PuttingCalibrationDataServiceTests.swift in Sources */,
 				PT050005B000000000000000 /* PuttingSpeedCurveServiceTests.swift in Sources */,
 				C1000044229F0044 /* SyncServiceTests.swift in Sources */,

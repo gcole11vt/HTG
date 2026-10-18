@@ -107,3 +107,10 @@
 **Priority:** P1
 **Status:** Complete
 **What it is:**  A mic button sits immediately left of the Reset (refresh) button in the Golf Mode yardage row (Ladder and Text pages). Tap it, say a yardage ("150", "one fifty", "one hundred fifty yards", "two twenty five") and it fills in the target after a short pause so later words are not cut off; tap again to stop. Only 50-400 is accepted (via `YardageEntryValidationService`); it times out after 8 seconds of nothing usable and shows a status line for denied permission or start failure. It reuses Range Mode's `SpeechRecognitionService` through `SpeechRecognitionYardageListener` plus an additive, default-nil `onTranscriptUpdate` callback, so Range Mode is unchanged. Parsing is in `YardageSpokenParser`, state in `YardageVoiceEntryViewModel` (start guard, cancel-during-start handling). Listening is cancelled on tab change/backgrounding. Unit-tested; not yet verified on a device with a real microphone.
+
+---
+
+**Task name:**  Putting mode
+**Priority:** P1
+**Status:** Complete (Align Speed calibration wizard still to come)
+**What it is:**  New fifth tab, Putting (Golf, Putting, Range, Clubs, Profile). Enter the putt distance in feet (same one-tap number-pad entry as Golf Mode, 1-99 ft) and see a suggested stroke from your calibrated speeds: "Position 3", or "Position 2½" when the distance falls midway between two positions, with the feet each position rolls. The curve is shown as a Ladder or Text view and follows Golf Mode's View setting (footer "Also used in Putting." added). Without a calibration the tab shows an "Align your speed" prompt; the Align Speed button is present but disabled until the wizard ships. Calibrations are stored on the device only (new `PuttingCalibration` models, not synced). Math lives in `PuttingSpeedCurveService` (mean, monotonic smoothing, half-position snapping). The yardage entry field was generalized with `DistanceEntryConfiguration`; Golf Mode behaves as before. About 50 new unit tests. Not yet verified visually in the simulator.

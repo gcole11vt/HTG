@@ -73,4 +73,15 @@ struct YardageEntryValidationServiceTests {
         #expect(putting.validatedYardage(from: "12") == 12)
         #expect(putting.validatedYardage(from: "100") == nil)
     }
+
+    @Test func digitLimitFollowsRange() {
+        #expect(YardageEntryValidationService(validRange: 1...99).sanitizedEntryText("123") == "12")
+        #expect(YardageEntryValidationService().sanitizedEntryText("1523") == "152")
+    }
+
+    @Test func outOfRangeWarningFollowsRangeDigitLimit() {
+        let putting = YardageEntryValidationService(validRange: 1...99)
+        #expect(putting.isDefinitelyOutOfRange("00"))
+        #expect(!putting.isDefinitelyOutOfRange("12"))
+    }
 }

@@ -23,6 +23,12 @@ struct ContentView: View {
                     Label("Golf", systemImage: "flag.fill")
                 }
 
+            PuttingModeView()
+                .tag(AppTab.putting)
+                .tabItem {
+                    Label("Putting", systemImage: "circle.circle")
+                }
+
             RangeModeView()
                 .tag(AppTab.range)
                 .tabItem {
