@@ -4,6 +4,7 @@ import SwiftUI
 struct AlignSpeedPositionStepView: View {
     @Bindable var manager: AlignSpeedManager
     @FocusState private var isFieldFocused: Bool
+    @State private var renameRequest: PuttingPositionRenameRequest?
 
     var body: some View {
         VStack(alignment: .leading, spacing: JournalTheme.sectionSpacing) {
@@ -18,16 +19,36 @@ struct AlignSpeedPositionStepView: View {
             await Task.yield()
             isFieldFocused = true
         }
+        .sheet(item: $renameRequest) { request in
+            PuttingPositionRenameSheetView(request: request) { name in
+                Task { await manager.renameCurrentPosition(name) }
+            }
+        }
     }
 
     private var heading: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Position \(manager.currentPosition ?? 1)")
-                .font(JournalTheme.sheetTitleFont)
-                .foregroundStyle(GTCColor.primary)
+            headingTitleRow
             Text("Make this backswing and roll a putt. Enter how far it rolled. Add more putts to average them.")
                 .font(JournalTheme.handwritten(size: 14))
                 .foregroundStyle(GTCColor.secondary)
+        }
+    }
+
+    private var headingTitleRow: some View {
+        HStack {
+            Text(manager.currentPositionName ?? "")
+                .font(JournalTheme.sheetTitleFont)
+                .foregroundStyle(GTCColor.primary)
+            Spacer()
+            Button { renameRequest = manager.renameRequestForCurrentPosition } label: {
+                Image(systemName: "pencil")
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .tint(GTCColor.primary)
+            .accessibilityLabel("Rename position")
+            .accessibilityIdentifier("alignSpeedRenameButton")
         }
     }
 

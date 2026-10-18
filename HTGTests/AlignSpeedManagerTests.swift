@@ -7,7 +7,7 @@ import Foundation
 @MainActor
 struct AlignSpeedManagerTests {
     private func makeContainer() throws -> ModelContainer {
-        let schema = Schema([PuttingCalibration.self, PuttingCalibrationPutt.self])
+        let schema = Schema([PuttingCalibration.self, PuttingCalibrationPutt.self, PuttingPositionName.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
     }
@@ -213,5 +213,46 @@ struct AlignSpeedManagerTests {
         #expect(!manager.hasUnsavedPutts)
         let service = PuttingCalibrationDataService(modelContext: container.mainContext)
         #expect(try await service.latestSnapshot() == nil)
+    }
+
+    // MARK: Position names
+
+    @Test("Current position name is the default, nil outside a position step")
+    func currentPositionNameDefault() async throws {
+        let (manager, _) = try makeManager()
+        #expect(manager.currentPositionName == nil)
+        await manager.advance()
+        #expect(manager.currentPositionName == "Position 1")
+    }
+
+    @Test("loadPositionNames picks up persisted names")
+    func loadPositionNamesPicksUpPersisted() async throws {
+        let (manager, container) = try makeManager(count: 3)
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        try await service.renamePosition(2, to: "Knee")
+        await manager.loadPositionNames()
+
+        #expect(manager.name(for: 2) == "Knee")
+        #expect(manager.name(for: 1) == "Position 1")
+    }
+
+    @Test("renameCurrentPosition persists immediately, even after cancel")
+    func renameCurrentPositionPersists() async throws {
+        let (manager, container) = try makeManager(count: 3)
+        await manager.advance()
+        await manager.renameCurrentPosition("Knee")
+        #expect(manager.currentPositionName == "Knee")
+
+        manager.cancel()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        #expect(try await service.positionNames().name(for: 1) == "Knee")
+    }
+
+    @Test("renameCurrentPosition is a no-op outside a position step")
+    func renameCurrentPositionNoOpOutsidePosition() async throws {
+        let (manager, container) = try makeManager(count: 3)
+        await manager.renameCurrentPosition("Nope")
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        #expect(try await service.positionNames().custom.isEmpty)
     }
 }

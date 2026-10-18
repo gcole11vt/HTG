@@ -27,7 +27,7 @@ struct AlignSpeedReviewStepView: View {
         let isFlagged = manager.reviewWarnings.contains(point.position)
         return HStack {
             if isFlagged { Image(systemName: "exclamationmark.triangle") }
-            Text("Position \(point.position)")
+            Text(manager.name(for: point.position))
             Spacer()
             Text("\(point.puttCount) \(point.puttCount == 1 ? "putt" : "putts")")
                 .foregroundStyle(GTCColor.secondary)

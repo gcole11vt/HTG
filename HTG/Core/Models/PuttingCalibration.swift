@@ -42,3 +42,33 @@ final class PuttingCalibrationPutt {
         self.calibration = calibration
     }
 }
+
+/// A user-chosen name for a backswing position, keyed by position number so it carries across
+/// recalibrations. Only custom names are stored; no row means the default "Position N".
+/// Device-only (not synced), like PuttingCalibration.
+@Model
+final class PuttingPositionName {
+    @Attribute(.unique) var position: Int
+    var name: String
+    var updatedAt: Date = Date()
+
+    init(position: Int, name: String) {
+        self.position = position
+        self.name = name
+    }
+}
+
+/// Immutable lookup of position names with default fallback.
+struct PuttingPositionNames: Equatable, Sendable {
+    static let defaults = PuttingPositionNames(custom: [:])
+
+    let custom: [Int: String]
+
+    static func defaultName(for position: Int) -> String { "Position \(position)" }
+
+    func name(for position: Int) -> String {
+        custom[position] ?? Self.defaultName(for: position)
+    }
+
+    func isCustom(_ position: Int) -> Bool { custom[position] != nil }
+}

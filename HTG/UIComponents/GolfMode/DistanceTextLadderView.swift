@@ -6,6 +6,8 @@ struct DistanceTextLadderView: View {
     let unit: DistanceUnit
     var recenterGeneration: Int = 0
     var onSelectRow: ((DistanceTextLadderRow) -> Void)?
+    /// Makes only each row's name tappable (rows are then not buttons). Default nil keeps Golf mode unchanged.
+    var onSelectRowLabel: ((DistanceTextLadderRow) -> Void)?
 
     @State private var hasCenteredOnce = false
 
@@ -32,8 +34,11 @@ struct DistanceTextLadderView: View {
         VStack(spacing: 2) {
             ForEach(Array(ladder.rows.enumerated()), id: \.element.id) { index, row in
                 if ladder.targetMarkerInsertionIndex == index { targetMarker }
-                DistanceTextLadderRowView(row: row, unit: unit) { onSelectRow?(row) }
-                    .id(row.id)
+                DistanceTextLadderRowView(
+                    row: row, unit: unit, onSelect: { onSelectRow?(row) },
+                    onSelectLabel: onSelectRowLabel.map { handler in { handler(row) } }
+                )
+                .id(row.id)
             }
             if ladder.targetMarkerInsertionIndex == ladder.rows.count { targetMarker }
         }

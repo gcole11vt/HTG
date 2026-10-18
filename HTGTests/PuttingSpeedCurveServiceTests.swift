@@ -255,4 +255,38 @@ struct PuttingSpeedCurveServiceTests {
         #expect(Service.calibrationAgeDescription(date(16, 20), now: now, calendar: calendar) == "Yesterday")
         #expect(Service.calibrationAgeDescription(date(12, 9), now: now, calendar: calendar) == "Oct 12")
     }
+
+    // MARK: Position names
+
+    private let kneeNames = PuttingPositionNames(custom: [2: "Knee"])
+
+    @Test("Text ladder uses custom labels and keeps ids")
+    func textLadderUsesCustomNames() {
+        let items = Service.textLadderItems(from: standard, names: kneeNames)
+        #expect(items.first { $0.id == "position-2" }?.primaryLabel == "Knee")
+        #expect(items.first { $0.id == "position-3" }?.primaryLabel == "Position 3")
+    }
+
+    @Test("Grouped ladder entries use custom names and keep nicknames")
+    func groupedEntriesUseCustomNames() throws {
+        let groups = Service.groupedLadderEntries(from: standard, highlightedPosition: nil, names: kneeNames)
+        let entry = try #require(groups.flatMap(\.entries).first { $0.clubNickname == "P2" })
+        #expect(entry.clubName == "Knee")
+    }
+
+    @Test("Titles use custom names")
+    func titlesUseCustomNames() {
+        let exact = PuttStrokeSuggestion(kind: .position(2), targetFeet: 8)
+        let between = PuttStrokeSuggestion(kind: .between(lower: 2, upper: 3), targetFeet: 11)
+        #expect(Service.title(for: exact, names: kneeNames) == "Knee")
+        #expect(Service.title(for: between, names: kneeNames) == "Knee½")
+        #expect(Service.title(for: between) == "Position 2½")
+    }
+
+    @Test("Position parses from item id")
+    func positionFromItemID() {
+        #expect(Service.position(fromItemID: "position-3") == 3)
+        #expect(Service.position(fromItemID: "foo") == nil)
+        #expect(Service.position(fromItemID: "position-x") == nil)
+    }
 }

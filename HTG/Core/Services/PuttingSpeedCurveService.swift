@@ -95,10 +95,10 @@ enum PuttingSpeedCurveService {
 
     // MARK: Display
 
-    static func title(for suggestion: PuttStrokeSuggestion) -> String {
+    static func title(for suggestion: PuttStrokeSuggestion, names: PuttingPositionNames = .defaults) -> String {
         switch suggestion.kind {
-        case .position(let position): "Position \(position)"
-        case .between(let lower, _): "Position \(lower)½"
+        case .position(let position): names.name(for: position)
+        case .between(let lower, _): "\(names.name(for: lower))½"
         case .shorterThanCalibrated(let shortest): "Shorter than \(shortest)"
         case .longerThanCalibrated(let longest): "Longer than \(longest)"
         }
@@ -127,12 +127,22 @@ enum PuttingSpeedCurveService {
 
     static func itemID(position: Int) -> String { "position-\(position)" }
 
-    static func textLadderItems(from curve: [PuttingCalibrationPoint]) -> [DistanceTextLadderItem] {
+    /// Inverse of `itemID(position:)`; nil for anything else.
+    static func position(fromItemID id: String) -> Int? {
+        let prefix = "position-"
+        guard id.hasPrefix(prefix) else { return nil }
+        return Int(id.dropFirst(prefix.count))
+    }
+
+    static func textLadderItems(
+        from curve: [PuttingCalibrationPoint],
+        names: PuttingPositionNames = .defaults
+    ) -> [DistanceTextLadderItem] {
         curve.map {
             DistanceTextLadderItem(
                 id: itemID(position: $0.position),
                 distance: Int($0.averageFeet.rounded()),
-                primaryLabel: "Position \($0.position)",
+                primaryLabel: names.name(for: $0.position),
                 secondaryLabel: ""
             )
         }
@@ -140,11 +150,12 @@ enum PuttingSpeedCurveService {
 
     static func groupedLadderEntries(
         from curve: [PuttingCalibrationPoint],
-        highlightedPosition: Int?
+        highlightedPosition: Int?,
+        names: PuttingPositionNames = .defaults
     ) -> [GroupedLadderEntry] {
         let entries = curve.map { point in
             LadderEntry(
-                clubName: "Position \(point.position)",
+                clubName: names.name(for: point.position),
                 clubNickname: "P\(point.position)",
                 shotTypeName: "",
                 carryDistance: Int(point.averageFeet.rounded()),

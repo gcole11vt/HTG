@@ -11,7 +11,7 @@ struct PuttingModeViewModelTests {
     private func makeContainer() throws -> ModelContainer {
         let schema = Schema([
             UserProfile.self, PreShotRoutineItem.self, SwingThought.self,
-            PuttingCalibration.self, PuttingCalibrationPutt.self
+            PuttingCalibration.self, PuttingCalibrationPutt.self, PuttingPositionName.self
         ])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
@@ -123,5 +123,62 @@ struct PuttingModeViewModelTests {
         let container = try makeContainer()
         let viewModel = PuttingModeViewModel(modelContext: container.mainContext)
         #expect(await viewModel.initialPositionCountForWizard() == 5)
+    }
+
+    @Test("Custom names show in the ladder and suggestion title")
+    func customNamesShowInLadderAndTitle() async throws {
+        let container = try makeContainer()
+        try await seed(container)
+        try await PuttingCalibrationDataService(modelContext: container.mainContext).renamePosition(3, to: "Knee")
+        let viewModel = PuttingModeViewModel(modelContext: container.mainContext)
+        await viewModel.load()
+        viewModel.setTargetFeet(14)
+
+        #expect(viewModel.suggestionTitle == "Knee")
+        #expect(viewModel.textLadder.rows.contains { $0.item.primaryLabel == "Knee" })
+    }
+
+    @Test("beginRename sets a request for the row position")
+    func beginRenameSetsRequest() async throws {
+        let container = try makeContainer()
+        try await seed(container)
+        let viewModel = PuttingModeViewModel(modelContext: container.mainContext)
+        await viewModel.load()
+
+        viewModel.beginRename(itemID: "position-3")
+        #expect(viewModel.renameRequest?.position == 3)
+        #expect(viewModel.renameRequest?.currentName == "Position 3")
+        #expect(viewModel.renameRequest?.defaultName == "Position 3")
+
+        viewModel.beginRename(itemID: "bogus")
+        #expect(viewModel.renameRequest?.position == 3)
+    }
+
+    @Test("renamePosition updates, persists and clears the request")
+    func renamePositionPersists() async throws {
+        let container = try makeContainer()
+        try await seed(container)
+        let viewModel = PuttingModeViewModel(modelContext: container.mainContext)
+        await viewModel.load()
+        viewModel.beginRename(itemID: "position-3")
+
+        await viewModel.renamePosition(3, to: "Hip")
+        #expect(viewModel.renameRequest == nil)
+        #expect(viewModel.textLadder.rows.contains { $0.item.primaryLabel == "Hip" })
+
+        let fresh = PuttingModeViewModel(modelContext: container.mainContext)
+        await fresh.load()
+        #expect(fresh.textLadder.rows.contains { $0.item.primaryLabel == "Hip" })
+    }
+
+    @Test("Blank rename reverts to the default label")
+    func blankRenameReverts() async throws {
+        let container = try makeContainer()
+        try await seed(container)
+        let viewModel = PuttingModeViewModel(modelContext: container.mainContext)
+        await viewModel.load()
+        await viewModel.renamePosition(3, to: "Hip")
+        await viewModel.renamePosition(3, to: "   ")
+        #expect(viewModel.textLadder.rows.contains { $0.item.primaryLabel == "Position 3" })
     }
 }

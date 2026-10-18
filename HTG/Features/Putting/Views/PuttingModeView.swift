@@ -58,8 +58,18 @@ struct PuttingModeView: View {
             groupedLadderEntries: viewModel.groupedLadderEntries,
             ladderMaxFeet: viewModel.ladderMaxFeet,
             recenterGeneration: viewModel.recenterGeneration,
-            onAlignSpeed: startAlignSpeed
+            onAlignSpeed: startAlignSpeed,
+            onSelectRowLabel: { viewModel.beginRename(itemID: $0.item.id) }
         )
+        .sheet(item: renameBinding(viewModel)) { request in
+            PuttingPositionRenameSheetView(request: request) { name in
+                Task { await viewModel.renamePosition(request.position, to: name) }
+            }
+        }
+    }
+
+    private func renameBinding(_ viewModel: PuttingModeViewModel) -> Binding<PuttingPositionRenameRequest?> {
+        Binding(get: { viewModel.renameRequest }, set: { viewModel.renameRequest = $0 })
     }
 }
 
@@ -67,7 +77,9 @@ struct PuttingModeView: View {
     PuttingModeView()
         .environment(NavigationCoordinator())
         .modelContainer(
-            for: [UserProfile.self, PuttingCalibration.self, PuttingCalibrationPutt.self],
+            for: [
+                UserProfile.self, PuttingCalibration.self, PuttingCalibrationPutt.self, PuttingPositionName.self
+            ],
             inMemory: true
         )
 }
