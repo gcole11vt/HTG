@@ -14,6 +14,8 @@ struct PuttingPageView: View {
     var recenterGeneration: Int = 0
     /// nil while the Align Speed wizard is not available; the button is then disabled.
     var onAlignSpeed: (() -> Void)?
+    /// Called when the user taps a position name in the text ladder.
+    var onSelectRowLabel: ((DistanceTextLadderRow) -> Void)?
 
     var body: some View {
         ZStack {
@@ -61,7 +63,10 @@ struct PuttingPageView: View {
             )
             Spacer(minLength: 0)
         case .text:
-            DistanceTextLadderView(ladder: textLadder, unit: .feet, recenterGeneration: recenterGeneration)
+            DistanceTextLadderView(
+                ladder: textLadder, unit: .feet, recenterGeneration: recenterGeneration,
+                onSelectRowLabel: onSelectRowLabel
+            )
                 .frame(maxHeight: .infinity)
         }
     }
@@ -82,7 +87,7 @@ private func previewPage(style: DistanceViewStyle) -> some View {
     return PuttingPageView(
         targetFeet: .constant(10),
         viewStyle: style,
-        suggestionTitle: suggestion.map(PuttingSpeedCurveService.title(for:)) ?? "",
+        suggestionTitle: suggestion.map { PuttingSpeedCurveService.title(for: $0) } ?? "",
         suggestionDetail: suggestion.map { PuttingSpeedCurveService.detail(for: $0, curve: curve) } ?? "",
         statusText: "Aligned Today",
         isStatusStale: false,

@@ -38,7 +38,8 @@ struct HTGApp: App {
             SwingThought.self,
             SyncTombstone.self,
             PuttingCalibration.self,
-            PuttingCalibrationPutt.self
+            PuttingCalibrationPutt.self,
+            PuttingPositionName.self
         ])
 
         let modelConfiguration = makePersistentModelConfiguration(schema: schema)

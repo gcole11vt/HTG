@@ -5,28 +5,54 @@ struct DistanceTextLadderRowView: View {
     let row: DistanceTextLadderRow
     let unit: DistanceUnit
     var onSelect: (() -> Void)?
+    /// When set, only the label is tappable (the row itself is not a Button).
+    var onSelectLabel: (() -> Void)?
 
     var body: some View {
-        Button { onSelect?() } label: {
-            HStack(spacing: 8) {
-                distanceText
-                Text(row.item.primaryLabel)
-                    .font(.system(size: 15))
-                    .foregroundStyle(GTCColor.text)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                secondaryText
-                Spacer(minLength: 0)
-            }
-            .padding(.vertical, 5)
-            .padding(.horizontal, 8)
-            .background(selectionBackground)
-            .contentShape(Rectangle())
+        if onSelectLabel == nil {
+            Button { onSelect?() } label: { rowContent }
+                .buttonStyle(.plain)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(accessibilityText)
+                .accessibilityAddTraits(row.isSelected ? .isSelected : [])
+        } else {
+            rowContent
+                .accessibilityElement(children: .contain)
+                .accessibilityAddTraits(row.isSelected ? .isSelected : [])
         }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilityText)
-        .accessibilityAddTraits(row.isSelected ? .isSelected : [])
+    }
+
+    private var rowContent: some View {
+        HStack(spacing: 8) {
+            distanceText
+            primaryText
+            secondaryText
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical, 5)
+        .padding(.horizontal, 8)
+        .background(selectionBackground)
+        .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    private var primaryText: some View {
+        if let onSelectLabel {
+            Button(action: onSelectLabel) { primaryLabelText }
+                .buttonStyle(.plain)
+                .accessibilityHint("Rename position")
+                .accessibilityIdentifier("puttingPositionName-\(row.item.id)")
+        } else {
+            primaryLabelText
+        }
+    }
+
+    private var primaryLabelText: some View {
+        Text(row.item.primaryLabel)
+            .font(.system(size: 15))
+            .foregroundStyle(GTCColor.text)
+            .lineLimit(1)
+            .minimumScaleFactor(0.75)
     }
 
     private var distanceText: some View {

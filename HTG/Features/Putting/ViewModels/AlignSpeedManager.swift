@@ -15,6 +15,7 @@ final class AlignSpeedManager {
     private let entryValidator = YardageEntryValidationService(validRange: PuttingCalibrationRules.puttFeetRange)
 
     private(set) var step: Step = .setup
+    private(set) var positionNames = PuttingPositionNames.defaults
     private(set) var positionCount: Int
     private(set) var puttsByPosition: [Int: [Double]] = [:]
     private(set) var isSaving = false
@@ -46,6 +47,42 @@ final class AlignSpeedManager {
     var currentPosition: Int? {
         if case .position(let position) = step { return position }
         return nil
+    }
+
+    /// nil outside a position step.
+    var currentPositionName: String? {
+        currentPosition.map(name(for:))
+    }
+
+    func name(for position: Int) -> String {
+        positionNames.name(for: position)
+    }
+
+    func loadPositionNames() async {
+        do {
+            positionNames = try await calibrationService.positionNames()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    /// Saved immediately: the name belongs to the position, so cancelling the wizard keeps it.
+    func renameCurrentPosition(_ rawName: String) async {
+        guard let position = currentPosition else { return }
+        do {
+            try await calibrationService.renamePosition(position, to: rawName)
+            positionNames = try await calibrationService.positionNames()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    var renameRequestForCurrentPosition: PuttingPositionRenameRequest? {
+        currentPosition.map {
+            PuttingPositionRenameRequest(
+                position: $0, currentName: name(for: $0), defaultName: PuttingPositionNames.defaultName(for: $0)
+            )
+        }
     }
 
     var currentPutts: [Double] {

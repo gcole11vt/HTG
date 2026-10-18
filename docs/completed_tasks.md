@@ -2,6 +2,13 @@
 
 ---
 
+**Task name:**  Putting: Rename position
+**Priority:**  P2
+**Status:**  Complete
+**What it is:**  (2026-10-18) (1) In Align mode, a pencil rename button sits at the far right of the Position header. (2) In Putting's Text view, tapping a position name opens the same rename sheet (`PuttingPositionRenameSheetView`). Custom names are stored in a new on-device `PuttingPositionName` model, not synced, matching calibrations. Names are max 20 characters, a blank name reverts to "Position N", and names survive recalibration. Rename from the ladder view is not included.
+
+---
+
 **Task name:**  Golf Mode: Text view border
 **Priority:**  P2
 **Status:**  Complete

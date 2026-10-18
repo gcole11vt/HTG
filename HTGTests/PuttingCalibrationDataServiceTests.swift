@@ -8,7 +8,7 @@ import Foundation
 struct PuttingCalibrationDataServiceTests {
 
     private func makeContainer() throws -> ModelContainer {
-        let schema = Schema([PuttingCalibration.self, PuttingCalibrationPutt.self])
+        let schema = Schema([PuttingCalibration.self, PuttingCalibrationPutt.self, PuttingPositionName.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
     }
@@ -106,5 +106,102 @@ struct PuttingCalibrationDataServiceTests {
             positionCount: 6, puttsByPosition: [1: [3], 2: [5], 3: [8], 4: [12], 5: [17], 6: [23]]
         )
         #expect(try await service.latestPositionCount() == 6)
+    }
+
+    // MARK: Position names
+
+    private func nameCount(_ container: ModelContainer) throws -> Int {
+        try container.mainContext.fetchCount(FetchDescriptor<PuttingPositionName>())
+    }
+
+    @Test("Position names default when nothing is stored")
+    func positionNamesDefaultWhenEmpty() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        let names = try await service.positionNames()
+        #expect(names.name(for: 3) == "Position 3")
+        #expect(!names.isCustom(3))
+    }
+
+    @Test("Rename persists across services")
+    func renamePersists() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        let resolved = try await service.renamePosition(2, to: "Knee")
+        #expect(resolved == "Knee")
+
+        let other = PuttingCalibrationDataService(modelContext: container.mainContext)
+        let names = try await other.positionNames()
+        #expect(names.name(for: 2) == "Knee")
+        #expect(names.isCustom(2))
+    }
+
+    @Test("Rename trims whitespace")
+    func renameTrimsWhitespace() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        #expect(try await service.renamePosition(2, to: "  Knee  ") == "Knee")
+    }
+
+    @Test("Blank rename reverts to the default and deletes the row")
+    func blankRenameReverts() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        try await service.renamePosition(2, to: "Knee")
+        let resolved = try await service.renamePosition(2, to: "   ")
+        #expect(resolved == "Position 2")
+        #expect(try nameCount(container) == 0)
+        #expect(try await service.positionNames().name(for: 2) == "Position 2")
+    }
+
+    @Test("Renaming to the default text stores no row")
+    func renameToDefaultStoresNothing() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        #expect(try await service.renamePosition(2, to: "Position 2") == "Position 2")
+        #expect(try nameCount(container) == 0)
+    }
+
+    @Test("Renaming twice updates the same row")
+    func renameTwiceUpdatesSameRow() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        try await service.renamePosition(2, to: "Knee")
+        try await service.renamePosition(2, to: "Hip")
+        #expect(try nameCount(container) == 1)
+        #expect(try await service.positionNames().name(for: 2) == "Hip")
+    }
+
+    @Test("Rename rejects positions outside range")
+    func renameRejectsInvalidPosition() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        await #expect(throws: PuttingCalibrationDataServiceError.invalidPosition) {
+            try await service.renamePosition(0, to: "Zero")
+        }
+        await #expect(throws: PuttingCalibrationDataServiceError.invalidPosition) {
+            try await service.renamePosition(9, to: "Nine")
+        }
+        #expect(try nameCount(container) == 0)
+    }
+
+    @Test("Names are capped at 20 characters")
+    func namesAreCapped() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        let long = String(repeating: "a", count: 30)
+        #expect(try await service.renamePosition(1, to: long).count == 20)
+        #expect(PuttingCalibrationDataService.clampedEntryText(long).count == 20)
+        #expect(PuttingCalibrationDataService.maxNameLength == 20)
+    }
+
+    @Test("Names survive a new calibration")
+    func namesSurviveNewCalibration() async throws {
+        let container = try makeContainer()
+        let service = PuttingCalibrationDataService(modelContext: container.mainContext)
+        try await service.renamePosition(2, to: "Knee")
+        _ = try await service.saveCalibration(positionCount: 3, puttsByPosition: [1: [4], 2: [8], 3: [14]])
+        _ = try await service.saveCalibration(positionCount: 3, puttsByPosition: [1: [5], 2: [9], 3: [15]])
+        #expect(try await service.positionNames().name(for: 2) == "Knee")
     }
 }

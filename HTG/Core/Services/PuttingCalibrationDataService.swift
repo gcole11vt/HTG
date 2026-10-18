@@ -6,6 +6,7 @@ enum PuttingCalibrationDataServiceError: Error, Equatable {
     case missingPutts(position: Int)
     case unexpectedPosition(Int)
     case puttOutOfRange
+    case invalidPosition
 }
 
 @MainActor
@@ -45,6 +46,54 @@ final class PuttingCalibrationDataService: Sendable {
 
     func latestPositionCount() async throws -> Int? {
         try latestCalibration()?.positionCount
+    }
+
+    // MARK: Position names
+
+    static let maxNameLength = 20
+
+    /// Trimmed and capped; nil when blank.
+    static func normalizedName(_ raw: String) -> String? {
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        return String(trimmed.prefix(maxNameLength))
+    }
+
+    /// Live typing cap; does not trim so spaces can be typed mid-name.
+    static func clampedEntryText(_ raw: String) -> String {
+        String(raw.prefix(maxNameLength))
+    }
+
+    func positionNames() async throws -> PuttingPositionNames {
+        let rows = try modelContext.fetch(FetchDescriptor<PuttingPositionName>())
+        return PuttingPositionNames(custom: Dictionary(rows.map { ($0.position, $0.name) }) { _, latest in latest })
+    }
+
+    /// Blank or default-equal names delete the row. Returns the resolved display name.
+    @discardableResult
+    func renamePosition(_ position: Int, to rawName: String, now: Date = Date()) async throws -> String {
+        guard (1...PuttingCalibrationRules.positionCountRange.upperBound).contains(position) else {
+            throw PuttingCalibrationDataServiceError.invalidPosition
+        }
+        let defaultName = PuttingPositionNames.defaultName(for: position)
+        let existing = try modelContext.fetch(
+            FetchDescriptor<PuttingPositionName>(predicate: #Predicate { $0.position == position })
+        )
+        guard let name = Self.normalizedName(rawName), name != defaultName else {
+            existing.forEach(modelContext.delete)
+            try modelContext.save()
+            return defaultName
+        }
+        if let row = existing.first {
+            row.name = name
+            row.updatedAt = now
+        } else {
+            let row = PuttingPositionName(position: position, name: name)
+            row.updatedAt = now
+            modelContext.insert(row)
+        }
+        try modelContext.save()
+        return name
     }
 
     private func latestCalibration() throws -> PuttingCalibration? {

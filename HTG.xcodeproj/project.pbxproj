@@ -10,6 +10,7 @@
 		PU060014B000000000000000 /* PuttingNoCalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060014F000000000000000 /* PuttingNoCalibrationView.swift */; };
 		PU060013B000000000000000 /* PuttStrokeSuggestionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060013F000000000000000 /* PuttStrokeSuggestionCardView.swift */; };
 		PU060012B000000000000000 /* PuttingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060012F000000000000000 /* PuttingPageView.swift */; };
+		PT050010B000000000000000 /* PuttingPositionRenameSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PT050010F000000000000000 /* PuttingPositionRenameSheetView.swift */; };
 		PU060011B000000000000000 /* PuttingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060011F000000000000000 /* PuttingModeView.swift */; };
 		PU060010B000000000000000 /* PuttingModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060010F000000000000000 /* PuttingModeViewModel.swift */; };
 		PU060003B000000000000000 /* PuttingModeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = PU060003F000000000000000 /* PuttingModeViewModelTests.swift */; };
@@ -165,6 +166,7 @@
 		PU060014F000000000000000 /* PuttingNoCalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingNoCalibrationView.swift; sourceTree = "<group>"; };
 		PU060013F000000000000000 /* PuttStrokeSuggestionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttStrokeSuggestionCardView.swift; sourceTree = "<group>"; };
 		PU060012F000000000000000 /* PuttingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingPageView.swift; sourceTree = "<group>"; };
+		PT050010F000000000000000 /* PuttingPositionRenameSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingPositionRenameSheetView.swift; sourceTree = "<group>"; };
 		PU060011F000000000000000 /* PuttingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingModeView.swift; sourceTree = "<group>"; };
 		PU060010F000000000000000 /* PuttingModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingModeViewModel.swift; sourceTree = "<group>"; };
 		PU060003F000000000000000 /* PuttingModeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttingModeViewModelTests.swift; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 			isa = PBXGroup;
 			children = (
 				PU060012F000000000000000 /* PuttingPageView.swift */,
+				PT050010F000000000000000 /* PuttingPositionRenameSheetView.swift */,
 				PU060013F000000000000000 /* PuttStrokeSuggestionCardView.swift */,
 				PU060014F000000000000000 /* PuttingNoCalibrationView.swift */,
 			);
@@ -960,6 +963,7 @@
 				PU060014B000000000000000 /* PuttingNoCalibrationView.swift in Sources */,
 				PU060013B000000000000000 /* PuttStrokeSuggestionCardView.swift in Sources */,
 				PU060012B000000000000000 /* PuttingPageView.swift in Sources */,
+				PT050010B000000000000000 /* PuttingPositionRenameSheetView.swift in Sources */,
 				PU060011B000000000000000 /* PuttingModeView.swift in Sources */,
 				AS070001B000000000000000 /* AlignSpeedManager.swift in Sources */,
 				AS070002B000000000000000 /* AlignSpeedView.swift in Sources */,

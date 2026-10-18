@@ -24,7 +24,10 @@ struct AlignSpeedView: View {
                     Button("Cancel") { cancelTapped() }
                 }
             }
-            .task { createManagerIfNeeded() }
+            .task {
+                createManagerIfNeeded()
+                await manager?.loadPositionNames()
+            }
             .onChange(of: manager?.didSave ?? false) { _, didSave in
                 if didSave { onSaved(); dismiss() }
             }
@@ -134,5 +137,5 @@ struct AlignSpeedHeaderView: View {
 
 #Preview {
     AlignSpeedView(initialPositionCount: 5, onSaved: {})
-        .modelContainer(for: [PuttingCalibration.self, PuttingCalibrationPutt.self], inMemory: true)
+        .modelContainer(for: [PuttingCalibration.self, PuttingCalibrationPutt.self, PuttingPositionName.self], inMemory: true)
 }
