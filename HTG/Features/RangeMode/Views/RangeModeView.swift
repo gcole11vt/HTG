@@ -12,12 +12,10 @@ struct RangeModeView: View {
     @State private var showMaxShotTypesAlert: Bool = false
     @State private var distanceText: String = ""
     @State private var showingSaveSheet: Bool = false
-    @State private var saveDistanceText: String = ""
     @State private var showingEndConfirmation: Bool = false
     @State private var speechService = SpeechRecognitionService()
     @State private var showPermissionDeniedAlert = false
     @FocusState private var isDistanceFieldFocused: Bool
-    @FocusState private var isSaveFieldFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -218,7 +216,9 @@ struct RangeModeView: View {
             stopSpeechIfNeeded()
         }
         .sheet(isPresented: $showingSaveSheet) {
-            saveSessionSheet
+            if let rangeManager {
+                RangeSaveCarryDistanceSheet(manager: rangeManager, onSaved: resetAfterSave)
+            }
         }
         .alert("Discard this session?", isPresented: $showingEndConfirmation) {
             Button("Discard", role: .destructive) {
@@ -287,7 +287,7 @@ struct RangeModeView: View {
             .buttonStyle(.bordered)
 
             Button {
-                saveDistanceText = rangeManager?.defaultSaveCarryDistanceText() ?? ""
+                rangeManager?.prepareSaveSheet()
                 showingSaveSheet = true
             } label: {
                 Text("Save Session")
@@ -410,62 +410,12 @@ struct RangeModeView: View {
 
     // MARK: - Save Session Sheet
 
-    private var saveSessionSheet: some View {
-        VStack(spacing: 16) {
-            Spacer()
-
-            GTCSectionEyebrow("Save Carry Distance")
-
-            Text("Save Carry Distance")
-                .font(JournalTheme.sheetTitleFont)
-                .foregroundStyle(GTCColor.primary)
-
-            HStack(spacing: 12) {
-                Spacer()
-
-                TextField("", text: $saveDistanceText)
-                    .font(JournalTheme.yardageFont)
-                    .foregroundStyle(GTCColor.primary)
-                    .multilineTextAlignment(.center)
-                    .keyboardType(.numberPad)
-                    .focused($isSaveFieldFocused)
-                    .minimumScaleFactor(0.5)
-                    .frame(width: JournalTheme.sheetNumericInputWidth)
-
-                Spacer()
-            }
-
-            Button {
-                if let distance = rangeManager?.parsedCarryDistance(from: saveDistanceText) {
-                    stopSpeechIfNeeded()
-                    Task {
-                        await rangeManager?.saveSession(carryDistance: distance)
-                        showingSaveSheet = false
-                        selectedClub = nil
-                        shotTypeSelection = .none
-                        customShotTypeName = ""
-                    }
-                }
-            } label: {
-                Text("Save")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
-            .tint(GTCColor.warning)
-            .disabled(!(rangeManager?.isValidCarryDistanceInput(saveDistanceText) ?? false))
-            .padding(.horizontal, 40)
-
-            Spacer()
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            isSaveFieldFocused = false
-        }
-        .presentationDetents([.height(JournalTheme.sheetDetentHeight)])
-        .presentationDragIndicator(.visible)
-        .onAppear {
-            saveDistanceText = rangeManager?.defaultSaveCarryDistanceText() ?? ""
-        }
+    private func resetAfterSave() {
+        stopSpeechIfNeeded()
+        showingSaveSheet = false
+        selectedClub = nil
+        shotTypeSelection = .none
+        customShotTypeName = ""
     }
 
     private var micToggleButton: some View {
@@ -591,6 +541,105 @@ enum ShotTypeSelection: Hashable {
         case .existing(let st): hasher.combine(1); hasher.combine(st.id)
         case .other: hasher.combine(2)
         }
+    }
+}
+
+// MARK: - Save Carry Distance Sheet
+
+private struct RangeSaveCarryDistanceSheet: View {
+    @Bindable var manager: RangeManager
+    let onSaved: () -> Void
+    @FocusState private var isFieldFocused: Bool
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            titleSection
+            distanceField
+            validationCaption
+            saveButton
+            Spacer()
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isFieldFocused = false
+        }
+        .presentationDetents([.height(JournalTheme.sheetDetentHeight)])
+        .presentationDragIndicator(.visible)
+        .alert("Error", isPresented: errorBinding) {
+            Button("OK") { manager.errorMessage = nil }
+        } message: {
+            Text(manager.errorMessage ?? "")
+        }
+    }
+
+    private var errorBinding: Binding<Bool> {
+        Binding(
+            get: { manager.errorMessage != nil },
+            set: { if !$0 { manager.errorMessage = nil } }
+        )
+    }
+
+    private var titleSection: some View {
+        VStack(spacing: 16) {
+            GTCSectionEyebrow("Save Carry Distance")
+
+            Text("Save Carry Distance")
+                .font(JournalTheme.sheetTitleFont)
+                .foregroundStyle(GTCColor.primary)
+        }
+    }
+
+    private var distanceField: some View {
+        HStack(spacing: 12) {
+            Spacer()
+
+            TextField("", text: distanceBinding)
+                .font(JournalTheme.yardageFont)
+                .foregroundStyle(GTCColor.primary)
+                .multilineTextAlignment(.center)
+                .keyboardType(.numberPad)
+                .focused($isFieldFocused)
+                .minimumScaleFactor(0.5)
+                .frame(width: JournalTheme.sheetNumericInputWidth)
+
+            Spacer()
+        }
+    }
+
+    private var distanceBinding: Binding<String> {
+        Binding(
+            get: { manager.saveCarryDistanceText },
+            set: { manager.updateSaveCarryDistanceText($0) }
+        )
+    }
+
+    @ViewBuilder
+    private var validationCaption: some View {
+        if let message = manager.saveValidationMessage {
+            Text(message)
+                .font(JournalTheme.handwritten(size: 14))
+                .foregroundStyle(GTCColor.warning)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 40)
+                .accessibilityIdentifier("rangeSaveValidationMessage")
+        }
+    }
+
+    private var saveButton: some View {
+        Button {
+            Task {
+                if await manager.attemptSaveSession() {
+                    onSaved()
+                }
+            }
+        } label: {
+            Text("Save")
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(GTCColor.warning)
+        .padding(.horizontal, 40)
     }
 }
 
