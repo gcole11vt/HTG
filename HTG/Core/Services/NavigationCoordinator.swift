@@ -24,6 +24,7 @@ final class NavigationCoordinator {
 
 enum AppTab: Hashable {
     case golf
+    case putting
     case range
     case clubs
     case profile

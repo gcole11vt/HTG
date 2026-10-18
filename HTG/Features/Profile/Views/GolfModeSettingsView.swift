@@ -70,6 +70,10 @@ struct GolfModeSettingsView: View {
             .listRowSeparator(.hidden)
         } header: {
             GTCSectionEyebrow("View")
+        } footer: {
+            Text("Also used in Putting.")
+                .font(JournalTheme.handwritten(size: 12))
+                .foregroundStyle(GTCColor.secondary)
         }
     }
 

@@ -36,7 +36,9 @@ struct HTGApp: App {
             AppSettings.self,
             PreShotRoutineItem.self,
             SwingThought.self,
-            SyncTombstone.self
+            SyncTombstone.self,
+            PuttingCalibration.self,
+            PuttingCalibrationPutt.self
         ])
 
         let modelConfiguration = makePersistentModelConfiguration(schema: schema)
