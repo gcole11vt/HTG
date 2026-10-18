@@ -17,8 +17,8 @@ final class GolfModeViewModel {
     var clubs: [Club] = []
     var isLoading: Bool = false
     var errorMessage: String?
-    private let minTargetYardage = 50
-    private let maxTargetYardage = 400
+    private let minTargetYardage = YardageEntryValidationService.validRange.lowerBound
+    private let maxTargetYardage = YardageEntryValidationService.validRange.upperBound
 
     // Selection tracking
     var selectedClubShot: SelectedClubShot?

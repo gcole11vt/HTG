@@ -91,3 +91,12 @@
 **What it is:**  Golf Mode now honors the View setting (Text is the default). The Text page shows a fixed header (title, target yardage, shot card) above a scrolling text ladder of the whole bag in the same order as Clubs > Print > By Yardage (distance, club, shot type), with Mantra, Pre-Shot Routine and Swing Thoughts in a fixed right column. The row nearest the target is bold, the selected/recommended row is tinted, and a dashed marker shows the target between rows when there is no exact match. Tapping a row selects that shot; changing the yardage, refresh and returning to the tab re-centre the list. Ladder math lives in the unit-agnostic `DistanceTextLadderService` (yards now, feet reusable for Putting mode); the shared header was extracted to `GolfModeShotHeaderView`. The "coming soon" note was removed from Golf Mode settings. 20 new unit tests. Not yet verified visually in the simulator.
 
 ---
+
+---
+
+**Task name:**  Golf Mode: Yardage entry is one tap
+**Priority:** P1
+**Status:** Complete
+**What it is:**  The big target yardage number in the Golf Mode header (shared by the Ladder and Text pages) is now an inline text field. One tap raises a blank number pad (the old value shows as a faint hint) and the +/- /refresh buttons swap to Cancel and Go; no more sheet or second tap. Go is enabled only for 50-400 yards, with a range caption that turns to a warning at three out-of-range digits. Behavior change: out-of-range entries are now rejected instead of silently clamped. Losing focus (tab switch, backgrounding) discards the entry. Validation lives in `YardageEntryValidationService` (range shared with `GolfModeViewModel`, reusable for Putting). 14 new unit tests. Not yet verified visually in the simulator.
+
+---
